@@ -63,7 +63,10 @@
         comp[s.key].label;
       legendEl.appendChild(item);
     });
-    canvas.parentNode.insertBefore(legendEl, canvas);
+    /* insere a legenda antes do .chart-container (fora dele),
+       para não ser sobreposta pelo canvas responsivo do Chart.js */
+    const chartContainer = canvas.parentNode;
+    chartContainer.parentNode.insertBefore(legendEl, chartContainer);
 
     new Chart(canvas, {
       type: 'bar',
