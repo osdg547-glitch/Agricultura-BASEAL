@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panoramas · CobWeb</title>
+  <meta name="description" content="Panoramas de mercado: condições internas nos CEASAs sergipanos e condições externas nos mercados internacionais.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+
+  <!-- Tipografia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../cobweb.css">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Panoramas · CobWeb">
+  <meta property="og:description" content="Condições internas (preços CEASA-SE) e externas (mercados internacionais) do hortifrúti sergipano.">
+  <meta property="og:type" content="website">
+
+  <style>
+    .panorama-bloco {
+      margin-bottom: 56px;
+    }
+
+    .panorama-bloco__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 14px;
+      margin-bottom: 24px;
+    }
+
+    .panorama-bloco__desc {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin: 0;
+      max-width: 520px;
+      line-height: 1.55;
+    }
+
+    .panorama-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .panorama-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: block;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .panorama-card:hover {
+      background: var(--color-bg-soft);
+      border-color: var(--color-border-strong);
+      border-bottom: 1px solid var(--color-border-strong);
+    }
+
+    .panorama-card--em-breve {
+      border-style: dashed;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .panorama-card--em-breve:hover {
+      background: transparent;
+      border-color: var(--color-border);
+    }
+
+    .panorama-card__eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .panorama-card__nome {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+      margin-bottom: 8px;
+    }
+
+    .panorama-card__preco {
+      font-size: 26px;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+
+    .panorama-card__meta {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      margin-bottom: 14px;
+    }
+
+    .panorama-card__nota {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--color-text-secondary);
+      border-top: 1px solid var(--color-border);
+      padding-top: 12px;
+    }
+
+    .panorama-card__cta {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--color-brand);
+      letter-spacing: 0.01em;
+    }
+
+    .panorama-card--em-breve .panorama-card__nome,
+    .panorama-card--em-breve .panorama-card__nota {
+      color: var(--color-text-tertiary);
+    }
+
+    .badge-em-breve {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: 2px 8px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       Cabeçalho
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container container--wide site-header__inner">
+      <a href="../" class="site-logo" aria-label="CobWeb · página inicial">
+        <svg class="site-logo__mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M 16 4 L 28 16 L 16 28 L 4 16 Z" stroke-width="1"/>
+            <path d="M 16 9 L 23 16 L 16 23 L 9 16 Z" stroke-width="1"/>
+            <path d="M 16 13 L 19 16 L 16 19 L 13 16 Z" stroke-width="1"/>
+            <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+          </g>
+        </svg>
+        <div>
+          <div class="site-logo__name">CobWeb</div>
+          <div class="site-logo__tag">mercados integrados · sergipe</div>
+        </div>
+      </a>
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="../">índice</a>
+        <a href="../produtos/">produtos</a>
+        <a href="." class="is-active">panoramas</a>
+        <a href="../dados/">dados</a>
+        <a href="../sobre/">sobre</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       Conteúdo principal
+       ============================================================ -->
+  <main class="container">
+
+    <!-- Manchete -->
+    <section>
+      <div class="eyebrow">panoramas · condições de mercado</div>
+      <h1 class="headline">Duas leituras do mercado</h1>
+      <p class="deck">Condições internas — preços no atacado dos CEASAs sergipanos — e condições externas — cotações e fluxos nos mercados internacionais.</p>
+    </section>
+
+    <!-- ============================================================
+         Condições internas
+         ============================================================ -->
+    <section class="panorama-bloco" aria-label="Condições internas de mercado">
+
+      <div class="panorama-bloco__header">
+        <div>
+          <h2 class="section-title" style="margin:0 0 6px;">Condições internas</h2>
+          <p class="panorama-bloco__desc">Preços de atacado coletados nos boletins do CEASA-SE e do Mercado Central de Aracaju, via EMDAGRO/ASPLAN.</p>
+        </div>
+      </div>
+
+      <div class="panorama-grid" aria-label="Produtos monitorados internamente">
+
+        <!-- Tomate -->
+        <a href="../produtos/tomate/" class="panorama-card">
+          <div class="panorama-card__eyebrow">tomate · atacado · aracaju</div>
+          <div class="panorama-card__nome">Tomate</div>
+          <div class="panorama-card__preco">R$ 6,00<span style="font-size:14px; font-weight:400; color:var(--color-text-secondary);">/kg</span></div>
+          <div class="panorama-card__meta">EMDAGRO CEASA-SE · última coleta 26/mar/2026</div>
+          <div class="panorama-card__nota">Alta de 114% de janeiro a março de 2026. Mercado Central confirma choque, com amortecimento de 17%.</div>
+          <span class="panorama-card__cta">ver análise completa →</span>
+        </a>
+
+        <!-- Placeholder: próximos produtos -->
+        <div class="panorama-card panorama-card--em-breve" aria-label="Mais produtos em breve">
+          <div class="panorama-card__eyebrow">em desenvolvimento</div>
+          <div class="panorama-card__nome">Mais produtos</div>
+          <div class="panorama-card__nota">Cebola, batata, pimentão, cenoura e outros produtos da cesta de referência CEASA-SE serão incorporados à medida que os dados forem consolidados.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Condições externas
+         ============================================================ -->
+    <section class="panorama-bloco" aria-label="Condições externas de mercado">
+
+      <div class="panorama-bloco__header">
+        <div>
+          <h2 class="section-title" style="margin:0 0 6px;">Condições externas</h2>
+          <p class="panorama-bloco__desc">Preços e volumes comercializados em mercados internacionais de referência para os produtos monitorados internamente.</p>
+        </div>
+        <span class="badge-em-breve">em desenvolvimento</span>
+      </div>
+
+      <div class="panorama-grid" aria-label="Mercados internacionais — em desenvolvimento">
+
+        <div class="panorama-card panorama-card--em-breve" aria-label="Frutas tropicais — em breve">
+          <div class="panorama-card__eyebrow">frutas tropicais · exportação</div>
+          <div class="panorama-card__nome">Mercados internacionais</div>
+          <div class="panorama-card__nota">Cotações e volumes de frutas e hortaliças em mercados de referência — Europa, EUA e Ásia. Fontes previstas: FAO, ITC Trade Map, USDA.</div>
+        </div>
+
+        <div class="panorama-card panorama-card--em-breve" aria-label="Fluxo de exportações — em breve">
+          <div class="panorama-card__eyebrow">sergipe · fluxo de exportações</div>
+          <div class="panorama-card__nome">Destinos e preços FOB</div>
+          <div class="panorama-card__nota">Preço médio FOB por destino e produto, derivado dos microdados Comex Stat. Identificação de padrões sazonais e competitividade por mercado.</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       Footer
+       ============================================================ -->
+  <footer class="site-footer container container--wide">
+    <span>CobWeb · publicação editorial independente</span>
+    <span>cc by-sa 4.0</span>
+  </footer>
+
+</body>
+</html>
