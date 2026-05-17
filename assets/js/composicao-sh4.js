@@ -34,63 +34,47 @@
 
     const comp = d.composicao_sh4.series;
 
-    const datasets = [
-      {
-        label: comp['0805'].label,
-        data: comp['0805'].data,
-        backgroundColor: palette.c0805
-      },
-      {
-        label: comp['0813'].label,
-        data: comp['0813'].data,
-        backgroundColor: palette.c0813
-      },
-      {
-        label: comp['0804'].label,
-        data: comp['0804'].data,
-        backgroundColor: palette.c0804
-      },
-      {
-        label: comp['0811'].label,
-        data: comp['0811'].data,
-        backgroundColor: palette.c0811
-      },
-      {
-        label: comp['outros'].label,
-        data: comp['outros'].data,
-        backgroundColor: palette.outros
-      }
+    const seriesConfig = [
+      { key: '0805', color: palette.c0805 },
+      { key: '0813', color: palette.c0813 },
+      { key: '0804', color: palette.c0804 },
+      { key: '0811', color: palette.c0811 },
+      { key: 'outros', color: palette.outros }
     ];
+
+    const datasets = seriesConfig.map(function (s) {
+      return {
+        label: comp[s.key].label,
+        data: comp[s.key].data,
+        backgroundColor: s.color
+      };
+    });
+
+    /* legenda HTML — inserida entre o título e o canvas */
+    const legendEl = document.createElement('div');
+    legendEl.className = 'chart-sh4-legenda';
+    seriesConfig.forEach(function (s) {
+      const hasData = comp[s.key].data.some(function (v) { return v > 0; });
+      if (!hasData) return;
+      const item = document.createElement('span');
+      item.className = 'chart-sh4-legenda__item';
+      item.innerHTML =
+        '<span class="chart-sh4-legenda__swatch" style="background:' + s.color + '"></span>' +
+        comp[s.key].label;
+      legendEl.appendChild(item);
+    });
+    canvas.parentNode.insertBefore(legendEl, canvas);
 
     new Chart(canvas, {
       type: 'bar',
-      data: {
-        labels: d.labels,
-        datasets: datasets
-      },
+      data: { labels: d.labels, datasets: datasets },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        layout: { padding: { top: 8 } },
+        layout: { padding: { top: 4 } },
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-            align: 'start',
-            labels: {
-              color: colors.text,
-              font: { size: 11, family: 'Inter, -apple-system, sans-serif' },
-              boxWidth: 12,
-              boxHeight: 12,
-              padding: 20,
-              usePointStyle: false,
-              filter: function (item, data) {
-                /* oculta séries com todos os valores zerados */
-                return data.datasets[item.datasetIndex].data.some(function (v) { return v > 0; });
-              }
-            }
-          },
+          legend: { display: false },
           tooltip: {
             backgroundColor: colors.tooltipBg,
             titleColor: colors.tooltipTx,
