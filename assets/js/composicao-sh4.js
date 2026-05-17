@@ -71,6 +71,7 @@
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        layout: { padding: { top: 8 } },
         interaction: { mode: 'index', intersect: false },
         plugins: {
           legend: {
@@ -82,7 +83,7 @@
               font: { size: 11, family: 'Inter, -apple-system, sans-serif' },
               boxWidth: 12,
               boxHeight: 12,
-              padding: 16,
+              padding: 20,
               usePointStyle: false,
               filter: function (item, data) {
                 /* oculta séries com todos os valores zerados */
