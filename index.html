@@ -155,13 +155,13 @@
 
     <!-- Toggle + Gráfico -->
     <section aria-label="Série histórica de exportações por classificação SH2">
-      <div class="serie-toggle" role="group" aria-label="Selecionar classificação SH2">
-        <button class="serie-btn" data-serie="sh08" aria-pressed="true">SH2 08 · Frutas e cítricos</button>
-        <button class="serie-btn" data-serie="sh07" aria-pressed="false">SH2 07 · Hortícolas</button>
+      <div class="serie-toggle" role="group" aria-label="Selecionar métrica">
+        <button class="serie-btn" data-serie="valor" aria-pressed="true">Valor US$ FOB</button>
+        <button class="serie-btn" data-serie="kg" aria-pressed="false">Quilograma Líquido</button>
       </div>
       <div class="chart-container">
-        <canvas id="indice-geral" role="img" aria-label="Exportações anuais de Sergipe em US$ FOB, SH2 08 (Frutas e cítricos), de 2016 a 2026">
-          Exportações anuais de Sergipe em SH2 08 (Frutas e cítricos): pico de US$ 2,87 mi em 2016, queda a US$ 28.763 em 2021, recuperação a US$ 2,23 mi em 2024, retração a US$ 1,20 mi em 2025. SH2 07 (Hortícolas) tem apenas um registro: US$ 1.334 em novembro de 2021.
+        <canvas id="indice-geral" role="img" aria-label="Exportações mensais de Sergipe (SH2 07+08 combinados), jan/2016 a abr/2026. Alterne entre Valor US$ FOB e Quilograma Líquido.">
+          Série mensal de exportações de Sergipe em hortifrutigranjeiros (SH2 07 e 08 combinados), de janeiro de 2016 a abril de 2026. Pico de valor em maio de 2017 (US$ 907.707 FOB). Pico de volume em março de 2024 (498.960 kg). Disponível em duas métricas: Valor US$ FOB e Quilograma Líquido.
         </canvas>
       </div>
     </section>
@@ -201,7 +201,7 @@
     <!-- Nota metodológica -->
     <aside class="method-note">
       <div class="method-note__label">nota metodológica</div>
-      <p class="method-note__text">Dados extraídos do Comex Stat (MDIC), consulta por UF do produto (Sergipe) e capítulos SH2 07 ("Produtos hortícolas, plantas, raízes e tubérculos, comestíveis") e SH2 08 ("Frutas; cascas de frutos cítricos e de melões"), período 2016–2026, geração 16/mai/2026. Valores em US$ FOB (Free On Board). Meses ausentes do dataset correspondem a zero exportações no período. O SH2 07 registra apenas uma observação em toda a série: novembro de 2021, US$ 1.334. Os dados de 2026 cobrem fevereiro a abril; os meses restantes de 2026 são futuros. A coluna Quilograma Líquido está disponível no dataset bruto mas não foi utilizada nesta visualização.</p>
+      <p class="method-note__text">Dados extraídos do Comex Stat (MDIC), consulta por UF do produto (Sergipe) e capítulos SH2 07 ("Produtos hortícolas, plantas, raízes e tubérculos, comestíveis") e SH2 08 ("Frutas; cascas de frutos cítricos e de melões"), período 2016–2026, geração 16/mai/2026. As duas classificações são somadas por mês — o SH2 07 registra apenas novembro de 2021 (US$ 1.334 / 945 kg), contribuição negligível frente ao SH2 08. Meses ausentes do dataset correspondem a zero exportações no período. Gráfico disponível em duas métricas: Valor US$ FOB (Free On Board) e Quilograma Líquido. Os dados de 2026 cobrem janeiro a abril; os meses restantes são futuros.</p>
     </aside>
 
   </main>
