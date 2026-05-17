@@ -1,12 +1,12 @@
 # cobweb
 
-Portal editorial de preços do hortifrúti em Sergipe.
+Portal editorial de preços agricolas com foco em hortifrúti em Sergipe.
 
 ## Sobre
 
-Site estático que publica mensalmente um índice de preços do hortifrúti em Aracaju (CEASA-SE), comparado com Recife (CEASA-PE) e São Paulo (CEAGESP), acompanhado de comentário de conjuntura e fichas individuais por produto.
+Site estático que publica mensalmente um índice de preços do hortifrúti em Aracaju (CEASA-SE), comparado com Recife (CEASA-PE) e São Paulo (CEAGESP), acompanhado de comentário de conjuntura e fichas individuais por produto. Além disso, dá uma panorama do mercado internacional, os preços negociados em diversos países e os principais portos de exportação nascional. Analisa o desepenho de outro países que atuam no setor, contribuindo para a estrategia dos produtores nacionais. 
 
-Fonte primária: PROHORT/CONAB.
+Fonte primária: PROHORT/CONAB para os preços do ceasas. Comex e sites internacionais para analíse internacional. 
 
 ## Estrutura
 
