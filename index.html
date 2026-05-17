@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CobWeb · mercados integrados · Sergipe</title>
-  <meta name="description" content="Índice de preços do hortifrúti em Sergipe e comparação com CEASAs de referência. Análise editorial mensal a partir de dados públicos do PROHORT/CONAB.">
+  <title>CobWeb · exportações de hortifrúti · Sergipe</title>
+  <meta name="description" content="Exportações sergipanas de hortifrutigranjeiros (SH2 07 e 08): série histórica 2016–2026 em US$ FOB. Fonte: Comex Stat / MDIC.">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
@@ -18,9 +18,38 @@
   <link rel="stylesheet" href="cobweb.css">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="CobWeb · mercados integrados · Sergipe">
-  <meta property="og:description" content="Índice de preços do hortifrúti em Sergipe e comparação com CEASAs de referência.">
+  <meta property="og:title" content="CobWeb · exportações de hortifrúti · Sergipe">
+  <meta property="og:description" content="Série 2016–2026: Sergipe exportou US$ 2,23 mi em frutas em 2024, mas recuou 46% em 2025. Dados Comex Stat.">
   <meta property="og:type" content="website">
+
+  <style>
+    .serie-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .serie-btn {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--color-border-strong);
+      background: transparent;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .serie-btn:hover {
+      background: var(--color-brand-soft);
+      color: var(--color-text);
+      border-color: var(--color-brand);
+    }
+    .serie-btn[aria-pressed="true"] {
+      background: var(--color-brand);
+      color: #fff;
+      border-color: var(--color-brand);
+    }
+  </style>
 </head>
 <body>
 
@@ -60,20 +89,20 @@
 
     <!-- Manchete -->
     <section>
-      <div class="eyebrow">índice de preços do hortifrúti · maio 2026</div>
-      <h1 class="headline">Preço do hortifrúti recua em maio puxado pela safra do agreste</h1>
-      <p class="deck">Índice ponderado pelo volume comercializado nas três CEASAs de referência. Aracaju lidera a queda; Recife e São Paulo seguem a tendência com defasagem.</p>
+      <div class="eyebrow">exportações · sergipe · sh2 07 e 08 · 2016–2026</div>
+      <h1 class="headline">Depois de seis anos em colapso, frutas sergipanas voltam a US$ 2,2 milhões — mas 2025 recua 46%</h1>
+      <p class="deck">Série histórica das exportações sergipanas em hortifrutigranjeiros: pico de US$ 2,87 mi em 2016, queda de 99% até 2021, recuperação em 2023–2024 e nova retração em 2025. Fonte: Comex Stat / MDIC.</p>
     </section>
 
     <!-- Meta strip -->
     <div class="meta-strip">
       <span class="meta-strip__item">
         <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
-        atualizado 8 mai 2026
+        2016–2026
       </span>
       <span class="meta-strip__item">
         <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v6c0 1.7 4 3 9 3s9-1.3 9-3V6M3 12v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg>
-        fonte: PROHORT/CONAB
+        fonte: Comex Stat / MDIC
       </span>
       <span class="meta-strip__item">
         <a href="sobre/metodologia/">
@@ -83,209 +112,96 @@
       </span>
     </div>
 
-    <!-- Cards das CEASAs -->
-    <section class="index-grid" aria-label="Índice de preços por CEASA">
+    <!-- Cards de destaque -->
+    <section class="index-grid" aria-label="Destaques da série de exportações">
+
       <article class="index-card">
         <header class="index-card__header">
-          <span class="index-card__name">Aracaju</span>
-          <span class="index-card__source">CEASA-SE</span>
+          <span class="index-card__name">Abr 2026</span>
+          <span class="index-card__source">SH2 08 · último mês</span>
         </header>
         <div class="index-card__value">
-          <span class="index-card__number">98,4</span>
-          <span class="index-card__delta delta-down">−4,2%</span>
+          <span class="index-card__number">98.270</span>
+          <span class="index-card__delta delta-up">+101%</span>
         </div>
-        <div class="index-card__base">base 100 = média 2024</div>
+        <div class="index-card__base">US$ FOB · vs. março de 2026</div>
       </article>
 
       <article class="index-card">
         <header class="index-card__header">
-          <span class="index-card__name">Recife</span>
-          <span class="index-card__source">CEASA-PE</span>
+          <span class="index-card__name">2024</span>
+          <span class="index-card__source">SH2 08 · ano completo</span>
         </header>
         <div class="index-card__value">
-          <span class="index-card__number">102,1</span>
-          <span class="index-card__delta delta-down">−1,8%</span>
+          <span class="index-card__number">2,23 mi</span>
+          <span class="index-card__delta delta-up">+3,7%</span>
         </div>
-        <div class="index-card__base">base 100 = média 2024</div>
+        <div class="index-card__base">US$ FOB · vs. 2023</div>
       </article>
 
       <article class="index-card">
         <header class="index-card__header">
-          <span class="index-card__name">São Paulo</span>
-          <span class="index-card__source">CEAGESP</span>
+          <span class="index-card__name">2025</span>
+          <span class="index-card__source">SH2 08 · ano completo</span>
         </header>
         <div class="index-card__value">
-          <span class="index-card__number">105,6</span>
-          <span class="index-card__delta delta-up">+0,4%</span>
+          <span class="index-card__number">1,20 mi</span>
+          <span class="index-card__delta delta-down">−46,2%</span>
         </div>
-        <div class="index-card__base">base 100 = média 2024</div>
+        <div class="index-card__base">US$ FOB · vs. 2024</div>
       </article>
+
     </section>
 
-    <!-- Gráfico -->
-    <section aria-label="Série temporal do índice">
-      <div class="chart-legend">
-        <span class="chart-legend__item">
-          <span class="chart-legend__swatch chart-legend__swatch--solid"></span>
-          Aracaju (CEASA-SE)
-        </span>
-        <span class="chart-legend__item">
-          <span class="chart-legend__swatch chart-legend__swatch--dashed"></span>
-          Recife (CEASA-PE)
-        </span>
-        <span class="chart-legend__item">
-          <span class="chart-legend__swatch chart-legend__swatch--dotted"></span>
-          São Paulo (CEAGESP)
-        </span>
+    <!-- Toggle + Gráfico -->
+    <section aria-label="Série histórica de exportações por classificação SH2">
+      <div class="serie-toggle" role="group" aria-label="Selecionar classificação SH2">
+        <button class="serie-btn" data-serie="sh08" aria-pressed="true">SH2 08 · Frutas e cítricos</button>
+        <button class="serie-btn" data-serie="sh07" aria-pressed="false">SH2 07 · Hortícolas</button>
       </div>
       <div class="chart-container">
-        <canvas id="indice-geral" role="img" aria-label="Índice de preços do hortifrúti em três CEASAs entre 2020 e 2025">
-          Série mensal do índice de preços em Aracaju, Recife e São Paulo, 2020 a 2025.
+        <canvas id="indice-geral" role="img" aria-label="Exportações anuais de Sergipe em US$ FOB, SH2 08 (Frutas e cítricos), de 2016 a 2026">
+          Exportações anuais de Sergipe em SH2 08 (Frutas e cítricos): pico de US$ 2,87 mi em 2016, queda a US$ 28.763 em 2021, recuperação a US$ 2,23 mi em 2024, retração a US$ 1,20 mi em 2025. SH2 07 (Hortícolas) tem apenas um registro: US$ 1.334 em novembro de 2021.
         </canvas>
       </div>
     </section>
 
-    <!-- Comentário de conjuntura -->
+    <!-- Leitura editorial -->
     <section class="commentary">
-      <h2 class="section-title">Panorama de maio</h2>
+      <h2 class="section-title">Leitura da série</h2>
       <div class="prose">
-        <p>A queda de 4,2% no índice sergipano em maio reflete a entrada simultânea da safra do agreste — Itabaiana, Lagarto, Areia Branca — com o escoamento residual de cargas pernambucanas. O movimento é localizado: Recife recua menos, São Paulo praticamente estável.</p>
-        <p>A leitura desagregada por categoria mostra que o recuo é puxado por hortaliças de fruto (tomate, pimentão), enquanto folhosas seguem firmes e frutas perenes acompanham a tendência nacional. Para os próximos 60 dias, o sinal é de preço deprimido, com reação esperada em julho quando a janela de plantio do agreste se fechar.</p>
+        <p>Dois ciclos distintos marcam as exportações sergipanas de frutas e cítricos (SH2 08) na última década. No primeiro — 2016 e 2017 — o estado exportou US$ 2,87 mi e US$ 2,85 mi, respectivamente. A partir de 2018, a queda foi abrupta: em quatro anos o valor recuou 99%, chegando a US$ 28.763 em 2021 — equivalente a um único embarque pequeno. O colapso não foi gradual: 2018 já registrava US$ 584 mil, e 2019 caía para US$ 443 mil antes que as exportações praticamente cessassem em 2020 e 2021.</p>
+        <p>A recuperação de 2023 foi a mais relevante da série: US$ 2,15 mi em um único ano, voltando ao patamar de 2016. O crescimento de 3,7% em 2024 sugeria consolidação. A retração de 2025, porém, quebra o ritmo: US$ 1,20 mi no ano completo representam queda de 46,2% e retornam as exportações ao nível de 2018. Os meses de setembro a dezembro de 2025 não apresentam registros no Comex Stat, padrão já observado em 2022, sugerindo interrupção sazonal ou estrutural do escoamento.</p>
       </div>
     </section>
 
-    <!-- Subíndices por categoria -->
-    <section class="subindex-section" aria-label="Subíndices por categoria">
-      <div class="eyebrow">subíndices · aracaju · maio 2026</div>
+    <!-- Destaques históricos -->
+    <section class="subindex-section" aria-label="Marcos históricos da série SH2 08">
+      <div class="eyebrow">marcos históricos · SH2 08 · Sergipe</div>
       <div class="subindex-grid">
         <div class="subindex-card">
-          <div class="subindex-card__label">hortaliças de fruto</div>
-          <div class="subindex-card__value">
-            94,2 <span class="subindex-card__delta delta-down">−8,1%</span>
-          </div>
+          <div class="subindex-card__label">pico · 2016</div>
+          <div class="subindex-card__value">2,87 mi<span class="subindex-card__delta delta-flat" style="font-size:11px;"> US$</span></div>
         </div>
         <div class="subindex-card">
-          <div class="subindex-card__label">folhosas</div>
-          <div class="subindex-card__value">
-            101,8 <span class="subindex-card__delta delta-up">+0,9%</span>
-          </div>
+          <div class="subindex-card__label">mínimo · 2021</div>
+          <div class="subindex-card__value">28.763 <span class="subindex-card__delta delta-down">−99%</span></div>
         </div>
         <div class="subindex-card">
-          <div class="subindex-card__label">raízes e tubérculos</div>
-          <div class="subindex-card__value">
-            99,5 <span class="subindex-card__delta delta-down">−2,3%</span>
-          </div>
+          <div class="subindex-card__label">retomada · 2024</div>
+          <div class="subindex-card__value">2,23 mi<span class="subindex-card__delta delta-flat" style="font-size:11px;"> US$</span></div>
         </div>
         <div class="subindex-card">
-          <div class="subindex-card__label">frutas</div>
-          <div class="subindex-card__value">
-            100,3 <span class="subindex-card__delta delta-flat">−0,1%</span>
-          </div>
+          <div class="subindex-card__label">2025 vs. 2024</div>
+          <div class="subindex-card__value"><span class="subindex-card__delta delta-down" style="font-size:19px; font-weight:500;">−46,2%</span></div>
         </div>
-      </div>
-    </section>
-
-    <!-- Lista de produtos -->
-    <section class="products-section">
-      <header class="products-section__header">
-        <h2 class="section-title" style="margin: 0;">Produtos em destaque</h2>
-        <a href="produtos/" class="products-section__meta">15 culturas acompanhadas · ver todos →</a>
-      </header>
-      <div class="products-grid">
-        <a href="produtos/tomate/" class="product-item">
-          <div class="product-item__header">
-            <span class="product-item__name">tomate</span>
-            <span class="product-item__delta delta-down">−18%</span>
-          </div>
-          <div class="product-item__price">
-            <span class="product-item__value">R$ 4,80<span class="product-item__unit">/kg</span></span>
-            <span class="product-item__previous">vs. R$ 5,85 em abr</span>
-          </div>
-        </a>
-
-        <a href="produtos/cebola/" class="product-item">
-          <div class="product-item__header">
-            <span class="product-item__name">cebola</span>
-            <span class="product-item__delta delta-up">+6%</span>
-          </div>
-          <div class="product-item__price">
-            <span class="product-item__value">R$ 3,20<span class="product-item__unit">/kg</span></span>
-            <span class="product-item__previous">vs. R$ 3,02 em abr</span>
-          </div>
-        </a>
-
-        <a href="produtos/batata/" class="product-item">
-          <div class="product-item__header">
-            <span class="product-item__name">batata</span>
-            <span class="product-item__delta delta-flat">+0,5%</span>
-          </div>
-          <div class="product-item__price">
-            <span class="product-item__value">R$ 4,15<span class="product-item__unit">/kg</span></span>
-            <span class="product-item__previous">vs. R$ 4,13 em abr</span>
-          </div>
-        </a>
-
-        <a href="produtos/pimentao/" class="product-item">
-          <div class="product-item__header">
-            <span class="product-item__name">pimentão</span>
-            <span class="product-item__delta delta-down">−12%</span>
-          </div>
-          <div class="product-item__price">
-            <span class="product-item__value">R$ 6,40<span class="product-item__unit">/kg</span></span>
-            <span class="product-item__previous">vs. R$ 7,28 em abr</span>
-          </div>
-        </a>
-
-        <a href="produtos/cenoura/" class="product-item">
-          <div class="product-item__header">
-            <span class="product-item__name">cenoura</span>
-            <span class="product-item__delta delta-down">−3%</span>
-          </div>
-          <div class="product-item__price">
-            <span class="product-item__value">R$ 3,90<span class="product-item__unit">/kg</span></span>
-            <span class="product-item__previous">vs. R$ 4,02 em abr</span>
-          </div>
-        </a>
-
-        <a href="produtos/alface/" class="product-item">
-          <div class="product-item__header">
-            <span class="product-item__name">alface</span>
-            <span class="product-item__delta delta-up">+2%</span>
-          </div>
-          <div class="product-item__price">
-            <span class="product-item__value">R$ 2,80<span class="product-item__unit">/un</span></span>
-            <span class="product-item__previous">vs. R$ 2,75 em abr</span>
-          </div>
-        </a>
-
-        <a href="produtos/banana/" class="product-item">
-          <div class="product-item__header">
-            <span class="product-item__name">banana prata</span>
-            <span class="product-item__delta delta-flat">±0%</span>
-          </div>
-          <div class="product-item__price">
-            <span class="product-item__value">R$ 3,50<span class="product-item__unit">/kg</span></span>
-            <span class="product-item__previous">estável</span>
-          </div>
-        </a>
-
-        <a href="produtos/manga/" class="product-item">
-          <div class="product-item__header">
-            <span class="product-item__name">manga tommy</span>
-            <span class="product-item__delta delta-up">+8%</span>
-          </div>
-          <div class="product-item__price">
-            <span class="product-item__value">R$ 4,20<span class="product-item__unit">/kg</span></span>
-            <span class="product-item__previous">vs. R$ 3,90 em abr</span>
-          </div>
-        </a>
       </div>
     </section>
 
     <!-- Nota metodológica -->
     <aside class="method-note">
       <div class="method-note__label">nota metodológica</div>
-      <p class="method-note__text">Índice de preços ponderado pelo volume comercializado, calculado a partir das séries de preço médio mensal por produto. Base 100 = média de 2024. Preços deflacionados pelo IPCA. Aracaju a partir do PROHORT/CONAB e boletins do CEASA-SE; Recife e São Paulo via PROHORT.</p>
+      <p class="method-note__text">Dados extraídos do Comex Stat (MDIC), consulta por UF do produto (Sergipe) e capítulos SH2 07 ("Produtos hortícolas, plantas, raízes e tubérculos, comestíveis") e SH2 08 ("Frutas; cascas de frutos cítricos e de melões"), período 2016–2026, geração 16/mai/2026. Valores em US$ FOB (Free On Board). Meses ausentes do dataset correspondem a zero exportações no período. O SH2 07 registra apenas uma observação em toda a série: novembro de 2021, US$ 1.334. Os dados de 2026 cobrem fevereiro a abril; os meses restantes de 2026 são futuros. A coluna Quilograma Líquido está disponível no dataset bruto mas não foi utilizada nesta visualização.</p>
     </aside>
 
   </main>

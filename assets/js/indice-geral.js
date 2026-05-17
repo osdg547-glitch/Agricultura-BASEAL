@@ -1,137 +1,120 @@
 /* ============================================================
-   cobweb · gráfico do índice geral
+   cobweb · exportações de hortifrúti · Sergipe
    ============================================================
-   Renderiza a série temporal do índice nas três CEASAs.
-   Espera um <canvas id="indice-geral"> e Chart.js carregado.
-
-   Quando os dados reais estiverem disponíveis (PROHORT/CONAB),
-   substitua o array gerado em buildSeries() pela leitura de
-   /dados/indice-geral.json (ou similar).
+   Dados reais: Comex Stat / MDIC.
+   Totais anuais em US$ FOB por capítulo SH2 (07 e 08).
+   Período: 2016–2026 (2026 parcial, jan–abr).
    ============================================================ */
 
 (function () {
+  'use strict';
+
   const canvas = document.getElementById('indice-geral');
   if (!canvas || typeof Chart === 'undefined') return;
 
-  // Detecta dark mode para ajustar cores do gráfico
   const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
   const colors = {
-    brand: isDark ? '#5dcaa5' : '#1d9e75',
-    brandFill: isDark ? 'rgba(93, 202, 165, 0.1)' : 'rgba(29, 158, 117, 0.08)',
-    neutral: '#888780',
-    grid: isDark ? 'rgba(240, 238, 229, 0.08)' : 'rgba(26, 26, 26, 0.08)',
-    text: isDark ? '#b4b2a9' : '#888780'
+    brand:     isDark ? '#5dcaa5' : '#1d9e75',
+    brandFill: isDark ? 'rgba(93, 202, 165, 0.25)' : 'rgba(29, 158, 117, 0.18)',
+    grid:      isDark ? 'rgba(240, 238, 229, 0.08)' : 'rgba(26, 26, 26, 0.08)',
+    text:      isDark ? '#b4b2a9' : '#888780',
+    tooltipBg: isDark ? 'rgba(240, 238, 229, 0.95)' : 'rgba(20, 20, 20, 0.92)',
+    tooltipTx: isDark ? '#14140f' : '#ffffff'
   };
 
-  // Série de exemplo. Substituir por dados reais.
-  function buildSeries() {
-    const labels = [];
-    const aracaju = [];
-    const recife = [];
-    const saopaulo = [];
-    const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-    const startYear = 2020;
+  const labels = ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026*'];
 
-    for (let y = 0; y < 6; y++) {
-      for (let m = 0; m < 12; m++) {
-        if (y === 5 && m > 4) break;
-        labels.push(y === 0 || m === 0 ? `${months[m]} ${startYear + y}` : months[m]);
-        const t = y * 12 + m;
-        const trend = 100 + (t - 30) * 0.15;
-        const seasonal = Math.sin(t * 2 * Math.PI / 12) * 4;
-        const cycle = Math.sin(t * 2 * Math.PI / 18) * 6;
-        aracaju.push(+(trend + seasonal + cycle + (Math.random() - 0.5) * 1.2).toFixed(1));
-        recife.push(+(trend * 1.02 + seasonal * 0.7 + cycle * 0.6 + (Math.random() - 0.5) * 1.0).toFixed(1));
-        saopaulo.push(+(trend * 1.04 + seasonal * 0.5 + cycle * 0.4 + (Math.random() - 0.5) * 0.8).toFixed(1));
-      }
+  /* Totais anuais calculados a partir de Comex Stat (SH2 = Código de 2 dígitos) */
+  const series = {
+    sh08: {
+      label: 'SH2 08 · Frutas e cascas de cítricos (US$ FOB)',
+      data:  [2872271, 2849077, 584013, 443012, 133062, 28763, 214701, 2151485, 2231772, 1199604, 172127],
+      yMax:  3200000
+    },
+    sh07: {
+      label: 'SH2 07 · Hortícolas, raízes e tubérculos (US$ FOB)',
+      data:  [0, 0, 0, 0, 0, 1334, 0, 0, 0, 0, 0],
+      yMax:  2000
     }
-    return { labels, aracaju, recife, saopaulo };
+  };
+
+  let active = 'sh08';
+
+  function fmtUSD(v) {
+    if (v >= 1000000) return 'US$ ' + (v / 1000000).toFixed(2).replace('.', ',') + ' M';
+    if (v >= 1000)    return 'US$ ' + (v / 1000).toFixed(1).replace('.', ',') + ' K';
+    return 'US$ ' + v.toLocaleString('pt-BR');
   }
 
-  const { labels, aracaju, recife, saopaulo } = buildSeries();
-
-  new Chart(canvas, {
-    type: 'line',
+  const chart = new Chart(canvas, {
+    type: 'bar',
     data: {
-      labels: labels,
-      datasets: [
-        {
-          label: 'Aracaju',
-          data: aracaju,
-          borderColor: colors.brand,
-          backgroundColor: colors.brandFill,
-          borderWidth: 2,
-          pointRadius: 0,
-          pointHoverRadius: 4,
-          tension: 0.35,
-          fill: true
-        },
-        {
-          label: 'Recife',
-          data: recife,
-          borderColor: colors.neutral,
-          borderWidth: 1.5,
-          borderDash: [6, 4],
-          pointRadius: 0,
-          pointHoverRadius: 4,
-          tension: 0.35,
-          fill: false
-        },
-        {
-          label: 'São Paulo',
-          data: saopaulo,
-          borderColor: colors.neutral,
-          borderWidth: 1.5,
-          borderDash: [2, 3],
-          pointRadius: 0,
-          pointHoverRadius: 4,
-          tension: 0.35,
-          fill: false
-        }
-      ]
+      labels,
+      datasets: [{
+        label: series.sh08.label,
+        data:  series.sh08.data,
+        backgroundColor: colors.brandFill,
+        borderColor:     colors.brand,
+        borderWidth:     1.5,
+        borderRadius:    3
+      }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: isDark ? 'rgba(240, 238, 229, 0.95)' : 'rgba(20, 20, 20, 0.92)',
-          titleColor: isDark ? '#14140f' : '#ffffff',
-          bodyColor: isDark ? '#14140f' : '#ffffff',
+          backgroundColor: colors.tooltipBg,
+          titleColor:      colors.tooltipTx,
+          bodyColor:       colors.tooltipTx,
           titleFont: { size: 12, weight: '500' },
-          bodyFont: { size: 12 },
+          bodyFont:  { size: 12 },
           padding: 10,
           callbacks: {
-            label: (item) => `${item.dataset.label}: ${item.parsed.y.toFixed(1)}`
+            label: (item) => fmtUSD(item.parsed.y)
           }
         }
       },
       scales: {
         x: {
-          grid: { display: false },
-          ticks: {
-            color: colors.text,
-            font: { size: 11 },
-            maxRotation: 0,
-            autoSkip: true,
-            maxTicksLimit: 8
-          },
-          border: { color: colors.grid }
+          grid:  { display: false },
+          ticks: { color: colors.text, font: { size: 11 }, maxRotation: 0 },
+          border:{ color: colors.grid }
         },
         y: {
-          grid: { color: colors.grid, drawBorder: false },
+          grid:  { color: colors.grid },
           ticks: {
             color: colors.text,
-            font: { size: 11 },
-            stepSize: 5
+            font:  { size: 11 },
+            callback: (v) => fmtUSD(v)
           },
-          border: { display: false },
-          min: 85,
-          max: 120
+          border:{ display: false },
+          min: 0,
+          max: 3200000
         }
       }
     }
+  });
+
+  /* Toggle entre SH2 08 e SH2 07 */
+  document.querySelectorAll('[data-serie]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const key = this.dataset.serie;
+      if (key === active) return;
+      active = key;
+
+      document.querySelectorAll('[data-serie]').forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+      });
+      this.setAttribute('aria-pressed', 'true');
+
+      const s = series[key];
+      chart.data.datasets[0].data  = s.data;
+      chart.data.datasets[0].label = s.label;
+      chart.options.scales.y.max   = s.yMax;
+      chart.update();
+    });
   });
 })();
