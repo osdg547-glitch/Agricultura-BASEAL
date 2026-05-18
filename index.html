@@ -212,6 +212,22 @@
       <div class="prose">
         <p>Dentro da classificação dos citrinos, o produto dominante na pauta de exportação é o limão-taiti (<em>Citrus latifolia</em>), produzido na região do Platô de Neópolis (Região do Baixo São Francisco). É uma região de grandes produtores que possuem certificação internacional, GlobalG.A.P. Curiosamente, embora Sergipe seja um grande produtor de laranja, ela é praticamente insignificante na pauta de exportação in natura. Isso se deve à forte indústria de processamento do estado, concentrada principalmente na região de Estância. O mercado global de cítricos estruturou o Brasil e, consequentemente, Sergipe para exportar suco. O transporte internacional de suco de laranja é altamente eficiente, realizado em navios-tanque refrigerados exclusivos (semelhantes a petroleiros) que partem dos portos brasileiros diretamente para a Europa e Estados Unidos.</p>
       </div>
+
+      <!-- Gráfico: volume + preço / preço por SH4 -->
+      <div id="limao-chart-wrapper" style="margin-top: 28px;">
+        <div class="serie-toggle" role="group" aria-label="Selecionar vista do gráfico">
+          <button class="serie-btn" data-vista="volume-preco" aria-pressed="true">Volume e preço — limão-taiti</button>
+          <button class="serie-btn" data-vista="preco-sh4" aria-pressed="false">Preço implícito por categoria</button>
+        </div>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="limao-volume-preco" role="img" aria-label="Gráfico em dois modos: (1) volume anual em toneladas e preço implícito US$/kg do limão-taiti (SH6 080550), Sergipe 2016–2026; (2) preço médio implícito anual por categoria SH4 — citrinos (0805), frutas secas (0813) e manga/abacaxi (0804).">
+            Série anual de volume exportado (toneladas) e preço médio implícito (US$ FOB/kg) do limão-taiti (SH6 080550) por Sergipe, 2016 a 2026. Na segunda vista, compara preços implícitos entre categorias SH4: citrinos in natura (~US$ 1/kg), frutas secas processadas (~US$ 22/kg em 2016–2017) e manga/abacaxi (~US$ 1,1/kg).
+          </canvas>
+        </div>
+        <p class="method-note__text" style="font-size: 13px; margin-top: 10px;">
+          <em>Vista 1 — barras (eixo esq.): volume em toneladas, SH6 080550; linha (eixo dir.): preço médio implícito US$ FOB/kg. Vista 2 — preço médio implícito por SH4 dominante; 0813 ausente de 2019 em diante por encerramento das exportações. Fonte: Comex Stat / MDIC, geração 17/mai/2026.</em>
+        </p>
+      </div>
     </section>
 
     <!-- Destaques históricos -->
@@ -257,5 +273,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="assets/js/indice-geral.js"></script>
   <script src="assets/js/composicao-sh4.js"></script>
+  <script src="assets/js/limao-volume-preco.js"></script>
 </body>
 </html>
