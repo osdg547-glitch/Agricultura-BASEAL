@@ -43,19 +43,48 @@
       line-height: 1.5;
     }
 
-    /* Grid 4 colunas; quebra em 2 em tablet e 1 em mobile */
+    /* Grid 4 colunas × 2 linhas; quando excede 8 cards, ativa scroll horizontal.
+       Em telas estreitas reduz para 2 ou 1 coluna mantendo o flow. */
     .panorama-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      grid-auto-flow: column;
+      grid-auto-columns: 232px;
       gap: 12px;
+      overflow-x: auto;
+      padding: 2px 2px 12px;
+      scroll-snap-type: x proximity;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border-strong) transparent;
+    }
+
+    .panorama-grid::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .panorama-grid::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .panorama-grid::-webkit-scrollbar-thumb {
+      background: var(--color-border-strong);
+      border-radius: 4px;
+    }
+
+    /* Dica visual: pequena sombra gradiente à direita quando há overflow */
+    .panorama-grid--scrollable {
+      position: relative;
     }
 
     @media (max-width: 800px) {
-      .panorama-grid { grid-template-columns: repeat(2, 1fr); }
+      .panorama-grid { grid-auto-columns: 220px; }
     }
 
     @media (max-width: 480px) {
-      .panorama-grid { grid-template-columns: 1fr; }
+      .panorama-grid {
+        grid-template-rows: 1fr;
+        grid-auto-columns: 85%;
+      }
     }
 
     /* Card compacto — "quadradinho" */
@@ -162,6 +191,15 @@
       color: var(--color-text-tertiary);
     }
 
+    .panorama-scroll-hint {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      text-align: right;
+      margin: 8px 4px 0;
+    }
+
     .badge-em-breve {
       font-size: 10px;
       letter-spacing: 0.06em;
@@ -225,13 +263,13 @@
       <div class="panorama-bloco__header">
         <div>
           <h2 class="section-title" style="margin:0;">Condições internas</h2>
-          <p class="panorama-bloco__desc">Preços de atacado coletados nos boletins EMDAGRO/ASPLAN — CEASA-SE e dois pontos de varejo em Aracaju. Jan–mar 2026.</p>
+          <p class="panorama-bloco__desc">11 produtos da cesta hortifrúti em três canais EMDAGRO/ASPLAN — atacado CEASA-SE, varejo Mercado Central e varejo Augusto Franco. Jan–mar 2026.</p>
         </div>
       </div>
 
-      <div class="panorama-grid" aria-label="Produtos monitorados internamente">
+      <div class="panorama-grid" aria-label="Produtos monitorados internamente — role para o lado para ver mais">
 
-        <!-- Tomate -->
+        <!-- Coluna 1, linha 1 — Tomate -->
         <a href="../produtos/tomate/" class="panorama-card" data-produto="tomate">
           <div class="panorama-card__eyebrow">tomate · ceasa-se</div>
           <div class="panorama-card__nome">Tomate</div>
@@ -246,52 +284,7 @@
           <span class="panorama-card__cta">ver análise →</span>
         </a>
 
-        <!-- Cebola roxa -->
-        <a href="../produtos/cebola-roxa/" class="panorama-card" data-produto="cebola_roxa">
-          <div class="panorama-card__eyebrow">cebola roxa · ceasa-se</div>
-          <div class="panorama-card__nome">Cebola roxa</div>
-          <div class="panorama-card__preco-row">
-            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
-            <div class="panorama-card__preco-group">
-              <div class="panorama-card__preco">R$ 4,00<span class="panorama-card__unid">/kg</span></div>
-              <div class="panorama-card__delta delta-flat">0% jan→mar</div>
-            </div>
-          </div>
-          <div class="panorama-card__nota">Atacado travado o trimestre inteiro; varejo cobra 25–50% acima sem movimento de fundo.</div>
-          <span class="panorama-card__cta">ver análise →</span>
-        </a>
-
-        <!-- Batata lisa -->
-        <a href="../produtos/batata-lisa/" class="panorama-card" data-produto="batata_lisa">
-          <div class="panorama-card__eyebrow">batata lisa · ceasa-se</div>
-          <div class="panorama-card__nome">Batata lisa</div>
-          <div class="panorama-card__preco-row">
-            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
-            <div class="panorama-card__preco-group">
-              <div class="panorama-card__preco">R$ 3,20<span class="panorama-card__unid">/kg</span></div>
-              <div class="panorama-card__delta delta-up">+7% jan→mar</div>
-            </div>
-          </div>
-          <div class="panorama-card__nota">Atacado quase parado; varejo dispara 60–75% em março. Repasse desproporcional.</div>
-          <span class="panorama-card__cta">ver análise →</span>
-        </a>
-
-        <!-- Manga tommy -->
-        <a href="../produtos/manga-tommy/" class="panorama-card" data-produto="manga_tommy">
-          <div class="panorama-card__eyebrow">manga tommy · ceasa-se</div>
-          <div class="panorama-card__nome">Manga tommy</div>
-          <div class="panorama-card__preco-row">
-            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
-            <div class="panorama-card__preco-group">
-              <div class="panorama-card__preco">R$ 2,60<span class="panorama-card__unid">/kg</span></div>
-              <div class="panorama-card__delta delta-down">−7% jan→mar</div>
-            </div>
-          </div>
-          <div class="panorama-card__nota">Atacado em queda; varejo travado e sem repassar a baixa. Spread triplicou no trimestre.</div>
-          <span class="panorama-card__cta">ver análise →</span>
-        </a>
-
-        <!-- Inhame da costa -->
+        <!-- Coluna 1, linha 2 — Inhame da costa -->
         <a href="../produtos/inhame-da-costa/" class="panorama-card" data-produto="inhame_da_costa">
           <div class="panorama-card__eyebrow">inhame da costa · ceasa-se</div>
           <div class="panorama-card__nome">Inhame da costa</div>
@@ -306,7 +299,37 @@
           <span class="panorama-card__cta">ver análise →</span>
         </a>
 
-        <!-- Cenoura -->
+        <!-- Coluna 2, linha 1 — Cebola roxa -->
+        <a href="../produtos/cebola-roxa/" class="panorama-card" data-produto="cebola_roxa">
+          <div class="panorama-card__eyebrow">cebola roxa · ceasa-se</div>
+          <div class="panorama-card__nome">Cebola roxa</div>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 4,00<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-flat">0% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Atacado travado o trimestre inteiro; varejo cobra 25–50% acima sem movimento de fundo.</div>
+          <span class="panorama-card__cta">ver análise →</span>
+        </a>
+
+        <!-- Coluna 2, linha 2 — Batata lisa -->
+        <a href="../produtos/batata-lisa/" class="panorama-card" data-produto="batata_lisa">
+          <div class="panorama-card__eyebrow">batata lisa · ceasa-se</div>
+          <div class="panorama-card__nome">Batata lisa</div>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 3,20<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-up">+7% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Atacado quase parado; varejo dispara 60–75% em março. Repasse desproporcional.</div>
+          <span class="panorama-card__cta">ver análise →</span>
+        </a>
+
+        <!-- Coluna 3, linha 1 — Cenoura -->
         <a href="../produtos/cenoura/" class="panorama-card" data-produto="cenoura">
           <div class="panorama-card__eyebrow">cenoura · ceasa-se</div>
           <div class="panorama-card__nome">Cenoura</div>
@@ -321,7 +344,99 @@
           <span class="panorama-card__cta">ver análise →</span>
         </a>
 
+        <!-- Coluna 3, linha 2 — Manga tommy -->
+        <a href="../produtos/manga-tommy/" class="panorama-card" data-produto="manga_tommy">
+          <div class="panorama-card__eyebrow">manga tommy · ceasa-se</div>
+          <div class="panorama-card__nome">Manga tommy</div>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 2,60<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-down">−7% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Atacado em queda; varejo travado e sem repassar a baixa. Spread triplicou no trimestre.</div>
+          <span class="panorama-card__cta">ver análise →</span>
+        </a>
+
+        <!-- Coluna 4, linha 1 — Limão taiti -->
+        <a href="../produtos/limao-taiti/" class="panorama-card" data-produto="limao_taiti">
+          <div class="panorama-card__eyebrow">limão taiti · ceasa-se</div>
+          <div class="panorama-card__nome">Limão taiti</div>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 2,00<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-down">−9% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Pilar das exportações de SE; ironia local — é o mais barato da cesta CEASA.</div>
+          <span class="panorama-card__cta">ver análise →</span>
+        </a>
+
+        <!-- Coluna 4, linha 2 — Mamão hawai -->
+        <a href="../produtos/mamao-hawai/" class="panorama-card" data-produto="mamao_hawai">
+          <div class="panorama-card__eyebrow">mamão hawai · ceasa-se</div>
+          <div class="panorama-card__nome">Mamão hawai</div>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 1,60<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-down">−45% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Atacado despenca 45%; Augusto Franco mantém R$ 5,00/kg as 23 semanas sem repassar.</div>
+          <span class="panorama-card__cta">ver análise →</span>
+        </a>
+
+        <!-- Coluna 5, linha 1 — Repolho verde — entra com scroll horizontal -->
+        <a href="../produtos/repolho-verde/" class="panorama-card" data-produto="repolho_verde">
+          <div class="panorama-card__eyebrow">repolho verde · ceasa-se</div>
+          <div class="panorama-card__nome">Repolho verde</div>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 4,67<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-up">+8% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Atacado em leve alta; varejo do Augusto Franco recua 29% — direções opostas.</div>
+          <span class="panorama-card__cta">ver análise →</span>
+        </a>
+
+        <!-- Coluna 5, linha 2 — Macaxeira -->
+        <a href="../produtos/macaxeira/" class="panorama-card" data-produto="macaxeira">
+          <div class="panorama-card__eyebrow">macaxeira · ceasa-se</div>
+          <div class="panorama-card__nome">Macaxeira</div>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 2,33<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-flat">0% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Três canais, 68 observações, três preços rigorosamente constantes. Inércia institucional.</div>
+          <span class="panorama-card__cta">ver análise →</span>
+        </a>
+
+        <!-- Coluna 6, linha 1 — Acerola -->
+        <a href="../produtos/acerola/" class="panorama-card" data-produto="acerola">
+          <div class="panorama-card__eyebrow">acerola · ceasa-se</div>
+          <div class="panorama-card__nome">Acerola</div>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 3,50<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-up">+40% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Atacado sobe 40%, mas varejo do Mercado Central cai 34%. Direções opostas.</div>
+          <span class="panorama-card__cta">ver análise →</span>
+        </a>
+
       </div>
+
+      <p class="panorama-scroll-hint" aria-hidden="true">role para o lado →</p>
     </section>
 
     <!-- ============================================================
