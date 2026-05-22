@@ -33,28 +33,38 @@
       justify-content: space-between;
       border-bottom: 1px solid var(--color-border);
       padding-bottom: 14px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .panorama-bloco__desc {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--color-text-secondary);
-      margin: 0;
-      max-width: 520px;
-      line-height: 1.55;
+      margin: 4px 0 0;
+      line-height: 1.5;
     }
 
+    /* Grid 4 colunas; quebra em 2 em tablet e 1 em mobile */
     .panorama-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
     }
 
+    @media (max-width: 800px) {
+      .panorama-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .panorama-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Card compacto — "quadradinho" */
     .panorama-card {
       border: 1px solid var(--color-border);
       border-radius: var(--radius-lg);
-      padding: 20px;
-      display: block;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
       text-decoration: none;
       transition: background 0.15s, border-color 0.15s;
     }
@@ -62,7 +72,6 @@
     .panorama-card:hover {
       background: var(--color-bg-soft);
       border-color: var(--color-border-strong);
-      border-bottom: 1px solid var(--color-border-strong);
     }
 
     .panorama-card--em-breve {
@@ -71,54 +80,79 @@
       pointer-events: none;
     }
 
-    .panorama-card--em-breve:hover {
-      background: transparent;
-      border-color: var(--color-border);
-    }
-
     .panorama-card__eyebrow {
-      font-size: 10px;
-      letter-spacing: 0.08em;
+      font-size: 9px;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
-      color: var(--color-text-secondary);
-      margin-bottom: 10px;
+      color: var(--color-text-tertiary);
+      margin-bottom: 6px;
     }
 
     .panorama-card__nome {
       font-family: var(--font-serif);
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 500;
       letter-spacing: -0.01em;
       color: var(--color-text);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    /* Linha sparkline + preço — lado a lado */
+    .panorama-card__preco-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .panorama-card__spark {
+      flex-shrink: 0;
+      width: 72px;
+      height: 40px;
+      overflow: visible;
+    }
+
+    .panorama-card__preco-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .panorama-card__preco {
-      font-size: 26px;
+      font-size: 20px;
       font-weight: 500;
       line-height: 1;
       color: var(--color-text);
-      margin-bottom: 4px;
+      letter-spacing: -0.02em;
     }
 
-    .panorama-card__meta {
+    .panorama-card__unid {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      letter-spacing: 0;
+    }
+
+    .panorama-card__delta {
       font-size: 11px;
-      color: var(--color-text-tertiary);
-      margin-bottom: 14px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
     }
 
     .panorama-card__nota {
-      font-size: 13px;
-      line-height: 1.55;
+      font-size: 12px;
+      line-height: 1.5;
       color: var(--color-text-secondary);
       border-top: 1px solid var(--color-border);
-      padding-top: 12px;
+      padding-top: 10px;
+      margin-top: auto;
     }
 
     .panorama-card__cta {
       display: inline-block;
-      margin-top: 12px;
-      font-size: 12px;
+      margin-top: 8px;
+      font-size: 11px;
       color: var(--color-brand);
       letter-spacing: 0.01em;
     }
@@ -172,9 +206,9 @@
   </header>
 
   <!-- ============================================================
-       Conteúdo principal
+       Conteúdo principal — container wide para acomodar 4 colunas
        ============================================================ -->
-  <main class="container">
+  <main class="container container--wide">
 
     <!-- Manchete -->
     <section>
@@ -190,71 +224,101 @@
 
       <div class="panorama-bloco__header">
         <div>
-          <h2 class="section-title" style="margin:0 0 6px;">Condições internas</h2>
-          <p class="panorama-bloco__desc">Preços de atacado coletados nos boletins do CEASA-SE e do Mercado Central de Aracaju, via EMDAGRO/ASPLAN.</p>
+          <h2 class="section-title" style="margin:0;">Condições internas</h2>
+          <p class="panorama-bloco__desc">Preços de atacado coletados nos boletins EMDAGRO/ASPLAN — CEASA-SE e dois pontos de varejo em Aracaju. Jan–mar 2026.</p>
         </div>
       </div>
 
       <div class="panorama-grid" aria-label="Produtos monitorados internamente">
 
         <!-- Tomate -->
-        <a href="../produtos/tomate/" class="panorama-card">
-          <div class="panorama-card__eyebrow">tomate · atacado · aracaju</div>
+        <a href="../produtos/tomate/" class="panorama-card" data-produto="tomate">
+          <div class="panorama-card__eyebrow">tomate · ceasa-se</div>
           <div class="panorama-card__nome">Tomate</div>
-          <div class="panorama-card__preco">R$ 6,00<span style="font-size:14px; font-weight:400; color:var(--color-text-secondary);">/kg</span></div>
-          <div class="panorama-card__meta">CEASA-SE · última coleta 26/mar/2026</div>
-          <div class="panorama-card__nota">Alta de 114% no atacado entre janeiro e março. Mercado Central confirma o choque com amortecimento; Augusto Franco em platô de R$ 5–6/kg o trimestre inteiro.</div>
-          <span class="panorama-card__cta">ver análise completa →</span>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 6,00<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-up">+114% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Choque de oferta em março. Atacado mais que dobra; varejo confirma com amortecimento.</div>
+          <span class="panorama-card__cta">ver análise →</span>
         </a>
 
         <!-- Cebola roxa -->
-        <a href="../produtos/cebola-roxa/" class="panorama-card">
-          <div class="panorama-card__eyebrow">cebola roxa · atacado · aracaju</div>
+        <a href="../produtos/cebola-roxa/" class="panorama-card" data-produto="cebola_roxa">
+          <div class="panorama-card__eyebrow">cebola roxa · ceasa-se</div>
           <div class="panorama-card__nome">Cebola roxa</div>
-          <div class="panorama-card__preco">R$ 4,00<span style="font-size:14px; font-weight:400; color:var(--color-text-secondary);">/kg</span></div>
-          <div class="panorama-card__meta">CEASA-SE · última coleta 26/mar/2026</div>
-          <div class="panorama-card__nota">Atacado travado em R$ 4,00/kg durante todo o trimestre. Varejo Augusto Franco cobra 25–50% acima sem qualquer movimento de fundo.</div>
-          <span class="panorama-card__cta">ver análise completa →</span>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 4,00<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-flat">0% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Atacado travado o trimestre inteiro; varejo cobra 25–50% acima sem movimento de fundo.</div>
+          <span class="panorama-card__cta">ver análise →</span>
         </a>
 
         <!-- Batata lisa -->
-        <a href="../produtos/batata-lisa/" class="panorama-card">
-          <div class="panorama-card__eyebrow">batata lisa · atacado · aracaju</div>
+        <a href="../produtos/batata-lisa/" class="panorama-card" data-produto="batata_lisa">
+          <div class="panorama-card__eyebrow">batata lisa · ceasa-se</div>
           <div class="panorama-card__nome">Batata lisa</div>
-          <div class="panorama-card__preco">R$ 3,20<span style="font-size:14px; font-weight:400; color:var(--color-text-secondary);">/kg</span></div>
-          <div class="panorama-card__meta">CEASA-SE · última coleta 26/mar/2026</div>
-          <div class="panorama-card__nota">Atacado sobe 7% no trimestre, mas o varejo do Mercado Central sobe 75% e o do Augusto Franco 60%. Repasse desproporcional ao movimento de fundo.</div>
-          <span class="panorama-card__cta">ver análise completa →</span>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 3,20<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-up">+7% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Atacado quase parado; varejo dispara 60–75% em março. Repasse desproporcional.</div>
+          <span class="panorama-card__cta">ver análise →</span>
         </a>
 
         <!-- Manga tommy -->
-        <a href="../produtos/manga-tommy/" class="panorama-card">
-          <div class="panorama-card__eyebrow">manga tommy · atacado · aracaju</div>
+        <a href="../produtos/manga-tommy/" class="panorama-card" data-produto="manga_tommy">
+          <div class="panorama-card__eyebrow">manga tommy · ceasa-se</div>
           <div class="panorama-card__nome">Manga tommy</div>
-          <div class="panorama-card__preco">R$ 2,60<span style="font-size:14px; font-weight:400; color:var(--color-text-secondary);">/kg</span></div>
-          <div class="panorama-card__meta">CEASA-SE · última coleta 26/mar/2026</div>
-          <div class="panorama-card__nota">Atacado em leve queda (-7%). Mercado Central cravado em R$ 4,00/kg as 23 semanas; Augusto Franco em platô de R$ 7–8/kg. Spread triplicou.</div>
-          <span class="panorama-card__cta">ver análise completa →</span>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 2,60<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-down">−7% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Atacado em queda; varejo travado e sem repassar a baixa. Spread triplicou no trimestre.</div>
+          <span class="panorama-card__cta">ver análise →</span>
         </a>
 
         <!-- Inhame da costa -->
-        <a href="../produtos/inhame-da-costa/" class="panorama-card">
-          <div class="panorama-card__eyebrow">inhame da costa · atacado · aracaju</div>
+        <a href="../produtos/inhame-da-costa/" class="panorama-card" data-produto="inhame_da_costa">
+          <div class="panorama-card__eyebrow">inhame da costa · ceasa-se</div>
           <div class="panorama-card__nome">Inhame da costa</div>
-          <div class="panorama-card__preco">R$ 6,00<span style="font-size:14px; font-weight:400; color:var(--color-text-secondary);">/kg</span></div>
-          <div class="panorama-card__meta">CEASA-SE · última coleta 26/mar/2026</div>
-          <div class="panorama-card__nota">Queda de 54% no atacado no trimestre — caiu de R$ 13,33 para R$ 6,00/kg. Mercado Central repassa metade; Augusto Franco, um quinto.</div>
-          <span class="panorama-card__cta">ver análise completa →</span>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 6,00<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-down">−54% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Queda de 54% no atacado não chega ao varejo de bairro. Assimetria de repasse.</div>
+          <span class="panorama-card__cta">ver análise →</span>
         </a>
 
         <!-- Cenoura -->
-        <a href="../produtos/cenoura/" class="panorama-card">
-          <div class="panorama-card__eyebrow">cenoura · atacado · aracaju</div>
+        <a href="../produtos/cenoura/" class="panorama-card" data-produto="cenoura">
+          <div class="panorama-card__eyebrow">cenoura · ceasa-se</div>
           <div class="panorama-card__nome">Cenoura</div>
-          <div class="panorama-card__preco">R$ 5,00<span style="font-size:14px; font-weight:400; color:var(--color-text-secondary);">/kg</span></div>
-          <div class="panorama-card__meta">CEASA-SE · última coleta 26/mar/2026</div>
-          <div class="panorama-card__nota">Estável em jan–fev (R$ 3,50/kg), salto para R$ 5,00 em março. Augusto Franco amplifica para +75%; Mercado Central segue pari passu o atacado.</div>
-          <span class="panorama-card__cta">ver análise completa →</span>
+          <div class="panorama-card__preco-row">
+            <svg class="panorama-card__spark" viewBox="0 0 72 40" aria-hidden="true"></svg>
+            <div class="panorama-card__preco-group">
+              <div class="panorama-card__preco">R$ 5,00<span class="panorama-card__unid">/kg</span></div>
+              <div class="panorama-card__delta delta-up">+43% jan→mar</div>
+            </div>
+          </div>
+          <div class="panorama-card__nota">Estável em jan–fev; salto de 43% no atacado em março, amplificado no varejo.</div>
+          <span class="panorama-card__cta">ver análise →</span>
         </a>
 
       </div>
@@ -267,7 +331,7 @@
 
       <div class="panorama-bloco__header">
         <div>
-          <h2 class="section-title" style="margin:0 0 6px;">Condições externas</h2>
+          <h2 class="section-title" style="margin:0;">Condições externas</h2>
           <p class="panorama-bloco__desc">Preços e volumes comercializados em mercados internacionais de referência para os produtos monitorados internamente.</p>
         </div>
         <span class="badge-em-breve">em desenvolvimento</span>
@@ -278,13 +342,13 @@
         <div class="panorama-card panorama-card--em-breve" aria-label="Frutas tropicais — em breve">
           <div class="panorama-card__eyebrow">frutas tropicais · exportação</div>
           <div class="panorama-card__nome">Mercados internacionais</div>
-          <div class="panorama-card__nota">Cotações e volumes de frutas e hortaliças em mercados de referência — Europa, EUA e Ásia. Fontes previstas: FAO, ITC Trade Map, USDA.</div>
+          <div class="panorama-card__nota">Cotações de frutas e hortaliças em mercados de referência — Europa, EUA e Ásia. Fontes previstas: FAO, ITC Trade Map, USDA.</div>
         </div>
 
         <div class="panorama-card panorama-card--em-breve" aria-label="Fluxo de exportações — em breve">
           <div class="panorama-card__eyebrow">sergipe · fluxo de exportações</div>
           <div class="panorama-card__nome">Destinos e preços FOB</div>
-          <div class="panorama-card__nota">Preço médio FOB por destino e produto, derivado dos microdados Comex Stat. Identificação de padrões sazonais e competitividade por mercado.</div>
+          <div class="panorama-card__nota">Preço médio FOB por destino e produto, derivado dos microdados Comex Stat.</div>
         </div>
 
       </div>
@@ -299,6 +363,63 @@
     <span>CobWeb · publicação editorial independente</span>
     <span>cc by-sa 4.0</span>
   </footer>
+
+  <!-- Sparklines: lê o JSON do atacado e preenche cada card -->
+  <script>
+    (function () {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const COR_ALTA   = isDark ? '#5dcaa5' : '#1d9e75';
+      const COR_BAIXA  = isDark ? '#d4a96a' : '#a0762a';
+      const COR_NEUTRA = isDark ? '#8c8b84' : '#b4b2a9';
+
+      fetch('../dados/precos-emdagro-q1-2026.json')
+        .then(function (r) { return r.json(); })
+        .then(function (dados) {
+          document.querySelectorAll('.panorama-card[data-produto]').forEach(function (card) {
+            var slug = card.dataset.produto;
+            var bloco = dados.produtos[slug];
+            if (!bloco || !bloco.atacado_ceasa) return;
+
+            var serie = bloco.atacado_ceasa.precos_rs_kg.filter(function (v) { return v !== null; });
+            if (serie.length < 2) return;
+
+            var svg = card.querySelector('.panorama-card__spark');
+            if (!svg) return;
+
+            var W = 72, H = 40, PAD_X = 2, PAD_Y = 3;
+            var min = Math.min.apply(null, serie);
+            var max = Math.max.apply(null, serie);
+            var range = max - min || 1;
+
+            var pts = serie.map(function (v, i) {
+              var x = PAD_X + (i / (serie.length - 1)) * (W - 2 * PAD_X);
+              var y = PAD_Y + (1 - (v - min) / range) * (H - 2 * PAD_Y);
+              return x.toFixed(1) + ',' + y.toFixed(1);
+            });
+
+            /* Cor da linha: verde se subiu, âmbar se caiu, cinza se estável */
+            var primeira = serie[0], ultima = serie[serie.length - 1];
+            var cor = ultima > primeira * 1.02 ? COR_ALTA
+                    : ultima < primeira * 0.98 ? COR_BAIXA
+                    : COR_NEUTRA;
+
+            /* Área de preenchimento sob a linha */
+            var ultPt = pts[pts.length - 1].split(',');
+            var priPt = pts[0].split(',');
+            var area = 'M ' + priPt[0] + ',' + (H - PAD_Y)
+                     + ' L ' + pts.join(' L ')
+                     + ' L ' + ultPt[0] + ',' + (H - PAD_Y) + ' Z';
+
+            svg.innerHTML =
+              '<path d="' + area + '" fill="' + cor + '" opacity="0.10"/>'
+              + '<polyline points="' + pts.join(' ') + '" fill="none"'
+              + ' stroke="' + cor + '" stroke-width="1.8"'
+              + ' stroke-linejoin="round" stroke-linecap="round"/>';
+          });
+        })
+        .catch(function (e) { console.warn('Sparklines: JSON não carregado.', e); });
+    })();
+  </script>
 
 </body>
 </html>
