@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tomate · CobWeb</title>
-  <meta name="description" content="Preço do tomate em três canais de Aracaju: atacado CEASA-SE, Mercado Central e Mercado Setorial do Augusto Franco. Janeiro a março de 2026.">
+  <title>Inhame da costa · CobWeb</title>
+  <meta name="description" content="Preço de inhame da costa em três canais de Aracaju: atacado CEASA-SE, Mercado Central e Mercado Setorial do Augusto Franco. Janeiro a março de 2026.">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg">
@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="../../cobweb.css">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Tomate · CobWeb">
-  <meta property="og:description" content="Três canais EMDAGRO em Aracaju: tomate sobe de R$ 2,80 a R$ 6,00/kg no atacado entre janeiro e março de 2026.">
+  <meta property="og:title" content="Inhame da costa · CobWeb">
+  <meta property="og:description" content="Raiz tradicional do café-da-manhã sergipano. No CEASA-SE despencou de R$ 13,00 para R$ 6,10/kg; nos varejos a queda foi metade disso. Caso-livro de assimetria d">
   <meta property="og:type" content="article">
 </head>
 <body>
@@ -60,9 +60,9 @@
 
     <!-- Manchete -->
     <section>
-      <div class="eyebrow">tomate · aracaju · jan – mar 2026</div>
-      <h1 class="headline">Tomate mais que dobra no atacado de Aracaju: de R$ 2,80 em janeiro a R$ 6,00 em março de 2026</h1>
-      <p class="deck">Três séries dos boletins EMDAGRO/ASPLAN: CEASA-SE no atacado e dois pontos de varejo — o Mercado Central, canal híbrido com markup baixo, e o Mercado Setorial do Augusto Franco, varejo de bairro com preço sistematicamente mais alto.</p>
+      <div class="eyebrow">inhame da costa · aracaju · jan – mar 2026</div>
+      <h1 class="headline">Inhame da costa cai 53% no atacado, mas o varejo só repassa metade da queda</h1>
+      <p class="deck">Raiz tradicional do café-da-manhã sergipano. No CEASA-SE despencou de R$ 13,00 para R$ 6,10/kg; nos varejos a queda foi metade disso. Caso-livro de assimetria de repasse.</p>
     </section>
 
     <!-- Meta strip -->
@@ -85,7 +85,6 @@
 
     <!-- Cards das séries -->
     <section class="index-grid" style="grid-template-columns: repeat(3, 1fr);" aria-label="Resumo por canal de preço">
-
       <article class="index-card">
         <header class="index-card__header">
           <span class="index-card__name">CEASA-SE</span>
@@ -93,11 +92,11 @@
         </header>
         <div class="index-card__value">
           <span class="index-card__number">R$ 6,00</span>
-          <span class="index-card__delta delta-up">+114%</span>
+          <span class="index-card__delta delta-down">-54%</span>
         </div>
         <div class="index-card__base">26/mar/2026 · /kg · vs. jan/2026</div>
         <div class="index-card__base" style="margin-top:6px;">
-          mín R$ 2,80 · pico R$ 6,00 · 22 obs
+          mín R$ 5,33 · pico R$ 13,33 · 22 obs
         </div>
       </article>
 
@@ -107,12 +106,12 @@
           <span class="index-card__source">canal híbrido</span>
         </header>
         <div class="index-card__value">
-          <span class="index-card__number">R$ 5,00</span>
-          <span class="index-card__delta delta-up">+67%</span>
+          <span class="index-card__number">R$ 11,00</span>
+          <span class="index-card__delta delta-down">-27%</span>
         </div>
         <div class="index-card__base">30/mar/2026 · /kg · vs. jan/2026</div>
         <div class="index-card__base" style="margin-top:6px;">
-          mín R$ 3,00 · pico R$ 5,00 · 23 obs
+          mín R$ 11,00 · pico R$ 15,00 · 23 obs
         </div>
       </article>
 
@@ -122,19 +121,18 @@
           <span class="index-card__source">varejo de bairro</span>
         </header>
         <div class="index-card__value">
-          <span class="index-card__number">R$ 6,00</span>
-          <span class="index-card__delta delta-up">+17%</span>
+          <span class="index-card__number">R$ 15,00</span>
+          <span class="index-card__delta delta-down">-12%</span>
         </div>
         <div class="index-card__base">27/mar/2026 · /kg · vs. jan/2026</div>
         <div class="index-card__base" style="margin-top:6px;">
-          mín R$ 5,00 · pico R$ 6,00 · 23 obs
+          mín R$ 15,00 · pico R$ 17,00 · 23 obs
         </div>
       </article>
-
     </section>
 
     <!-- Gráfico -->
-    <section aria-label="Evolução do preço do tomate por canal">
+    <section aria-label="Evolução do preço de inhame da costa por canal">
       <div class="chart-legend">
         <span class="chart-legend__item">
           <span class="chart-legend__swatch chart-legend__swatch--solid"></span>
@@ -151,12 +149,12 @@
       </div>
       <div class="chart-container">
         <canvas
-          id="grafico-tomate"
-          data-produto="tomate"
+          id="grafico-inhame-da-costa"
+          data-produto="inhame_da_costa"
           data-json="../../dados/precos-emdagro-q1-2026.json"
           role="img"
-          aria-label="Série semanal do preço do tomate em R$/kg, janeiro a março de 2026, nos três canais EMDAGRO em Aracaju">
-          Série semanal do preço do tomate em R$/kg, janeiro a março de 2026, em três canais EMDAGRO em Aracaju: atacado CEASA-SE, varejo Mercado Central e varejo Augusto Franco.
+          aria-label="Série semanal do preço de inhame da costa em R$/kg, janeiro a março de 2026, nos três canais EMDAGRO em Aracaju">
+          Série semanal do preço de inhame da costa em R$/kg, janeiro a março de 2026, em três canais EMDAGRO em Aracaju: atacado CEASA-SE, varejo Mercado Central e varejo Augusto Franco.
         </canvas>
       </div>
     </section>
@@ -165,32 +163,8 @@
     <section class="commentary">
       <h2 class="section-title">Leitura da série</h2>
       <div class="prose">
-        <p>A série da EMDAGRO para o CEASA-SE exibe um padrão em duas fases. Em janeiro, o preço ficou travado em R$ 2,80/kg (R$ 70 por caixa de 25 kg) em todas as coletas — seis semanas sem variação, artefato do arredondamento aplicado pela ASPLAN, não estabilidade real de mercado. Na segunda quinzena de fevereiro a pressão apareceu: o preço saltou para R$ 4,00/kg (R$ 100/cx). Março consolidou a alta com leituras entre R$ 4,80 e R$ 6,00/kg, confirmando choque de oferta.</p>
-        <p>O Mercado Central reforça a leitura, mas com amortecimento: R$ 3,00/kg em janeiro e fevereiro inteiros, subindo para R$ 4,00–5,00/kg só na segunda quinzena de março. O spread entre os dois canais inverteu em janeiro — o Mercado Central ficou acima do atacado EMDAGRO em R$ 0,20/kg, padrão atípico que caracteriza o canal híbrido. Em março o spread normalizou: EMDAGRO acima do Mercado Central em R$ 0,93/kg (média mensal).</p>
-        <p>O varejo do Augusto Franco completa a leitura por cima. Saiu de R$ 5,00–6,00/kg já em janeiro — duas vezes o atacado — e permaneceu em platô até o choque de março. A pancada de oferta encurta o spread (em março o atacado se aproxima do varejo), mas o piso permanece intacto: o consumidor do bairro nunca pagou menos de R$ 5,00/kg ao longo do trimestre.</p>
-      </div>
-    </section>
-
-    <!-- Tabela de estatísticas por série -->
-    <section class="subindex-section" aria-label="Estatísticas descritivas por canal">
-      <div class="eyebrow">estatísticas · jan–mar 2026 · janela de sobreposição</div>
-      <div class="subindex-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
-        <div class="subindex-card">
-          <div class="subindex-card__label">Atacado · média trimestre</div>
-          <div class="subindex-card__value">R$ 3,92<span class="subindex-card__delta delta-flat" style="font-size:11px;">/kg</span></div>
-        </div>
-        <div class="subindex-card">
-          <div class="subindex-card__label">Mercado Central · média trimestre</div>
-          <div class="subindex-card__value">R$ 3,52<span class="subindex-card__delta delta-flat" style="font-size:11px;">/kg</span></div>
-        </div>
-        <div class="subindex-card">
-          <div class="subindex-card__label">Augusto Franco · média trimestre</div>
-          <div class="subindex-card__value">R$ 5,42<span class="subindex-card__delta delta-flat" style="font-size:11px;">/kg</span></div>
-        </div>
-        <div class="subindex-card">
-          <div class="subindex-card__label">spread varejo-atacado em mar</div>
-          <div class="subindex-card__value">R$ 0,51<span class="subindex-card__delta delta-flat" style="font-size:11px;">/kg</span></div>
-        </div>
+        <p>O inhame da costa é raiz típica da culinária sergipana e o produto com a maior queda observada no trimestre. No CEASA-SE caiu de R$ 200 por saco de 15 kg em janeiro (R$ 13,33/kg) para R$ 80–90/saco em março (R$ 5,33–6,00/kg) — recuo de 54%. Há sinal de safra: o pico fica em janeiro–fevereiro, antes da entrada da nova colheita; em março o atacado se ajusta para baixo.</p>
+        <p>O varejo não repassa proporcionalmente. O Mercado Central caiu de R$ 15,00 para R$ 11,00/kg (-27%) — metade da queda do atacado. O Augusto Franco caiu apenas R$ 2,00/kg, de R$ 17,00 para R$ 15,00 (-12%) — um quinto da queda. Resultado: o spread varejo-atacado mais que dobrou no trimestre. Em janeiro, o varejo do Augusto Franco custava R$ 4,00 acima do atacado; em março, R$ 9,00 acima. É caso-livro de assimetria de repasse no varejo de hortifrúti.</p>
       </div>
     </section>
 
@@ -198,13 +172,13 @@
     <aside class="method-note">
       <div class="method-note__label">notas metodológicas</div>
       <p class="method-note__text">
-        <strong>Atacado CEASA-SE:</strong> boletins ASPLAN/EMDAGRO, CEASA-SE. Unidade original: caixa de 25 kg. Conversão: preço ÷ 25. A série exibe inércia de coleta — preço travado em R$ 2,80/kg por seis semanas consecutivas em janeiro–fevereiro. Artefato de arredondamento, não estabilidade real. 22 observações, jan–mar/2026.
+        <strong>Atacado CEASA-SE:</strong> boletins ASPLAN/EMDAGRO, CEASA-SE. Unidade original: saco de 15 kg. Conversão para R$/kg pelo peso nominal. 22 observações em 11 boletins semanais, jan–mar/2026.
       </p>
       <p class="method-note__text" style="margin-top:10px;">
-        <strong>Mercado Central de Aracaju:</strong> nome oficial Mercado Maria Virgínia Leite Franco. Rotulado como varejo na fonte, mas com preços sistematicamente próximos ou abaixo do atacado EMDAGRO. Caracteriza canal híbrido atacado-varejo popular. Não é proxy de varejo final em supermercado. 23 observações, jan–mar/2026.
+        <strong>Mercado Central de Aracaju:</strong> Mercado Maria Virgínia Leite Franco. Canal híbrido atacado-varejo popular; markup baixo sobre o atacado. 23 observações em 11 boletins, jan–mar/2026.
       </p>
       <p class="method-note__text" style="margin-top:10px;">
-        <strong>Mercado Setorial do Augusto Franco:</strong> nome oficial Mercado Setorial Vereador Nilton Santos, no conjunto Augusto Franco em Aracaju. Varejo de bairro de classe média-baixa, com markup mais comportado do que supermercados, mas claramente acima do canal híbrido do Mercado Central. 23 observações em 10 boletins semanais, jan–mar/2026.
+        <strong>Mercado Setorial do Augusto Franco:</strong> Mercado Setorial Vereador Nilton Santos. Varejo de bairro de classe média-baixa em Aracaju; markup intermediário entre canal híbrido e supermercado. 23 observações em 10 boletins, jan–mar/2026.
       </p>
     </aside>
 
