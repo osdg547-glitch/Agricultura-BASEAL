@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre · CobWeb · hortifrúti · Sergipe</title>
+  <meta name="description" content="Portal de informação econômica para o hortifrúti sergipano. Reunimos, organizamos e interpretamos dados públicos sobre preços e mercados, com método transparente e leitura voltada a quem decide.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+
+  <!-- Tipografia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="/cobweb.css">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Sobre · CobWeb · hortifrúti · Sergipe">
+  <meta property="og:description" content="Portal de informação econômica para o hortifrúti sergipano, com sede em Aracaju. Transparência metodológica, fontes públicas e leitura voltada a quem decide.">
+  <meta property="og:type" content="website">
+
+  <style>
+    .sobre-section {
+      border-top: 1px solid var(--color-border);
+      padding-top: 32px;
+      margin-bottom: 40px;
+    }
+
+    .fontes-lista {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+    }
+
+    .fontes-lista li {
+      display: flex;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .fontes-lista li:first-child {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .fontes-lista__sigla {
+      font-weight: 500;
+      color: var(--color-text);
+      min-width: 180px;
+      flex-shrink: 0;
+    }
+
+    .fontes-lista__desc {
+      color: var(--color-text-secondary);
+    }
+
+    @media (max-width: 640px) {
+      .fontes-lista li {
+        flex-direction: column;
+        gap: 4px;
+      }
+      .fontes-lista__sigla {
+        min-width: unset;
+      }
+    }
+
+    .contato-block {
+      background: var(--color-bg-soft);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 40px;
+    }
+
+    .contato-block__label {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .contato-block__email {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--color-text);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .contato-block__email:hover {
+      border-bottom-color: var(--color-brand);
+    }
+
+    .contato-block__desc {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       Cabeçalho
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container container--wide site-header__inner">
+      <a href="/" class="site-logo" aria-label="CobWeb · página inicial">
+        <svg class="site-logo__mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M 16 4 L 28 16 L 16 28 L 4 16 Z" stroke-width="1"/>
+            <path d="M 16 9 L 23 16 L 16 23 L 9 16 Z" stroke-width="1"/>
+            <path d="M 16 13 L 19 16 L 16 19 L 13 16 Z" stroke-width="1"/>
+            <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+          </g>
+        </svg>
+        <div>
+          <div class="site-logo__name">CobWeb</div>
+          <div class="site-logo__tag">mercados integrados · sergipe</div>
+        </div>
+      </a>
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="/">home</a>
+        <a href="/produtos/">produtos</a>
+        <a href="/panoramas/">panoramas</a>
+        <a href="/dados/">dados</a>
+        <a href="/sobre/" class="is-active">sobre</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       Conteúdo principal
+       ============================================================ -->
+  <main class="container">
+
+    <!-- Manchete -->
+    <section>
+      <div class="eyebrow">portal · aracaju · sergipe</div>
+      <h1 class="headline">Quem somos</h1>
+      <p class="deck">Somos um portal de informação econômica para o setor de hortifrúti, com sede em Aracaju, Sergipe. Nosso ponto de partida é uma convicção: o bom desempenho de uma economia nasce de boas instituições — as regras e os arranjos que reduzem o custo de transacionar e criam incentivos para inovar e produzir mais.</p>
+    </section>
+
+    <!-- Corpo introdutório -->
+    <section class="commentary">
+      <div class="prose">
+        <p>No hortifrúti, as ineficiências da cadeia têm duas raízes. Uma é o atraso tecnológico, com baixo acesso a máquinas, insumos e assistência técnica, o que mantém a produtividade abaixo do possível. A outra são os problemas de informação e coordenação: preços dispersos e difíceis de comparar, assimetrias entre quem compra e quem vende, desconhecimento sobre tecnologias e fornecedores disponíveis. As duas se reforçam, e ambas podem ser atacadas com informação melhor, sobre o mercado e sobre as ferramentas para produzir nele.</p>
+        <p>Por isso reunimos, organizamos e interpretamos dados públicos sobre preços e mercados do hortifrúti sergipano, sempre com método transparente e leitura voltada a quem decide: do produtor e do técnico de campo ao gestor público, ao varejista e ao pesquisador.</p>
+      </div>
+    </section>
+
+    <!-- Como trabalhamos -->
+    <section class="sobre-section">
+      <h2 class="section-title">Como trabalhamos</h2>
+      <div class="prose">
+        <p>Nosso compromisso é com a transparência metodológica. Trabalhamos apenas com fontes públicas e oficiais, e documentamos como cada dado foi tratado, das unidades de medida adotadas às decisões de classificação. Quando uma fonte é ambígua ou tem limitações, nós dizemos: preferimos um dado honesto sobre sua própria incerteza a um número que aparenta uma precisão que não tem.</p>
+        <p>Na prática, isso significa cuidado em cada etapa: classificamos os preços com critério claro, tornamos as séries comparáveis entre si e cruzamos fontes diferentes para conferir o que uma leitura isolada não revela. Cada dado que publicamos vem com nota sobre como foi obtido e tratado.</p>
+        <p>O resultado é informação que pode ser conferida, citada e contestada. É assim que um portal de análise se distingue da simples republicação de um boletim.</p>
+      </div>
+    </section>
+
+    <!-- De onde vêm os dados -->
+    <section class="sobre-section">
+      <h2 class="section-title">De onde vêm os dados</h2>
+      <p class="deck" style="font-size: 15px; margin-bottom: 0;">Nossas séries são construídas a partir de fontes públicas, entre elas:</p>
+      <ul class="fontes-lista" role="list">
+        <li>
+          <span class="fontes-lista__sigla">EMDAGRO / ASPLAN</span>
+          <span class="fontes-lista__desc">Boletins de preço de atacado e varejo do CEASA-SE e dos mercados de Aracaju</span>
+        </li>
+        <li>
+          <span class="fontes-lista__sigla">CODERSE / CEASA-SE</span>
+          <span class="fontes-lista__desc">Boletins de atacado do entreposto</span>
+        </li>
+        <li>
+          <span class="fontes-lista__sigla">IBGE</span>
+          <span class="fontes-lista__desc">Censo Agropecuário, Produção Agrícola Municipal e PNAD Contínua</span>
+        </li>
+        <li>
+          <span class="fontes-lista__sigla">Comex Stat / MDIC</span>
+          <span class="fontes-lista__desc">Estatísticas de comércio exterior do estado</span>
+        </li>
+      </ul>
+      <aside class="method-note" style="margin-top: 20px;">
+        <p class="method-note__text">Cada série publicada vem acompanhada de nota sobre origem, periodicidade e limitações do dado.</p>
+      </aside>
+    </section>
+
+    <!-- Para quem é -->
+    <section class="sobre-section">
+      <h2 class="section-title">Para quem é</h2>
+      <div class="prose">
+        <p>O portal serve a todos os elos que dependem de boa informação sobre o mercado de hortifrúti: o produtor familiar e o técnico de campo que decidem o que plantar e a quem vender; o gestor público e o pesquisador que precisam de dados tratados e fonte verificável; o varejista e o intermediário que acompanham a conjuntura de preços. O acesso à informação básica é, e seguirá sendo, aberto.</p>
+      </div>
+    </section>
+
+    <!-- Para onde caminhamos -->
+    <section class="sobre-section">
+      <h2 class="section-title">Para onde caminhamos</h2>
+      <div class="prose">
+        <p>O portal começa pela informação de mercado, mas nossa visão é mais ampla. Em etapas futuras, pretendemos abrir um eixo dedicado a tecnologia e insumos, com informação sobre novas tecnologias de produção, fornecedores e preços de insumos, para ajudar o produtor a enfrentar também o gargalo tecnológico, e não só o informacional. É um horizonte, não uma entrega de hoje; e construiremos cada etapa só quando pudermos sustentá-la com o mesmo rigor do resto.</p>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section class="sobre-section">
+      <h2 class="section-title">Contato</h2>
+      <div class="contato-block">
+        <div class="contato-block__label">e-mail</div>
+        <a href="mailto:cobweb@outlook.com.br" class="contato-block__email">cobweb@outlook.com.br</a>
+        <p class="contato-block__desc">Para dúvidas, sugestões de pauta, correções em nossos dados ou propostas de parceria, fale com a gente.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       Footer
+       ============================================================ -->
+  <footer class="site-footer container container--wide">
+    <span>CobWeb · publicação editorial independente</span>
+    <span>cc by-sa 4.0</span>
+  </footer>
+
+</body>
+</html>
