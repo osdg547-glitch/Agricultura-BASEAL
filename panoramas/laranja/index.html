@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onde se produz laranja em Sergipe · CobWeb</title>
+  <meta name="description" content="Mapa coroplético da laranja nos 75 municípios de Sergipe: área colhida, quantidade produzida e rendimento médio, de 2001 a 2024. Fonte: IBGE, tabela 1613.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg">
+
+  <!-- Tipografia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../../cobweb.css">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Onde se produz laranja em Sergipe · CobWeb">
+  <meta property="og:description" content="A área colhida de laranja em Sergipe caiu 44,7% entre 2011 e 2024, e a retração se concentra no sul do estado. Mapa por município, 2001 a 2024.">
+  <meta property="og:type" content="article">
+
+  <style>
+    /* ============================================================
+       Mapa temático da laranja
+       As cores vêm dos tokens do cobweb.css; nenhum hexadecimal solto.
+       ============================================================ */
+
+    .cw-mapa {
+      --mapa-c1: var(--color-map-1);
+      --mapa-c2: var(--color-map-2);
+      --mapa-c3: var(--color-map-3);
+      --mapa-c4: var(--color-map-4);
+      --mapa-c5: var(--color-map-5);
+      --mapa-zero: var(--color-map-zero);
+      --mapa-sem-info: var(--color-map-nodata);
+      --mapa-borda: var(--color-bg);
+      --mapa-texto: var(--color-text);
+      --mapa-texto-fraco: var(--color-text-secondary);
+      --mapa-acento: var(--color-brand);
+
+      max-width: 640px;
+      margin: 0 auto 36px;
+      color: var(--mapa-texto);
+    }
+
+    /* Seletor de variável, mesmo padrão de interação do .serie-btn da home */
+    .cw-mapa-controles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .cw-mapa-opcao {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--color-border-strong);
+      background: transparent;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .cw-mapa-opcao:hover {
+      background: var(--color-brand-soft);
+      color: var(--color-text);
+      border-color: var(--color-brand);
+    }
+
+    /* O extremo da rampa, e não a cor de marca, porque só ele garante AA
+       contra o texto do botão nos dois temas. */
+    .cw-mapa-opcao.ativo {
+      background: var(--color-map-5);
+      border-color: var(--color-map-5);
+      color: var(--color-bg);
+    }
+
+    .cw-mapa-opcao:focus-visible,
+    .cw-mapa-ano input:focus-visible {
+      outline: 2px solid var(--color-brand);
+      outline-offset: 2px;
+    }
+
+    /* Controle de ano */
+    .cw-mapa-ano {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+    }
+
+    .cw-mapa-ano input[type="range"] {
+      flex: 1;
+      max-width: 320px;
+      accent-color: var(--color-brand);
+    }
+
+    .cw-mapa-ano-valor {
+      font-variant-numeric: tabular-nums;
+      color: var(--color-text);
+      min-width: 3.5ch;
+    }
+
+    /* Legenda */
+    .cw-mapa-legenda {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      margin: 0 0 12px;
+      padding: 0;
+      list-style: none;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    .cw-mapa-legenda li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cw-mapa-chave {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+      border: 1px solid var(--color-border);
+      flex: 0 0 auto;
+    }
+
+    /* Mapa */
+    .cw-mapa-palco { position: relative; }
+
+    .cw-mapa-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .cw-mapa-mun {
+      stroke: var(--mapa-borda);
+      stroke-width: 0.6;
+      transition: fill 160ms ease;
+    }
+
+    .cw-mapa-mun.em-destaque {
+      stroke: var(--mapa-acento);
+      stroke-width: 1.4;
+    }
+
+    /* As mesmas classes vestem o polígono do SVG e o quadradinho da legenda,
+       que é um span. Daí as duas propriedades: fill pinta um, background o outro. */
+    .cw-mapa-sem-info { fill: var(--mapa-sem-info); background: var(--mapa-sem-info); }
+    .cw-mapa-zero     { fill: var(--mapa-zero);     background: var(--mapa-zero); }
+    .cw-mapa-c1       { fill: var(--mapa-c1);       background: var(--mapa-c1); }
+    .cw-mapa-c2       { fill: var(--mapa-c2);       background: var(--mapa-c2); }
+    .cw-mapa-c3       { fill: var(--mapa-c3);       background: var(--mapa-c3); }
+    .cw-mapa-c4       { fill: var(--mapa-c4);       background: var(--mapa-c4); }
+    .cw-mapa-c5       { fill: var(--mapa-c5);       background: var(--mapa-c5); }
+
+    /* Dica de contexto no hover */
+    .cw-mapa-dica {
+      position: absolute;
+      transform: translate(12px, -50%);
+      pointer-events: none;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      font-size: 12px;
+      line-height: 1.45;
+      max-width: 15rem;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .cw-mapa-dica strong {
+      display: block;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .cw-mapa-dica span {
+      color: var(--color-text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Nota de rodapé do mapa */
+    .cw-mapa-nota,
+    .cw-mapa-erro {
+      margin: 12px 0 0;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      font-style: italic;
+    }
+
+    /* Em tela estreita a dica precisa caber na viewport, então quebra linha */
+    @media (max-width: 640px) {
+      .cw-mapa-dica {
+        white-space: normal;
+        max-width: 11rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cw-mapa-mun { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       Cabeçalho
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container container--wide site-header__inner">
+      <a href="../../" class="site-logo" aria-label="CobWeb, página inicial">
+        <svg class="site-logo__mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M 16 4 L 28 16 L 16 28 L 4 16 Z" stroke-width="1"/>
+            <path d="M 16 9 L 23 16 L 16 23 L 9 16 Z" stroke-width="1"/>
+            <path d="M 16 13 L 19 16 L 16 19 L 13 16 Z" stroke-width="1"/>
+            <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+          </g>
+        </svg>
+        <div>
+          <div class="site-logo__name">CobWeb</div>
+          <div class="site-logo__tag">mercados integrados · sergipe</div>
+        </div>
+      </a>
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="../../">home</a>
+        <a href="../../produtos/">serviços</a>
+        <a href="../" class="is-active">panoramas</a>
+        <a href="../../sobre/">sobre</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       Conteúdo principal
+       ============================================================ -->
+  <main class="container">
+
+    <!-- Manchete -->
+    <section>
+      <div class="eyebrow">panoramas · produção · laranja · 2001 a 2024</div>
+      <h1 class="headline">Onde se produz laranja em Sergipe</h1>
+      <p class="deck">A citricultura sergipana perdeu quase metade da área colhida desde 2011, e a retração não se distribuiu pelo estado: ela se concentrou no cinturão do sul. O mapa abaixo mostra área colhida, quantidade produzida e rendimento médio por município, ano a ano.</p>
+    </section>
+
+    <!-- Meta strip -->
+    <div class="meta-strip">
+      <span class="meta-strip__item">
+        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+        2001 a 2024
+      </span>
+      <span class="meta-strip__item">
+        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v6c0 1.7 4 3 9 3s9-1.3 9-3V6M3 12v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg>
+        fonte: IBGE, PAM, tabela 1613
+      </span>
+      <span class="meta-strip__item">
+        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-4.35-7-10a7 7 0 1 1 14 0c0 5.65-7 10-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg>
+        75 municípios
+      </span>
+    </div>
+
+    <!-- Cards de destaque -->
+    <section class="index-grid" aria-label="Destaques da série de produção de laranja">
+
+      <article class="index-card">
+        <header class="index-card__header">
+          <span class="index-card__name">2024</span>
+          <span class="index-card__source">área colhida</span>
+        </header>
+        <div class="index-card__value">
+          <span class="index-card__number">31.279</span>
+          <span class="index-card__delta delta-down">−44,7%</span>
+        </div>
+        <div class="index-card__base">hectares · frente ao pico de 2011</div>
+      </article>
+
+      <article class="index-card">
+        <header class="index-card__header">
+          <span class="index-card__name">2024</span>
+          <span class="index-card__source">quantidade produzida</span>
+        </header>
+        <div class="index-card__value">
+          <span class="index-card__number">443.661</span>
+          <span class="index-card__delta delta-down">−46,1%</span>
+        </div>
+        <div class="index-card__base">toneladas · frente ao pico de 2011</div>
+      </article>
+
+      <article class="index-card">
+        <header class="index-card__header">
+          <span class="index-card__name">2024</span>
+          <span class="index-card__source">concentração</span>
+        </header>
+        <div class="index-card__value">
+          <span class="index-card__number">46,0%</span>
+        </div>
+        <div class="index-card__base">da área colhida em quatro municípios</div>
+      </article>
+
+    </section>
+
+    <!-- ============================================================
+         Mapa
+         ============================================================ -->
+    <section aria-label="Mapa da produção de laranja por município">
+      <h2 class="section-title">Produção de laranja por município</h2>
+      <p style="font-size: 14px; color: var(--color-text-secondary); margin: 0 0 18px;">
+        Escolha a variável e arraste o controle de ano. Os cortes de classe são fixos por variável e calculados sobre a distribuição de 2001 a 2024 inteira, de modo que a mesma cor significa a mesma coisa em qualquer ano da série.
+      </p>
+
+      <div id="mapa-laranja">
+        <p class="cw-mapa-erro">Carregando o mapa. Se nada aparecer, os arquivos de dados não foram encontrados.</p>
+      </div>
+    </section>
+
+    <!-- Leitura editorial -->
+    <section class="commentary">
+      <h2 class="section-title">Leitura do mapa</h2>
+      <div class="prose">
+        <p>A série de área colhida cresce até 2011, quando chega a 56.542 hectares, e cai continuamente depois disso. Entre 2012 e 2018 o estado perde 25.591 hectares, 45,4% da base, e desde então oscila em torno de 30 mil hectares sem retomar o patamar anterior. A quantidade produzida acompanha o movimento: 822.468 toneladas em 2011 contra 443.661 em 2024. A recuperação parcial de 2024, que devolve 48.802 toneladas frente a 2023 sem crescimento equivalente de área, é ganho de rendimento, não de expansão.</p>
+        <p>Arrastando o controle de 2011 para 2024, a retração aparece concentrada no sul do estado, na faixa que vai de Boquim e Salgado até a divisa com a Bahia. É o cinturão citrícola histórico de Sergipe, e é ali que a perda de área se materializa. O norte e o agreste seguem majoritariamente sem produção registrada em toda a série, de modo que a queda estadual é, na prática, a queda de um punhado de municípios.</p>
+        <p>A concentração é o segundo fato do mapa. Em 2024, apenas 21 dos 75 municípios registram área colhida positiva, e quatro deles, Cristinápolis, Itabaianinha, Umbaúba e Lagarto, respondem por 14.388 hectares, 46,0% do total do estado. Salgado é o caso que separa área de produtividade: colhe 2.400 hectares, sétimo lugar em área, e produz 58.800 toneladas, o maior volume do estado, com rendimento de 24.500 quilogramas por hectare contra 9.500 em Propriá, o menor da safra.</p>
+        <p>Vale ler esse mapa ao lado da pauta de exportação. Sergipe é um produtor relevante de laranja e, ainda assim, a fruta é praticamente ausente das exportações in natura do estado, que são puxadas pelo limão taiti do Platô de Neópolis. A laranja sergipana sai por outra porta, a da indústria de processamento concentrada na região de Estância, e por isso não aparece nas séries do Comex Stat.</p>
+      </div>
+    </section>
+
+    <!-- Nota metodológica -->
+    <aside class="method-note">
+      <div class="method-note__label">nota metodológica</div>
+      <p class="method-note__text">
+        Dados do IBGE, Produção Agrícola Municipal, tabela 1613, produto laranja, municípios de Sergipe, extraídos do SIDRA em 26 de julho de 2026. Quatro ressalvas importam na leitura.
+        <br><br>
+        <strong>1. A série começa em 2001 por quebra de unidade.</strong> Até 2000 o IBGE media quantidade em mil frutos e rendimento em frutos por hectare; de 2001 em diante, em toneladas e quilogramas por hectare (nota 2 da tabela 1613). Séries que cruzam 2001 não são comparáveis sem conversão. A área colhida está em hectares desde 1974 e poderia recuar mais, mas foi cortada em 2001 para que as três variáveis tenham a mesma janela.
+        <br><br>
+        <strong>2. Quatro municípios não constam da tabela 1613</strong> e aparecem no mapa como sem informação: Gracho Cardoso, Monte Alegre de Sergipe, Nossa Senhora da Glória e São Miguel do Aleixo. Pela nota 1 do IBGE, município sem informação para nenhum produto da lavoura permanente não entra na lista. Isso não é o mesmo que produção zero, e o mapa não trata como tal: a legenda separa "sem informação" de "sem produção registrada".
+        <br><br>
+        <strong>3. Os dados de 2024 são preliminares</strong> e podem ser revistos na próxima divulgação (nota 11 do IBGE).
+        <br><br>
+        <strong>4. Rendimento não se soma entre municípios,</strong> por ser razão entre quantidade e área. Quando essa variável está selecionada, o mapa suprime o total estadual em vez de exibir uma soma sem sentido.
+        <br><br>
+        A malha municipal usada no mapa é a do IBGE, obtida do espelho tbrugz/geodata-br no GitHub e já em resolução reduzida para uso em tela. É procedência de terceiro, e não da fonte oficial: o script scripts/preparar-geometria.R, no repositório, regera o arquivo direto do IBGE, pelo pacote geobr, quando essa dependência precisar ser eliminada. A junção entre dados e geometria é feita por código do IBGE de sete dígitos, não por nome. Os cortes de classe são fixos por variável, definidos sobre a distribuição de toda a série, e não recalculados por ano: cortes móveis quebrariam a comparação entre anos, que é o principal uso do mapa.
+      </p>
+    </aside>
+
+  </main>
+
+  <!-- ============================================================
+       Footer
+       ============================================================ -->
+  <footer class="site-footer container container--wide">
+    <span>CobWeb · publicação editorial independente</span>
+    <span>cc by-sa 4.0</span>
+  </footer>
+
+  <script src="../../assets/js/mapa-laranja.js"></script>
+  <script>
+    CobWebMapaLaranja.montar('#mapa-laranja', {
+      geojson: '../../dados/se-municipios.geojson',
+      dados: '../../dados/laranja-municipios.json',
+      variavel: 'area',
+      ano: 2024
+    });
+  </script>
+
+</body>
+</html>

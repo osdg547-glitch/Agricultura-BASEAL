@@ -19,6 +19,16 @@
   --color-positive: #1d9e75;       /* verde · variação positiva */
   --color-neutral: #888780;        /* cinza · estável/comparativo */
 
+  /* Rampa sequencial de mapa · mesmo matiz da cor de marca, do menor ao maior.
+     Dois neutros fora da rampa distinguem "zero declarado" de "sem informação". */
+  --color-map-1: #d7ebe1;
+  --color-map-2: #a5d5c1;
+  --color-map-3: #66bb9c;
+  --color-map-4: #2f9a76;
+  --color-map-5: #17614a;
+  --color-map-zero: #e6e3d9;
+  --color-map-nodata: #b6b4aa;
+
   /* Bordas */
   --color-border: rgba(26, 26, 26, 0.12);
   --color-border-strong: rgba(26, 26, 26, 0.25);
@@ -50,6 +60,17 @@
     --color-brand-soft: rgba(93, 202, 165, 0.1);
     --color-negative: #d85a30;
     --color-positive: #5dcaa5;
+
+    /* No tema escuro a rampa inverte: o maior valor é o tom mais claro. O piso
+       da rampa fica acima do neutro de sem informação, para que a menor classe
+       nunca pareça mais vazia do que um município sem dado. */
+    --color-map-1: #245b48;
+    --color-map-2: #2f7c60;
+    --color-map-3: #3f9f7b;
+    --color-map-4: #57c197;
+    --color-map-5: #90e7c3;
+    --color-map-zero: #2a2a23;
+    --color-map-nodata: #4a493f;
   }
 }
 

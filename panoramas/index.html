@@ -76,6 +76,11 @@
       position: relative;
     }
 
+    /* Blocos com poucos cards não devem reservar a segunda linha vazia */
+    .panorama-grid--linha-unica {
+      grid-template-rows: 1fr;
+    }
+
     @media (max-width: 800px) {
       .panorama-grid { grid-auto-columns: 220px; }
     }
@@ -250,8 +255,8 @@
     <!-- Manchete -->
     <section>
       <div class="eyebrow">panoramas · condições de mercado</div>
-      <h1 class="headline">Duas leituras do mercado</h1>
-      <p class="deck">Condições internas — preços no atacado dos CEASAs sergipanos — e condições externas — cotações e fluxos nos mercados internacionais.</p>
+      <h1 class="headline">Três leituras do mercado</h1>
+      <p class="deck">Condições internas (preços no atacado dos CEASAs sergipanos), condições externas (cotações e fluxos nos mercados internacionais) e condições de produção (o que o estado planta e colhe, município a município).</p>
     </section>
 
     <!-- ============================================================
@@ -436,6 +441,30 @@
       </div>
 
       <p class="panorama-scroll-hint" aria-hidden="true">role para o lado →</p>
+    </section>
+
+    <!-- ============================================================
+         Condições de produção
+         ============================================================ -->
+    <section class="panorama-bloco" aria-label="Condições de produção">
+
+      <div class="panorama-bloco__header">
+        <div>
+          <h2 class="section-title" style="margin:0;">Condições de produção</h2>
+          <p class="panorama-bloco__desc">O que Sergipe planta e colhe, por município. Séries municipais da Produção Agrícola Municipal do IBGE, em mapa.</p>
+        </div>
+      </div>
+
+      <div class="panorama-grid panorama-grid--linha-unica" aria-label="Panoramas de produção">
+
+        <a href="laranja/" class="panorama-card">
+          <div class="panorama-card__eyebrow">laranja · ibge, tabela 1613</div>
+          <div class="panorama-card__nome">Onde se produz laranja</div>
+          <div class="panorama-card__nota">Mapa dos 75 municípios, de 2001 a 2024. A área colhida caiu 44,7% desde o pico de 2011, e a retração se concentra no cinturão do sul.</div>
+          <span class="panorama-card__cta">ver mapa →</span>
+        </a>
+
+      </div>
     </section>
 
     <!-- ============================================================
