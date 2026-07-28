@@ -170,7 +170,9 @@
     Object.keys(dados.variaveis).forEach(function (chave) {
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'cw-mapa-opcao';
+      // serie-btn vem do cobweb.css e cuida da aparência, inclusive do estado
+      // pressionado via aria-pressed. cw-mapa-opcao é só o gancho de seleção.
+      b.className = 'cw-mapa-opcao serie-btn';
       b.textContent = dados.variaveis[chave].rotulo;
       b.setAttribute('data-variavel', chave);
       b.addEventListener('click', function () {

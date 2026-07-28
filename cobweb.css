@@ -333,6 +333,51 @@ a:hover { border-bottom-color: currentColor; }
 .delta-flat { color: var(--color-text-tertiary); }
 
 /* ============================================================
+   Seletor de série
+   ============================================================
+   Usado em qualquer gráfico que alterne entre variáveis de unidades
+   diferentes. O estado pressionado usa o extremo da rampa de mapa, e
+   não a cor de marca, porque só ele garante contraste AA contra o
+   texto do botão nos dois temas.
+   ============================================================ */
+
+.serie-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.serie-btn {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--color-border-strong);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.serie-btn:hover {
+  background: var(--color-brand-soft);
+  color: var(--color-text);
+  border-color: var(--color-brand);
+}
+
+.serie-btn[aria-pressed="true"] {
+  background: var(--color-map-5);
+  color: var(--color-bg);
+  border-color: var(--color-map-5);
+}
+
+.serie-btn:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* ============================================================
    Gráfico
    ============================================================ */
 
