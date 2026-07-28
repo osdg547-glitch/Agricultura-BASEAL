@@ -278,8 +278,7 @@
         : 'Total do estado em ' + estado.ano + ': ' + fmt.format(total) + ' ' + meta.unidade + '.';
       alvo.querySelector('.cw-mapa-nota').textContent =
         nota + ' ' + comDado + ' dos 75 municípios têm valor informado nesse ano. ' +
-        'Fonte: IBGE, Produção Agrícola Municipal, tabela 1613.' +
-        (estado.ano === anos[anos.length - 1] ? ' Dados preliminares.' : '');
+        'Fonte: IBGE, Produção Agrícola Municipal.';
     }
 
     atualizar();
