@@ -342,7 +342,40 @@
     <section class="commentary" aria-label="Leitura editorial">
       <div class="prose">
         <p>A concentração é o segundo fato do mapa. Em 2024, apenas 21 dos 75 municípios registram área colhida positiva, e quatro deles, Cristinápolis, Itabaianinha, Umbaúba e Lagarto, respondem por 14.388 hectares, 46,0% do total do estado. Salgado é o caso que separa área de produtividade: colhe 2.400 hectares, sétimo lugar em área, e produz 58.800 toneladas, o maior volume do estado, com rendimento de 24.500 quilogramas por hectare contra 9.500 em Propriá, o menor da safra.</p>
-        <p>Vale ler esse mapa ao lado da pauta de exportação. Sergipe é um produtor relevante de laranja e, ainda assim, a fruta é praticamente ausente das exportações in natura do estado, que são puxadas pelo limão taiti do Platô de Neópolis. A laranja sergipana sai por outra porta, a da indústria de processamento concentrada na região de Estância, e por isso não aparece nas séries do Comex Stat.</p>
+        <p>Vale ler esse mapa ao lado da pauta de exportação. Sergipe é um produtor relevante de laranja e, ainda assim, a fruta é praticamente ausente das exportações in natura do estado, que são puxadas pelo limão taiti do Platô de Neópolis. A laranja sergipana sai por outra porta, a da indústria de processamento concentrada na região de Estância, e é como suco que ela atravessa a fronteira.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Exportações de suco de laranja
+         ============================================================ -->
+    <section id="suco-exportacoes-wrapper" aria-label="Exportações de suco de laranja">
+      <h2 class="section-title">A saída pelo suco, 2001 a 2025</h2>
+      <p style="font-size: 14px; color: var(--color-text-secondary); margin: 0 0 18px;">
+        Exportações sergipanas de suco de laranja, somando os três NCMs do produto. O preço implícito é o valor dividido pelo peso, não uma cotação de mercado.
+      </p>
+
+      <div class="serie-toggle" role="group" aria-label="Selecionar métrica">
+        <button class="serie-btn" data-serie="valor" aria-pressed="true">Valor US$ FOB</button>
+        <button class="serie-btn" data-serie="kg" aria-pressed="false">Quilograma líquido</button>
+        <button class="serie-btn" data-serie="preco" aria-pressed="false">Preço implícito</button>
+      </div>
+
+      <div class="chart-container" style="height: 300px;">
+        <canvas id="suco-exportacoes" data-fonte="../../dados/exportacoes-suco-laranja-se.json"
+                role="img"
+                aria-label="Exportações sergipanas de suco de laranja, 2001 a 2025, em três métricas alternáveis: valor em dólares FOB, quilograma líquido e preço implícito em dólares por quilograma.">
+          Série anual das exportações de suco de laranja de Sergipe, de 2001 a 2025. O valor sai de US$ 6,3 milhões FOB em 2001, passa por US$ 94,2 milhões em 2012 e atinge o máximo da série em 2024, US$ 141,3 milhões, recuando para US$ 114,0 milhões em 2025. O volume tem trajetória distinta: máximo de 51,4 mil toneladas em 2012 e 25,9 mil em 2024. O preço implícito fica entre US$ 0,70 e US$ 2,04 por quilograma até 2022 e salta para US$ 5,46 em 2024.
+        </canvas>
+      </div>
+
+      <p class="method-note__text" style="font-size: 13px; margin: 10px 0 32px;">
+        <em>Fonte: Comex Stat / MDIC.</em>
+      </p>
+
+      <div class="prose" style="margin-bottom: 36px;">
+        <p>O recorde da série em valor é de 2024, US$ 141,3 milhões FOB, e ele acontece no mesmo ano em que a área colhida de laranja está no fundo da série. Não há contradição: o volume exportado em 2024 foi de 25,9 mil toneladas, praticamente metade das 51,4 mil de 2012, quando o valor tinha sido US$ 94,2 milhões. O que subiu foi o preço. O implícito sai de US$ 1,79 por quilograma em 2022 para US$ 5,46 em 2024, e recua para US$ 3,94 em 2025, quando o valor cai para US$ 114,0 milhões com volume maior que o de 2024.</p>
+        <p>É a leitura que fecha o percurso da página. A cadeia sergipana colhe menos fruta e exporta menos suco em peso do que exportava há uma década, mas fatura mais, porque o mercado internacional de suco de laranja passou a pagar outro preço. A retração de área que o mapa mostra no sul do estado e o recorde de receita do gráfico acima são o mesmo processo visto de dois lados.</p>
       </div>
     </section>
 
@@ -360,6 +393,8 @@
         <br><br>
         <strong>4. Rendimento não se soma entre municípios,</strong> por ser razão entre quantidade e área. Quando essa variável está selecionada, o mapa suprime o total estadual em vez de exibir uma soma sem sentido.
         <br><br>
+        As exportações de suco vêm de outra fonte: Comex Stat / MDIC, fluxo de exportação, UF do produto Sergipe, NCMs 20091100 (congelado), 20091200 (não congelado, Brix não superior a 20) e 20091900 (outros sucos de laranja), somados, extraídos em 28 de julho de 2026. O congelado responde por 95,6% do valor de todo o período. O ano de 2026 não entra no gráfico por estar incompleto na data da extração: até 28 de julho acumulava US$ 32.154.702 FOB e 12.924.231 quilogramas. O preço implícito é o valor FOB dividido pelo quilograma líquido, e não uma cotação de mercado: mudanças de mistura de produto ou de destino o deslocam sem que nenhum preço tenha mudado. A UF do produto no Comex Stat é a de origem declarada da mercadoria, que não coincide necessariamente com a de origem da fruta processada.
+        <br><br>
         A malha municipal usada no mapa é a do IBGE, obtida do espelho tbrugz/geodata-br no GitHub e já em resolução reduzida para uso em tela. É procedência de terceiro, e não da fonte oficial: o script scripts/preparar-geometria.R, no repositório, regera o arquivo direto do IBGE, pelo pacote geobr, quando essa dependência precisar ser eliminada. A junção entre dados e geometria é feita por código do IBGE de sete dígitos, não por nome. Os cortes de classe são fixos por variável, definidos sobre a distribuição de toda a série, e não recalculados por ano: cortes móveis quebrariam a comparação entre anos, que é o principal uso do mapa.
       </p>
     </aside>
@@ -376,6 +411,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="../../assets/js/laranja-estado.js"></script>
+  <script src="../../assets/js/suco-exportacoes.js"></script>
   <script src="../../assets/js/mapa-laranja.js"></script>
   <script>
     CobWebMapaLaranja.montar('#mapa-laranja', {
