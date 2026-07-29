@@ -51,11 +51,15 @@
 
     const min = Math.min.apply(null, serie);
     const max = Math.max.apply(null, serie);
-    const range = max - min || 1;
+    const range = max - min;
 
+    /* Série constante não tem amplitude para normalizar: a linha vai para o
+       meio da caixa, e não para o piso, que leria como ausência de dado. */
     const pts = serie.map(function (v, i) {
       const x = PAD_X + (i / (serie.length - 1)) * (W - 2 * PAD_X);
-      const y = PAD_Y + (1 - (v - min) / range) * (H - 2 * PAD_Y);
+      const y = range === 0
+        ? H / 2
+        : PAD_Y + (1 - (v - min) / range) * (H - 2 * PAD_Y);
       return x.toFixed(1) + ',' + y.toFixed(1);
     });
 

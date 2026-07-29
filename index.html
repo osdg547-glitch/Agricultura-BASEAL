@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CobWeb · mercados do hortifrúti em Sergipe</title>
-  <meta name="description" content="Portal editorial de preços, produção e comércio exterior do hortifrúti sergipano. Três leituras do mercado a partir de dados públicos da EMDAGRO, do IBGE e do Comex Stat.">
+  <meta name="description" content="Portal editorial de preços, produção e comércio exterior do hortifrúti sergipano. Onze séries de preço no atacado de Aracaju, a produção município a município e as exportações do estado.">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
@@ -19,110 +19,359 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="CobWeb · mercados do hortifrúti em Sergipe">
-  <meta property="og:description" content="Preços do atacado e do varejo de Aracaju, produção municipal e exportações. Dados públicos organizados e comentados.">
+  <meta property="og:description" content="Onze séries de preço no atacado de Aracaju, a produção município a município e as exportações do estado. Dados públicos organizados e comentados.">
   <meta property="og:type" content="website">
 
   <style>
     /* ============================================================
-       Estilos locais da home
-       Só o que não existe no cobweb.css: a versão clicável do card de
-       índice, a lista de leituras e a sparkline do item de produto.
+       Capa do portal
+       ============================================================
+       A home não é um artigo: é o sumário do que existe no site. O
+       layout trabalha em três registros — a capa com o sumário
+       numerado, o mural das séries de preço e a grade de ensaios.
+       Todos os valores vêm dos tokens do cobweb.css; o único tamanho
+       novo é o da manchete de capa, maior que a de artigo.
        ============================================================ */
 
-    /* Card de índice em versão link. O hover redefine a borda inteira,
-       neutralizando o sublinhado padrão de âncora. */
-    .index-card--link {
-      display: block;
-      text-decoration: none;
-      transition: background 0.15s, border-color 0.15s;
+    /* ---------- capa ---------- */
+
+    .capa {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+      gap: 20px 56px;
+      align-items: start;
+      margin-bottom: 36px;
     }
 
-    .index-card--link:hover {
-      background: var(--color-bg-soft);
-      border-color: var(--color-border-strong);
-    }
-
-    /* Nos cards de leitura o nome é longo demais para dividir a linha com a
-       janela de cobertura: os dois empilham, e nenhum dos dois quebra. */
-    .index-card--link .index-card__header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 3px;
-      margin-bottom: 12px;
-    }
-
-    .index-card--link .index-card__source { white-space: nowrap; }
-    .index-card--link .index-card__base { line-height: 1.45; }
-
-    .index-card__cta {
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 11px;
-      color: var(--color-brand);
-      letter-spacing: 0.01em;
-    }
-
-    /* Lista de ensaios publicados */
-    .leitura-item {
-      display: block;
-      text-decoration: none;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--color-border);
-      transition: background 0.15s;
-    }
-
-    .leitura-item:first-of-type {
-      border-top: 1px solid var(--color-border);
-    }
-
-    .leitura-item:hover {
-      border-bottom-color: var(--color-border);
-      background: var(--color-bg-soft);
-    }
-
-    .leitura-item__eyebrow {
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--color-text-tertiary);
-      margin-bottom: 6px;
-    }
-
-    .leitura-item__titulo {
+    .capa__manchete {
       font-family: var(--font-serif);
-      font-size: 20px;
+      font-size: 42px;
       font-weight: 500;
-      line-height: 1.25;
-      letter-spacing: -0.012em;
-      margin: 0 0 6px;
+      line-height: 1.1;
+      letter-spacing: -0.022em;
+      margin: 0 0 18px;
       color: var(--color-text);
     }
 
-    .leitura-item__resumo {
-      font-size: 14px;
+    .capa__deck {
+      font-size: 17px;
       line-height: 1.55;
       color: var(--color-text-secondary);
       margin: 0;
+      max-width: 54ch;
     }
 
-    /* Sparkline dentro do item de produto */
-    .product-item__spark {
-      flex-shrink: 0;
-      width: 64px;
-      height: 28px;
-      overflow: visible;
+    /* Sumário numerado — o índice do portal, à direita da manchete */
+    .sumario {
+      border-top: 2px solid var(--color-text);
+      padding-top: 4px;
     }
 
-    .product-item__previous {
-      display: block;
-      margin-top: 6px;
+    .sumario__item {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--color-border);
+      border-radius: 0;
+      transition: background 0.15s;
     }
 
-    /* Linha de continuação ao fim de uma seção */
-    .secao-cta {
+    .sumario__item:hover {
+      background: var(--color-bg-soft);
+      border-bottom-color: var(--color-border);
+    }
+
+    .sumario__num {
+      font-family: var(--font-serif);
       font-size: 13px;
-      color: var(--color-brand);
-      margin: 18px 0 0;
+      color: var(--color-text-tertiary);
+      line-height: 1.5;
+    }
+
+    .sumario__nome {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .sumario__meta {
+      display: block;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      line-height: 1.45;
+      margin-top: 2px;
+    }
+
+    /* ---------- mural das séries ---------- */
+
+    .bloco {
+      margin-bottom: 52px;
+    }
+
+    .bloco__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+
+    .bloco__desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      margin: 0;
+      max-width: 46ch;
+      text-align: right;
+    }
+
+    /* Grade de fios: o fundo do contêiner aparece nas frestas de 1px e
+       faz as divisórias, sem borda em cada célula. */
+    .mural {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--color-border);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .mural__item {
+      background: var(--color-bg);
+      padding: 14px 16px 10px;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.15s;
+    }
+
+    .mural__item:hover {
+      background: var(--color-bg-soft);
+    }
+
+    .mural__topo {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .mural__nome {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: lowercase;
+      line-height: 1.25;
+    }
+
+    .mural__delta {
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .mural__preco {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .mural__unid {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      letter-spacing: 0;
+    }
+
+    .mural__spark {
+      width: 100%;
+      height: auto;
+      margin-top: auto;
+      padding-top: 10px;
+    }
+
+    /* Última célula: fecha a grade em 12 e leva ao panorama completo */
+    .mural__item--cta {
+      justify-content: space-between;
+      background: var(--color-bg-soft);
+    }
+
+    .mural__cta-titulo {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .mural__cta-texto {
+      display: block;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--color-text-secondary);
+    }
+
+    .mural__cta-link {
+      font-size: 11px;
+      color: var(--color-brand-text);
+      margin-top: 12px;
+    }
+
+    /* ---------- grade de ensaios ---------- */
+
+    .ensaios {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 40px;
+    }
+
+    .ensaio {
+      display: block;
+      border: none;
+      border-top: 2px solid var(--color-text);
+      padding-top: 16px;
+      transition: opacity 0.15s;
+    }
+
+    .ensaio--secundario {
+      border-top: 1px solid var(--color-border-strong);
+    }
+
+    .ensaio:hover .ensaio__titulo {
+      color: var(--color-brand-text);
+    }
+
+    .ensaio__eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: 8px;
+    }
+
+    .ensaio__titulo {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.018em;
+      margin: 0 0 10px;
+      color: var(--color-text);
+      transition: color 0.15s;
+    }
+
+    .ensaio--secundario .ensaio__titulo {
+      font-size: 20px;
+    }
+
+    .ensaio__resumo {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      margin: 0 0 12px;
+    }
+
+    .ensaio--secundario .ensaio__resumo {
+      font-size: 14px;
+    }
+
+    .ensaio__link {
+      font-size: 12px;
+      color: var(--color-brand-text);
+    }
+
+    /* Coluna direita: o que ainda não foi publicado, sem fingir que existe */
+    .em-preparo {
+      margin-top: 28px;
+      border-top: 1px solid var(--color-border);
+      padding-top: 14px;
+    }
+
+    .em-preparo__label {
+      font-size: 10px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: 10px;
+    }
+
+    .em-preparo__item {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--color-text-secondary);
+      margin: 0;
+      padding: 7px 0;
+      border-bottom: 1px dashed var(--color-border);
+    }
+
+    .em-preparo__item:last-child {
+      border-bottom: none;
+    }
+
+    /* ---------- tese, em duas colunas ---------- */
+
+    .tese {
+      column-count: 2;
+      column-gap: 44px;
+      border-top: 1px solid var(--color-border);
+      padding-top: 24px;
+    }
+
+    .tese p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin: 0 0 14px;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .tese p:first-child {
+      margin-top: 0;
+    }
+
+    /* ---------- foco visível ---------- */
+
+    .sumario__item:focus-visible,
+    .mural__item:focus-visible,
+    .ensaio:focus-visible {
+      outline: 2px solid var(--color-brand);
+      outline-offset: -2px;
+    }
+
+    /* ---------- responsivo ---------- */
+
+    @media (max-width: 900px) {
+      .capa {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .capa__manchete { font-size: 34px; }
+      .mural { grid-template-columns: repeat(3, 1fr); }
+
+      .ensaios {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .bloco__desc { text-align: left; }
+    }
+
+    @media (max-width: 640px) {
+      .capa__manchete { font-size: 28px; }
+      .capa__deck { font-size: 16px; }
+      .mural { grid-template-columns: repeat(2, 1fr); }
+      .ensaio__titulo { font-size: 24px; }
+      .tese { column-count: 1; }
     }
   </style>
 </head>
@@ -159,13 +408,54 @@
   <!-- ============================================================
        Conteúdo principal
        ============================================================ -->
-  <main class="container">
+  <main class="container container--wide">
 
-    <!-- Manchete -->
-    <section>
-      <div class="eyebrow">cobweb · hortifrúti · sergipe</div>
-      <h1 class="headline">A informação de preço do hortifrúti já existe. Falta organizá-la</h1>
-      <p class="deck">Os boletins da EMDAGRO, a produção municipal do IBGE e as estatísticas de comércio exterior do MDIC são públicos e gratuitos — e praticamente ilegíveis para quem precisa decidir plantio, compra ou reportagem. O CobWeb reúne essas bases, converte tudo para uma unidade comparável e publica o resultado com o comentário que os números sozinhos não dão.</p>
+    <!-- ============================================================
+         Capa — manchete à esquerda, sumário do portal à direita
+         ============================================================ -->
+    <section class="capa" aria-label="Capa">
+
+      <div>
+        <div class="eyebrow">cobweb · hortifrúti · sergipe</div>
+        <h1 class="capa__manchete">A informação de preço do hortifrúti já existe. Falta organizá-la</h1>
+        <p class="capa__deck">Os boletins da EMDAGRO, a produção municipal do IBGE e o comércio exterior do MDIC são públicos e gratuitos — e praticamente ilegíveis para quem precisa decidir plantio, compra ou reportagem. Aqui essas bases viram série contínua, unidade comparável e texto.</p>
+      </div>
+
+      <nav class="sumario" aria-label="Sumário do portal">
+
+        <a href="panoramas/#internas" class="sumario__item">
+          <span class="sumario__num" aria-hidden="true">01</span>
+          <span>
+            <span class="sumario__nome">Condições internas</span>
+            <span class="sumario__meta">11 produtos em três canais de Aracaju · jan a mar de 2026</span>
+          </span>
+        </a>
+
+        <a href="panoramas/#producao" class="sumario__item">
+          <span class="sumario__num" aria-hidden="true">02</span>
+          <span>
+            <span class="sumario__nome">Condições de produção</span>
+            <span class="sumario__meta">o que o estado planta e colhe, nos 75 municípios · 2001 a 2024</span>
+          </span>
+        </a>
+
+        <a href="panoramas/#externas" class="sumario__item">
+          <span class="sumario__num" aria-hidden="true">03</span>
+          <span>
+            <span class="sumario__nome">Condições externas</span>
+            <span class="sumario__meta">o que atravessa a fronteira, em valor e volume · 2016 a 2026</span>
+          </span>
+        </a>
+
+        <a href="sobre/" class="sumario__item">
+          <span class="sumario__num" aria-hidden="true">04</span>
+          <span>
+            <span class="sumario__nome">Sobre e método</span>
+            <span class="sumario__meta">quem publica, com que fontes e com qual critério</span>
+          </span>
+        </a>
+
+      </nav>
     </section>
 
     <!-- Meta strip -->
@@ -179,174 +469,192 @@
         fontes: EMDAGRO, IBGE e Comex Stat
       </span>
       <span class="meta-strip__item">
-        <a href="sobre/">
-          <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align: -3px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          sobre o portal
-        </a>
+        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 14l4-5 3 3 4-6"/></svg>
+        22 coletas no atacado CEASA-SE
       </span>
     </div>
 
     <!-- ============================================================
-         Três leituras do mercado
+         Mural — o trimestre inteiro em uma tela
          ============================================================ -->
-    <section aria-label="Três leituras do mercado">
-      <h2 class="section-title">Três leituras do mesmo mercado</h2>
-      <p style="font-size: 14px; color: var(--color-text-secondary); margin: 0 0 20px;">
-        O que se paga em Aracaju, o que o estado colhe e o que atravessa a fronteira. Cada leitura tem sua própria base, sua própria janela e sua própria página.
-      </p>
+    <section class="bloco" aria-label="Séries de preço no atacado">
 
-      <div class="index-grid">
+      <div class="bloco__header">
+        <h2 class="section-title" style="margin: 0;">O trimestre em onze séries</h2>
+        <p class="bloco__desc">Preço no atacado CEASA-SE ao fim de março e variação desde janeiro. Cada série leva à ficha do produto, com os dois canais de varejo ao lado.</p>
+      </div>
 
-        <a href="panoramas/" class="index-card index-card--link">
-          <header class="index-card__header">
-            <span class="index-card__name">Condições internas</span>
-            <span class="index-card__source">11 produtos</span>
-          </header>
-          <div class="index-card__value">
-            <span class="index-card__number">R$ 6,00</span>
-            <span class="index-card__delta delta-up">+114%</span>
-          </div>
-          <div class="index-card__base">tomate no atacado CEASA-SE · jan a mar de 2026</div>
-          <span class="index-card__cta">ver os preços →</span>
+      <div class="mural" data-sparklines="dados/precos-emdagro-q1-2026.json">
+
+        <a href="produtos/tomate/" class="mural__item" data-produto="tomate">
+          <span class="mural__topo">
+            <span class="mural__nome">tomate</span>
+            <span class="mural__delta delta-up">+114%</span>
+          </span>
+          <span class="mural__preco">R$ 6,00<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
         </a>
 
-        <a href="panoramas/laranja/" class="index-card index-card--link">
-          <header class="index-card__header">
-            <span class="index-card__name">Condições de produção</span>
-            <span class="index-card__source">75 municípios</span>
-          </header>
-          <div class="index-card__value">
-            <span class="index-card__number">31.279</span>
-            <span class="index-card__delta delta-down">−44,7%</span>
-          </div>
-          <div class="index-card__base">hectares de laranja em 2024 · frente a 2011</div>
-          <span class="index-card__cta">ver o mapa →</span>
+        <a href="produtos/inhame-da-costa/" class="mural__item" data-produto="inhame_da_costa">
+          <span class="mural__topo">
+            <span class="mural__nome">inhame da costa</span>
+            <span class="mural__delta delta-down">−54%</span>
+          </span>
+          <span class="mural__preco">R$ 6,00<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
         </a>
 
-        <a href="panoramas/exportacoes/" class="index-card index-card--link">
-          <header class="index-card__header">
-            <span class="index-card__name">Condições externas</span>
-            <span class="index-card__source">2016 a 2026</span>
-          </header>
-          <div class="index-card__value">
-            <span class="index-card__number">1,20 mi</span>
-            <span class="index-card__delta delta-down">−46,2%</span>
-          </div>
-          <div class="index-card__base">US$ FOB exportados em 2025 · frente a 2024</div>
-          <span class="index-card__cta">ver a série →</span>
+        <a href="produtos/mamao-hawai/" class="mural__item" data-produto="mamao_hawai">
+          <span class="mural__topo">
+            <span class="mural__nome">mamão hawai</span>
+            <span class="mural__delta delta-down">−45%</span>
+          </span>
+          <span class="mural__preco">R$ 1,60<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
+        </a>
+
+        <a href="produtos/cenoura/" class="mural__item" data-produto="cenoura">
+          <span class="mural__topo">
+            <span class="mural__nome">cenoura</span>
+            <span class="mural__delta delta-up">+43%</span>
+          </span>
+          <span class="mural__preco">R$ 5,00<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
+        </a>
+
+        <a href="produtos/acerola/" class="mural__item" data-produto="acerola">
+          <span class="mural__topo">
+            <span class="mural__nome">acerola</span>
+            <span class="mural__delta delta-up">+40%</span>
+          </span>
+          <span class="mural__preco">R$ 3,50<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
+        </a>
+
+        <a href="produtos/repolho-verde/" class="mural__item" data-produto="repolho_verde">
+          <span class="mural__topo">
+            <span class="mural__nome">repolho verde</span>
+            <span class="mural__delta delta-up">+8%</span>
+          </span>
+          <span class="mural__preco">R$ 4,67<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
+        </a>
+
+        <a href="produtos/batata-lisa/" class="mural__item" data-produto="batata_lisa">
+          <span class="mural__topo">
+            <span class="mural__nome">batata lisa</span>
+            <span class="mural__delta delta-up">+7%</span>
+          </span>
+          <span class="mural__preco">R$ 3,20<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
+        </a>
+
+        <a href="produtos/cebola-roxa/" class="mural__item" data-produto="cebola_roxa">
+          <span class="mural__topo">
+            <span class="mural__nome">cebola roxa</span>
+            <span class="mural__delta delta-flat">0%</span>
+          </span>
+          <span class="mural__preco">R$ 4,00<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
+        </a>
+
+        <a href="produtos/macaxeira/" class="mural__item" data-produto="macaxeira">
+          <span class="mural__topo">
+            <span class="mural__nome">macaxeira</span>
+            <span class="mural__delta delta-flat">0%</span>
+          </span>
+          <span class="mural__preco">R$ 2,33<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
+        </a>
+
+        <a href="produtos/manga-tommy/" class="mural__item" data-produto="manga_tommy">
+          <span class="mural__topo">
+            <span class="mural__nome">manga tommy</span>
+            <span class="mural__delta delta-down">−7%</span>
+          </span>
+          <span class="mural__preco">R$ 2,60<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
+        </a>
+
+        <a href="produtos/limao-taiti/" class="mural__item" data-produto="limao_taiti">
+          <span class="mural__topo">
+            <span class="mural__nome">limão taiti</span>
+            <span class="mural__delta delta-down">−9%</span>
+          </span>
+          <span class="mural__preco">R$ 2,00<span class="mural__unid">/kg</span></span>
+          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
+        </a>
+
+        <a href="panoramas/#internas" class="mural__item mural__item--cta">
+          <span>
+            <span class="mural__cta-titulo">Atacado e varejo, lado a lado</span>
+            <span class="mural__cta-texto">As mesmas onze séries nos três canais de Aracaju, com a leitura de cada repasse.</span>
+          </span>
+          <span class="mural__cta-link">ver o panorama →</span>
         </a>
 
       </div>
     </section>
 
     <!-- ============================================================
-         Por que o portal existe
+         Ensaios publicados
          ============================================================ -->
-    <section class="commentary">
-      <h2 class="section-title">Por que o portal existe</h2>
-      <div class="prose">
-        <p>Há uma assimetria de informação real na cadeia do hortifrúti, e ela pesa sobre quem tem menos margem para errar. O produtor familiar decide o que plantar meses antes de saber a que preço venderá; o comprador de varejo negocia com quem conhece o mercado melhor do que ele. O dado que resolveria boa parte disso é público — está nos boletins semanais da EMDAGRO, nas tabelas da Produção Agrícola Municipal e nos microdados do Comex Stat. Mas está espalhado, em unidades incompatíveis, sem série contínua e sem qualquer narrativa que ligue um número ao outro.</p>
-        <p>O CobWeb trata dessa parte específica do problema, a parte informacional. Não é marketplace, não faz intermediação e não promete crédito nem logística. Converte preços por caixa e por saco em reais por quilo, alinha as séries de três canais de comercialização de Aracaju, agrega a produção município a município e coloca ao lado o que o estado embarca para fora. O resto é texto: cada série vem com a leitura de quem a organizou.</p>
-        <p>O primeiro trimestre de 2026 dá a medida do que essa organização revela. O tomate mais que dobrou no atacado entre janeiro e março, e o varejo de bairro repassou o choque com folga. O inhame da costa caiu 54% no atacado, e o mesmo varejo repassou menos da metade da queda. Repasse assimétrico não é uma impressão de quem vai à feira: é o que as três séries mostram quando são postas na mesma escala.</p>
-      </div>
-    </section>
+    <section class="bloco" aria-label="Ensaios publicados">
 
-    <!-- ============================================================
-         Leituras publicadas
-         ============================================================ -->
-    <section class="products-section" aria-label="Leituras publicadas">
-      <div class="products-section__header">
+      <div class="bloco__header">
         <h2 class="section-title" style="margin: 0;">Leituras publicadas</h2>
-        <span class="products-section__meta">panoramas em formato de ensaio</span>
+        <p class="bloco__desc">Panoramas em formato de ensaio: uma cadeia por vez, série, mapa e comentário.</p>
       </div>
 
-      <a href="panoramas/laranja/" class="leitura-item">
-        <div class="leitura-item__eyebrow">produção · ibge, pam · 2001 a 2024</div>
-        <h3 class="leitura-item__titulo">Cenário da produção de laranja e de suco de laranja em Sergipe</h3>
-        <p class="leitura-item__resumo">Sergipe colhe hoje pouco mais da metade da laranja que colhia em 2011 e, ainda assim, bateu em 2024 o recorde da série em valor exportado de suco. Mapa dos 75 municípios, série estadual e localização das plantas processadoras.</p>
-      </a>
+      <div class="ensaios">
 
-      <a href="panoramas/exportacoes/" class="leitura-item">
-        <div class="leitura-item__eyebrow">demanda externa · comex stat · 2016 a 2026</div>
-        <h3 class="leitura-item__titulo">Sergipe quase não exporta hortifrúti — o limão-taiti é a exceção</h3>
-        <p class="leitura-item__resumo">Pico de US$ 2,87 milhões em 2016, queda de 99% até 2021 e recuperação depois de 2023. A volatilidade se explica pela troca de composição da pauta e pelo volume embarcado de limão do Platô de Neópolis.</p>
-      </a>
+        <a href="panoramas/laranja/" class="ensaio">
+          <div class="ensaio__eyebrow">produção · ibge, pam · 2001 a 2024</div>
+          <h3 class="ensaio__titulo">Cenário da produção de laranja e de suco de laranja em Sergipe</h3>
+          <p class="ensaio__resumo">Sergipe colhe hoje pouco mais da metade da laranja que colhia em 2011 e, ainda assim, bateu em 2024 o recorde da série em valor exportado de suco. As duas coisas são o mesmo fato visto de dois lados: menos fruta, preço muito maior. Mapa dos 75 municípios, série estadual e localização das plantas processadoras.</p>
+          <span class="ensaio__link">ler o ensaio →</span>
+        </a>
 
-      <p class="secao-cta"><a href="panoramas/">ver todos os panoramas →</a></p>
+        <div>
+          <a href="panoramas/exportacoes/" class="ensaio ensaio--secundario">
+            <div class="ensaio__eyebrow">demanda externa · comex stat · 2016 a 2026</div>
+            <h3 class="ensaio__titulo">Sergipe quase não exporta hortifrúti — o limão-taiti é a exceção</h3>
+            <p class="ensaio__resumo">Pico de US$ 2,87 milhões em 2016, queda de 99% até 2021 e recuperação depois de 2023. A volatilidade se explica pela troca de composição da pauta e pelo volume embarcado de limão do Platô de Neópolis.</p>
+            <span class="ensaio__link">ler o ensaio →</span>
+          </a>
+
+          <div class="em-preparo">
+            <div class="em-preparo__label">em preparo</div>
+            <p class="em-preparo__item">Índice agregado das CEASAs, base 100 — a manchete que esta capa ainda não tem.</p>
+            <p class="em-preparo__item">Cotações internacionais de frutas e hortaliças: FAO, ITC Trade Map e USDA.</p>
+            <p class="em-preparo__item">Preço médio FOB por destino, a partir dos microdados do Comex Stat.</p>
+          </div>
+        </div>
+
+      </div>
     </section>
 
     <!-- ============================================================
-         Produtos em destaque
+         A tese, em duas colunas
          ============================================================ -->
-    <section class="products-section" aria-label="Produtos em destaque">
-      <div class="products-section__header">
-        <h2 class="section-title" style="margin: 0;">Produtos em destaque</h2>
-        <span class="products-section__meta">atacado CEASA-SE · jan a mar de 2026</span>
+    <section class="bloco" aria-label="Por que o portal existe">
+
+      <div class="bloco__header">
+        <h2 class="section-title" style="margin: 0;">Por que o portal existe</h2>
+        <p class="bloco__desc">Uma assimetria de informação que se resolve com organização, não com plataforma.</p>
       </div>
 
-      <div class="products-grid" data-sparklines="dados/precos-emdagro-q1-2026.json">
-
-        <a href="produtos/tomate/" class="product-item" data-produto="tomate">
-          <div class="product-item__header">
-            <span class="product-item__name">tomate</span>
-            <span class="product-item__delta delta-up">+114%</span>
-          </div>
-          <div class="product-item__price">
-            <svg class="product-item__spark" data-spark viewBox="0 0 64 28" aria-hidden="true"></svg>
-            <span class="product-item__value">R$ 6,00</span>
-            <span class="product-item__unit">/kg</span>
-          </div>
-          <span class="product-item__previous">de R$ 2,80 em janeiro · choque de oferta em março</span>
-        </a>
-
-        <a href="produtos/inhame-da-costa/" class="product-item" data-produto="inhame_da_costa">
-          <div class="product-item__header">
-            <span class="product-item__name">inhame da costa</span>
-            <span class="product-item__delta delta-down">−54%</span>
-          </div>
-          <div class="product-item__price">
-            <svg class="product-item__spark" data-spark viewBox="0 0 64 28" aria-hidden="true"></svg>
-            <span class="product-item__value">R$ 6,00</span>
-            <span class="product-item__unit">/kg</span>
-          </div>
-          <span class="product-item__previous">de R$ 13,00 em janeiro · o varejo repassa metade</span>
-        </a>
-
-        <a href="produtos/mamao-hawai/" class="product-item" data-produto="mamao_hawai">
-          <div class="product-item__header">
-            <span class="product-item__name">mamão hawai</span>
-            <span class="product-item__delta delta-down">−45%</span>
-          </div>
-          <div class="product-item__price">
-            <svg class="product-item__spark" data-spark viewBox="0 0 64 28" aria-hidden="true"></svg>
-            <span class="product-item__value">R$ 1,60</span>
-            <span class="product-item__unit">/kg</span>
-          </div>
-          <span class="product-item__previous">de R$ 2,92 em janeiro · varejo travado em R$ 5,00</span>
-        </a>
-
-        <a href="produtos/cenoura/" class="product-item" data-produto="cenoura">
-          <div class="product-item__header">
-            <span class="product-item__name">cenoura</span>
-            <span class="product-item__delta delta-up">+43%</span>
-          </div>
-          <div class="product-item__price">
-            <svg class="product-item__spark" data-spark viewBox="0 0 64 28" aria-hidden="true"></svg>
-            <span class="product-item__value">R$ 5,00</span>
-            <span class="product-item__unit">/kg</span>
-          </div>
-          <span class="product-item__previous">de R$ 3,50 em janeiro · salto concentrado em março</span>
-        </a>
-
+      <div class="tese">
+        <p>Há uma assimetria de informação real na cadeia do hortifrúti, e ela pesa sobre quem tem menos margem para errar. O produtor familiar decide o que plantar meses antes de saber a que preço venderá; o comprador de varejo negocia com quem conhece o mercado melhor do que ele. O dado que resolveria boa parte disso é público — está nos boletins semanais da EMDAGRO, nas tabelas da Produção Agrícola Municipal e nos microdados do Comex Stat. Mas está espalhado, em unidades incompatíveis, sem série contínua e sem qualquer narrativa que ligue um número ao outro.</p>
+        <p>O CobWeb trata dessa parte específica do problema, a parte informacional. Não é marketplace, não faz intermediação e não promete crédito nem logística. Converte preços por caixa e por saco em reais por quilo, alinha as séries de três canais de comercialização de Aracaju, agrega a produção município a município e coloca ao lado o que o estado embarca para fora.</p>
+        <p>O primeiro trimestre de 2026 dá a medida do que essa organização revela. O tomate mais que dobrou no atacado entre janeiro e março, e o varejo de bairro repassou o choque com folga. O inhame da costa caiu 54% no atacado, e o mesmo varejo repassou menos da metade da queda. Repasse assimétrico não é impressão de quem vai à feira: é o que as séries mostram quando são postas na mesma escala.</p>
       </div>
-
-      <p class="secao-cta"><a href="panoramas/">ver os 11 produtos monitorados →</a></p>
     </section>
 
     <!-- Nota metodológica -->
     <aside class="method-note">
       <div class="method-note__label">nota metodológica</div>
-      <p class="method-note__text">Os preços vêm dos boletins semanais da EMDAGRO/ASPLAN para três canais de Aracaju — atacado CEASA-SE, varejo do Mercado Central e varejo do Mercado Setorial do Augusto Franco — entre janeiro e março de 2026, convertidos de embalagem para R$/kg pelo peso nominal. As variações da home comparam janeiro e março do mesmo trimestre; a apuração completa de cada produto está na sua ficha. A produção municipal vem da Produção Agrícola Municipal do IBGE, tabela 1613, e as exportações do Comex Stat/MDIC, capítulos SH2 07 e 08. O índice agregado das CEASAs, que será a manchete desta página, ainda está em construção: até lá, a home destaca as três leituras já publicadas, sem estimativa própria.</p>
+      <p class="method-note__text">Os preços vêm dos boletins semanais da EMDAGRO/ASPLAN para três canais de Aracaju — atacado CEASA-SE, varejo do Mercado Central e varejo do Mercado Setorial do Augusto Franco — entre janeiro e março de 2026, convertidos de embalagem para R$/kg pelo peso nominal. O mural mostra o preço do atacado ao fim de março e a variação desde janeiro; a apuração completa de cada produto está na sua ficha. A produção municipal vem da Produção Agrícola Municipal do IBGE, tabela 1613, e as exportações do Comex Stat/MDIC, capítulos SH2 07 e 08. O índice agregado das CEASAs, que será a manchete desta capa, ainda está em construção: até lá, nada aqui é estimativa própria.</p>
     </aside>
 
   </main>
@@ -359,7 +667,7 @@
     <span>cc by-sa 4.0</span>
   </footer>
 
-  <!-- Sparklines dos produtos em destaque -->
+  <!-- Sparklines do mural -->
   <script src="assets/js/sparklines.js"></script>
 </body>
 </html>
