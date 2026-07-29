@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CobWeb · demanda externa · Sergipe</title>
-  <meta name="description" content="Exportações sergipanas de hortifrutigranjeiros (SH2 07 e 08): série histórica 2016–2026 em US$ FOB. Fonte: Comex Stat / MDIC.">
+  <title>CobWeb · mercados do hortifrúti em Sergipe</title>
+  <meta name="description" content="Portal editorial de preços, produção e comércio exterior do hortifrúti sergipano. Três leituras do mercado a partir de dados públicos da EMDAGRO, do IBGE e do Comex Stat.">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
@@ -18,33 +18,111 @@
   <link rel="stylesheet" href="cobweb.css">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="CobWeb · exportações de hortifrúti · Sergipe">
-  <meta property="og:description" content="Série 2016–2026: Sergipe exportou US$ 2,23 mi em frutas em 2024, mas recuou 46% em 2025. Dados Comex Stat.">
+  <meta property="og:title" content="CobWeb · mercados do hortifrúti em Sergipe">
+  <meta property="og:description" content="Preços do atacado e do varejo de Aracaju, produção municipal e exportações. Dados públicos organizados e comentados.">
   <meta property="og:type" content="website">
 
   <style>
-    /* .serie-toggle e .serie-btn migraram para o cobweb.css, por passarem a
-       servir também a página do mapa da laranja. */
-    .chart-sh4-legenda {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 20px;
-      margin: 10px 0 10px;
+    /* ============================================================
+       Estilos locais da home
+       Só o que não existe no cobweb.css: a versão clicável do card de
+       índice, a lista de leituras e a sparkline do item de produto.
+       ============================================================ */
+
+    /* Card de índice em versão link. O hover redefine a borda inteira,
+       neutralizando o sublinhado padrão de âncora. */
+    .index-card--link {
+      display: block;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
     }
-    .chart-sh4-legenda__item {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 11px;
-      color: var(--color-text-secondary);
-      font-family: var(--font-sans);
+
+    .index-card--link:hover {
+      background: var(--color-bg-soft);
+      border-color: var(--color-border-strong);
     }
-    .chart-sh4-legenda__swatch {
+
+    /* Nos cards de leitura o nome é longo demais para dividir a linha com a
+       janela de cobertura: os dois empilham, e nenhum dos dois quebra. */
+    .index-card--link .index-card__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+      margin-bottom: 12px;
+    }
+
+    .index-card--link .index-card__source { white-space: nowrap; }
+    .index-card--link .index-card__base { line-height: 1.45; }
+
+    .index-card__cta {
       display: inline-block;
-      width: 12px;
-      height: 12px;
-      border-radius: 2px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--color-brand);
+      letter-spacing: 0.01em;
+    }
+
+    /* Lista de ensaios publicados */
+    .leitura-item {
+      display: block;
+      text-decoration: none;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--color-border);
+      transition: background 0.15s;
+    }
+
+    .leitura-item:first-of-type {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .leitura-item:hover {
+      border-bottom-color: var(--color-border);
+      background: var(--color-bg-soft);
+    }
+
+    .leitura-item__eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: 6px;
+    }
+
+    .leitura-item__titulo {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: -0.012em;
+      margin: 0 0 6px;
+      color: var(--color-text);
+    }
+
+    .leitura-item__resumo {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+
+    /* Sparkline dentro do item de produto */
+    .product-item__spark {
       flex-shrink: 0;
+      width: 64px;
+      height: 28px;
+      overflow: visible;
+    }
+
+    .product-item__previous {
+      display: block;
+      margin-top: 6px;
+    }
+
+    /* Linha de continuação ao fim de uma seção */
+    .secao-cta {
+      font-size: 13px;
+      color: var(--color-brand);
+      margin: 18px 0 0;
     }
   </style>
 </head>
@@ -85,153 +163,190 @@
 
     <!-- Manchete -->
     <section>
-      <div class="eyebrow">demanda externa · sergipe · 2016–2026</div>
-      <h1 class="headline">Sergipe quase não exporta hortifrúti — o limão-taiti é a exceção</h1>
-      <p class="deck">Quando analisamos as exportações sergipanas de hortifrúti, percebemos um pico de US$ 2,87 milhões em 2016, uma queda de 99% até 2021 e uma recuperação pós-2023. A volatilidade da série se deve à alteração na composição das exportações e ao aumento da quantidade exportada de limões.</p>
+      <div class="eyebrow">cobweb · hortifrúti · sergipe</div>
+      <h1 class="headline">A informação de preço do hortifrúti já existe. Falta organizá-la</h1>
+      <p class="deck">Os boletins da EMDAGRO, a produção municipal do IBGE e as estatísticas de comércio exterior do MDIC são públicos e gratuitos — e praticamente ilegíveis para quem precisa decidir plantio, compra ou reportagem. O CobWeb reúne essas bases, converte tudo para uma unidade comparável e publica o resultado com o comentário que os números sozinhos não dão.</p>
     </section>
 
     <!-- Meta strip -->
     <div class="meta-strip">
       <span class="meta-strip__item">
         <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
-        2016–2026
+        janela de preços: jan a mar de 2026
       </span>
       <span class="meta-strip__item">
         <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v6c0 1.7 4 3 9 3s9-1.3 9-3V6M3 12v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg>
-        fonte: Comex Stat / MDIC
+        fontes: EMDAGRO, IBGE e Comex Stat
       </span>
       <span class="meta-strip__item">
-        <a href="sobre/metodologia/">
+        <a href="sobre/">
           <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align: -3px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          metodologia
+          sobre o portal
         </a>
       </span>
     </div>
 
-    <!-- Cards de destaque -->
-    <section class="index-grid" aria-label="Destaques da série de exportações">
-
-      <article class="index-card">
-        <header class="index-card__header">
-          <span class="index-card__name">Abr 2026</span>
-          <span class="index-card__source">último mês</span>
-        </header>
-        <div class="index-card__value">
-          <span class="index-card__number">98.270</span>
-          <span class="index-card__delta delta-up">+101%</span>
-        </div>
-        <div class="index-card__base">US$ FOB · vs. março de 2026</div>
-      </article>
-
-      <article class="index-card">
-        <header class="index-card__header">
-          <span class="index-card__name">2024</span>
-          <span class="index-card__source"> ano completo</span>
-        </header>
-        <div class="index-card__value">
-          <span class="index-card__number">2,23 mi</span>
-          <span class="index-card__delta delta-up">+3,7%</span>
-        </div>
-        <div class="index-card__base">US$ FOB · vs. 2023</div>
-      </article>
-
-      <article class="index-card">
-        <header class="index-card__header">
-          <span class="index-card__name">2025</span>
-          <span class="index-card__source"> ano completo</span>
-        </header>
-        <div class="index-card__value">
-          <span class="index-card__number">1,20 mi</span>
-          <span class="index-card__delta delta-down">−46,2%</span>
-        </div>
-        <div class="index-card__base">US$ FOB · vs. 2024</div>
-      </article>
-
-    </section>
-
-    <!-- Toggle + Gráfico -->
-    <section aria-label="Série histórica de exportações por classificação SH2">
-      <div class="serie-toggle" role="group" aria-label="Selecionar métrica">
-        <button class="serie-btn" data-serie="valor" aria-pressed="true">Valor US$ FOB</button>
-        <button class="serie-btn" data-serie="kg" aria-pressed="false">Quilograma Líquido</button>
-        <button class="serie-btn" data-serie="preco" aria-pressed="false">Preço Implícito (US$/kg)</button>
-      </div>
-      <div class="chart-container">
-        <canvas id="indice-geral" role="img" aria-label="Exportações mensais de Sergipe (SH2 07+08 combinados), jan/2016 a abr/2026. Alterne entre Valor US$ FOB e Quilograma Líquido.">
-          Série anual de exportações de Sergipe em hortifrutigranjeiros (SH2 07 e 08 combinados), de janeiro de 2016 a abril de 2026. Pico de valor em maio de 2017 (US$ 907.707 FOB). Pico de volume em março de 2024 (498.960 kg). Disponível em duas métricas: Valor US$ FOB e Quilograma Líquido.
-        </canvas>
-      </div>
-    </section>
-
-    <!-- Leitura editorial -->
-    <section class="commentary">
-      <h2 class="section-title">Leitura da série</h2>
-      <div class="prose">
-        <p>Dois ciclos distintos marcam as exportações sergipanas nesse setor na última década. No primeiro, 2016 e 2017, o estado exportou US$ 2,87 mi e US$ 2,85 mi, respectivamente. A partir de 2018, a queda foi abrupta: em quatro anos o valor recuou 99%, chegando a US$ 28.763 em 2021, equivalente a um único embarque pequeno. O colapso não foi gradual: 2018 já registrava US$ 584 mil, e 2019 caía para US$ 443 mil antes que as exportações praticamente cessassem em 2020 e 2021.</p>
-        <p>A recuperação de 2023 foi a mais relevante da série: US$ 2,15 mi em um único ano, voltando ao patamar de 2016. O crescimento de 3,7% em 2024 sugeria consolidação. A retração de 2025, porém, quebra o ritmo: US$ 1,20 mi no ano completo representam queda de 46,2%.</p>
-        <p>A volatilidade da série é explicada por dois fatores. Em sua fase descendente, houve uma mudança na composição das exportações. Até o biênio 2016-2017, as exportações eram puxadas por três componentes: citrinos (laranja, limão, lima e tangerina), frutas secas e, residualmente, manga, abacaxi e família. No entanto, as exportações de frutas secas são interrompidas em 2018, bem como o valor exportado de citrinos vão paulatinamente diminuindo até 2021.Já na fase de retomada, o aumento do valor exportado é puxado pelo aumento da quantidade exportada, enquanto o preço implícito das exportações de citrinos pouco se altera</p>
-      </div>
-    </section>
-
-    <!-- Composição por SH4 -->
-    <section aria-label="Composição das exportações por classificação SH4">
-      <h2 class="section-title">Exportação de hortifrúti — decomposição por produto</h2>
-      <div class="chart-container" style="height: 340px;">
-        <canvas id="composicao-sh4" role="img" aria-label="Exportações de Sergipe decompostas por classificação SH4, 2016 a 2026. Citrinos (0805) dominam a série de 2019 em diante. Frutas secas (0813) respondem pela maior parte dos anos 2016 e 2017.">
-          Gráfico de barras empilhadas mostrando a composição das exportações sergipanas de hortifrúti (2016–2026) por classificação SH4. Em 2016 e 2017, frutas secas (0813) representavam mais de 60% do total. A partir de 2019, citrinos (0805) passaram a dominar, chegando a 100% nos anos 2023–2026.
-        </canvas>
-      </div>
-      <p class="method-note__text" style="margin-bottom: 32px; font-size: 13px;">
-        <em>Fonte: Comex Stat / MDIC. 0805 = sucos e frutas cítricas frescas; 0813 = mistura de frutas secas/preparações; 0804 = manga, abacaxi, goiaba; 0811 = frutas congeladas. "Outros" inclui coco (0801), hortícolas (SH2 07) e demais SH4.</em>
+    <!-- ============================================================
+         Três leituras do mercado
+         ============================================================ -->
+    <section aria-label="Três leituras do mercado">
+      <h2 class="section-title">Três leituras do mesmo mercado</h2>
+      <p style="font-size: 14px; color: var(--color-text-secondary); margin: 0 0 20px;">
+        O que se paga em Aracaju, o que o estado colhe e o que atravessa a fronteira. Cada leitura tem sua própria base, sua própria janela e sua própria página.
       </p>
-      <div class="prose">
-        <p>Dentro da classificação dos citrinos, o produto dominante na pauta de exportação é o limão-taiti (<em>Citrus latifolia</em>), produzido na região do Platô de Neópolis (Região do Baixo São Francisco). É uma região de grandes produtores que possuem certificação internacional, GlobalG.A.P. Curiosamente, embora Sergipe seja um grande produtor de laranja, ela é praticamente insignificante na pauta de exportação in natura. Isso se deve à forte indústria de processamento do estado, concentrada principalmente na região de Estância. O mercado global de cítricos estruturou o Brasil e, consequentemente, Sergipe para exportar suco. O transporte internacional de suco de laranja é altamente eficiente, realizado em navios-tanque refrigerados exclusivos (semelhantes a petroleiros) que partem dos portos brasileiros diretamente para a Europa e Estados Unidos.</p>
-      </div>
 
-      <!-- Gráfico: volume + preço / preço por SH4 -->
-      <div id="limao-chart-wrapper" style="margin-top: 28px;">
-        <div class="serie-toggle" role="group" aria-label="Selecionar vista do gráfico">
-          <button class="serie-btn" data-vista="volume-preco" aria-pressed="true">Volume e preço — limão-taiti</button>
-          <button class="serie-btn" data-vista="preco-sh4" aria-pressed="false">Preço implícito por categoria</button>
-        </div>
-        <div class="chart-container" style="height: 300px;">
-          <canvas id="limao-volume-preco" role="img" aria-label="Gráfico em dois modos: (1) volume anual em toneladas e preço implícito US$/kg do limão-taiti (SH6 080550), Sergipe 2016–2026; (2) preço médio implícito anual por categoria SH4 — citrinos (0805), frutas secas (0813) e manga/abacaxi (0804).">
-            Série anual de volume exportado (toneladas) e preço médio implícito (US$ FOB/kg) do limão-taiti (SH6 080550) por Sergipe, 2016 a 2026. Na segunda vista, compara preços implícitos entre categorias SH4: citrinos in natura (~US$ 1/kg), frutas secas processadas (~US$ 22/kg em 2016–2017) e manga/abacaxi (~US$ 1,1/kg).
-          </canvas>
-        </div>
-        <p class="method-note__text" style="font-size: 13px; margin-top: 10px;">
-          <em>Vista 1 — barras (eixo esq.): volume em toneladas, SH6 080550; linha (eixo dir.): preço médio implícito US$ FOB/kg. Vista 2 — preço médio implícito por SH4 dominante; 0813 ausente de 2019 em diante por encerramento das exportações. Fonte: Comex Stat / MDIC, geração 17/mai/2026.</em>
-        </p>
+      <div class="index-grid">
+
+        <a href="panoramas/" class="index-card index-card--link">
+          <header class="index-card__header">
+            <span class="index-card__name">Condições internas</span>
+            <span class="index-card__source">11 produtos</span>
+          </header>
+          <div class="index-card__value">
+            <span class="index-card__number">R$ 6,00</span>
+            <span class="index-card__delta delta-up">+114%</span>
+          </div>
+          <div class="index-card__base">tomate no atacado CEASA-SE · jan a mar de 2026</div>
+          <span class="index-card__cta">ver os preços →</span>
+        </a>
+
+        <a href="panoramas/laranja/" class="index-card index-card--link">
+          <header class="index-card__header">
+            <span class="index-card__name">Condições de produção</span>
+            <span class="index-card__source">75 municípios</span>
+          </header>
+          <div class="index-card__value">
+            <span class="index-card__number">31.279</span>
+            <span class="index-card__delta delta-down">−44,7%</span>
+          </div>
+          <div class="index-card__base">hectares de laranja em 2024 · frente a 2011</div>
+          <span class="index-card__cta">ver o mapa →</span>
+        </a>
+
+        <a href="panoramas/exportacoes/" class="index-card index-card--link">
+          <header class="index-card__header">
+            <span class="index-card__name">Condições externas</span>
+            <span class="index-card__source">2016 a 2026</span>
+          </header>
+          <div class="index-card__value">
+            <span class="index-card__number">1,20 mi</span>
+            <span class="index-card__delta delta-down">−46,2%</span>
+          </div>
+          <div class="index-card__base">US$ FOB exportados em 2025 · frente a 2024</div>
+          <span class="index-card__cta">ver a série →</span>
+        </a>
+
       </div>
     </section>
 
-    <!-- Destaques históricos -->
-    <section class="subindex-section" aria-label="Marcos históricos da série SH2 08">
-      <div class="eyebrow">marcos históricos · SH2 08 · Sergipe</div>
-      <div class="subindex-grid">
-        <div class="subindex-card">
-          <div class="subindex-card__label">pico · 2016</div>
-          <div class="subindex-card__value">2,87 mi<span class="subindex-card__delta delta-flat" style="font-size:11px;"> US$</span></div>
-        </div>
-        <div class="subindex-card">
-          <div class="subindex-card__label">mínimo · 2021</div>
-          <div class="subindex-card__value">28.763 <span class="subindex-card__delta delta-down">−99%</span></div>
-        </div>
-        <div class="subindex-card">
-          <div class="subindex-card__label">retomada · 2024</div>
-          <div class="subindex-card__value">2,23 mi<span class="subindex-card__delta delta-flat" style="font-size:11px;"> US$</span></div>
-        </div>
-        <div class="subindex-card">
-          <div class="subindex-card__label">2025 vs. 2024</div>
-          <div class="subindex-card__value"><span class="subindex-card__delta delta-down" style="font-size:19px; font-weight:500;">−46,2%</span></div>
-        </div>
+    <!-- ============================================================
+         Por que o portal existe
+         ============================================================ -->
+    <section class="commentary">
+      <h2 class="section-title">Por que o portal existe</h2>
+      <div class="prose">
+        <p>Há uma assimetria de informação real na cadeia do hortifrúti, e ela pesa sobre quem tem menos margem para errar. O produtor familiar decide o que plantar meses antes de saber a que preço venderá; o comprador de varejo negocia com quem conhece o mercado melhor do que ele. O dado que resolveria boa parte disso é público — está nos boletins semanais da EMDAGRO, nas tabelas da Produção Agrícola Municipal e nos microdados do Comex Stat. Mas está espalhado, em unidades incompatíveis, sem série contínua e sem qualquer narrativa que ligue um número ao outro.</p>
+        <p>O CobWeb trata dessa parte específica do problema, a parte informacional. Não é marketplace, não faz intermediação e não promete crédito nem logística. Converte preços por caixa e por saco em reais por quilo, alinha as séries de três canais de comercialização de Aracaju, agrega a produção município a município e coloca ao lado o que o estado embarca para fora. O resto é texto: cada série vem com a leitura de quem a organizou.</p>
+        <p>O primeiro trimestre de 2026 dá a medida do que essa organização revela. O tomate mais que dobrou no atacado entre janeiro e março, e o varejo de bairro repassou o choque com folga. O inhame da costa caiu 54% no atacado, e o mesmo varejo repassou menos da metade da queda. Repasse assimétrico não é uma impressão de quem vai à feira: é o que as três séries mostram quando são postas na mesma escala.</p>
       </div>
+    </section>
+
+    <!-- ============================================================
+         Leituras publicadas
+         ============================================================ -->
+    <section class="products-section" aria-label="Leituras publicadas">
+      <div class="products-section__header">
+        <h2 class="section-title" style="margin: 0;">Leituras publicadas</h2>
+        <span class="products-section__meta">panoramas em formato de ensaio</span>
+      </div>
+
+      <a href="panoramas/laranja/" class="leitura-item">
+        <div class="leitura-item__eyebrow">produção · ibge, pam · 2001 a 2024</div>
+        <h3 class="leitura-item__titulo">Cenário da produção de laranja e de suco de laranja em Sergipe</h3>
+        <p class="leitura-item__resumo">Sergipe colhe hoje pouco mais da metade da laranja que colhia em 2011 e, ainda assim, bateu em 2024 o recorde da série em valor exportado de suco. Mapa dos 75 municípios, série estadual e localização das plantas processadoras.</p>
+      </a>
+
+      <a href="panoramas/exportacoes/" class="leitura-item">
+        <div class="leitura-item__eyebrow">demanda externa · comex stat · 2016 a 2026</div>
+        <h3 class="leitura-item__titulo">Sergipe quase não exporta hortifrúti — o limão-taiti é a exceção</h3>
+        <p class="leitura-item__resumo">Pico de US$ 2,87 milhões em 2016, queda de 99% até 2021 e recuperação depois de 2023. A volatilidade se explica pela troca de composição da pauta e pelo volume embarcado de limão do Platô de Neópolis.</p>
+      </a>
+
+      <p class="secao-cta"><a href="panoramas/">ver todos os panoramas →</a></p>
+    </section>
+
+    <!-- ============================================================
+         Produtos em destaque
+         ============================================================ -->
+    <section class="products-section" aria-label="Produtos em destaque">
+      <div class="products-section__header">
+        <h2 class="section-title" style="margin: 0;">Produtos em destaque</h2>
+        <span class="products-section__meta">atacado CEASA-SE · jan a mar de 2026</span>
+      </div>
+
+      <div class="products-grid" data-sparklines="dados/precos-emdagro-q1-2026.json">
+
+        <a href="produtos/tomate/" class="product-item" data-produto="tomate">
+          <div class="product-item__header">
+            <span class="product-item__name">tomate</span>
+            <span class="product-item__delta delta-up">+114%</span>
+          </div>
+          <div class="product-item__price">
+            <svg class="product-item__spark" data-spark viewBox="0 0 64 28" aria-hidden="true"></svg>
+            <span class="product-item__value">R$ 6,00</span>
+            <span class="product-item__unit">/kg</span>
+          </div>
+          <span class="product-item__previous">de R$ 2,80 em janeiro · choque de oferta em março</span>
+        </a>
+
+        <a href="produtos/inhame-da-costa/" class="product-item" data-produto="inhame_da_costa">
+          <div class="product-item__header">
+            <span class="product-item__name">inhame da costa</span>
+            <span class="product-item__delta delta-down">−54%</span>
+          </div>
+          <div class="product-item__price">
+            <svg class="product-item__spark" data-spark viewBox="0 0 64 28" aria-hidden="true"></svg>
+            <span class="product-item__value">R$ 6,00</span>
+            <span class="product-item__unit">/kg</span>
+          </div>
+          <span class="product-item__previous">de R$ 13,00 em janeiro · o varejo repassa metade</span>
+        </a>
+
+        <a href="produtos/mamao-hawai/" class="product-item" data-produto="mamao_hawai">
+          <div class="product-item__header">
+            <span class="product-item__name">mamão hawai</span>
+            <span class="product-item__delta delta-down">−45%</span>
+          </div>
+          <div class="product-item__price">
+            <svg class="product-item__spark" data-spark viewBox="0 0 64 28" aria-hidden="true"></svg>
+            <span class="product-item__value">R$ 1,60</span>
+            <span class="product-item__unit">/kg</span>
+          </div>
+          <span class="product-item__previous">de R$ 2,92 em janeiro · varejo travado em R$ 5,00</span>
+        </a>
+
+        <a href="produtos/cenoura/" class="product-item" data-produto="cenoura">
+          <div class="product-item__header">
+            <span class="product-item__name">cenoura</span>
+            <span class="product-item__delta delta-up">+43%</span>
+          </div>
+          <div class="product-item__price">
+            <svg class="product-item__spark" data-spark viewBox="0 0 64 28" aria-hidden="true"></svg>
+            <span class="product-item__value">R$ 5,00</span>
+            <span class="product-item__unit">/kg</span>
+          </div>
+          <span class="product-item__previous">de R$ 3,50 em janeiro · salto concentrado em março</span>
+        </a>
+
+      </div>
+
+      <p class="secao-cta"><a href="panoramas/">ver os 11 produtos monitorados →</a></p>
     </section>
 
     <!-- Nota metodológica -->
     <aside class="method-note">
       <div class="method-note__label">nota metodológica</div>
-      <p class="method-note__text">Dados extraídos do Comex Stat (MDIC), consulta por UF do produto (Sergipe) e capítulos SH2 07 ("Produtos hortícolas, plantas, raízes e tubérculos, comestíveis") e SH2 08 ("Frutas; cascas de frutos cítricos e de melões"), período 2016–2026, geração 16/mai/2026. As duas classificações são somadas por mês — o SH2 07 registra apenas novembro de 2021 (US$ 1.334 / 945 kg), contribuição negligível frente ao SH2 08. Meses ausentes do dataset correspondem a zero exportações no período. Gráfico disponível em duas métricas: Valor US$ FOB (Free On Board) e Quilograma Líquido. Os dados de 2026 cobrem janeiro a abril; os meses restantes são futuros.</p>
+      <p class="method-note__text">Os preços vêm dos boletins semanais da EMDAGRO/ASPLAN para três canais de Aracaju — atacado CEASA-SE, varejo do Mercado Central e varejo do Mercado Setorial do Augusto Franco — entre janeiro e março de 2026, convertidos de embalagem para R$/kg pelo peso nominal. As variações da home comparam janeiro e março do mesmo trimestre; a apuração completa de cada produto está na sua ficha. A produção municipal vem da Produção Agrícola Municipal do IBGE, tabela 1613, e as exportações do Comex Stat/MDIC, capítulos SH2 07 e 08. O índice agregado das CEASAs, que será a manchete desta página, ainda está em construção: até lá, a home destaca as três leituras já publicadas, sem estimativa própria.</p>
     </aside>
 
   </main>
@@ -244,10 +359,7 @@
     <span>cc by-sa 4.0</span>
   </footer>
 
-  <!-- Chart.js + scripts dos gráficos -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="assets/js/indice-geral.js"></script>
-  <script src="assets/js/composicao-sh4.js"></script>
-  <script src="assets/js/limao-volume-preco.js"></script>
+  <!-- Sparklines dos produtos em destaque -->
+  <script src="assets/js/sparklines.js"></script>
 </body>
 </html>
