@@ -13,12 +13,18 @@ Referência completa para manter consistência ao adicionar páginas e component
 
 ### Marca
 
-| Token              | Light       | Dark        | Uso                              |
-|--------------------|-------------|-------------|----------------------------------|
-| `--color-brand`    | `#1d9e75`   | `#5dcaa5`   | Linha principal, links de CTA    |
-| `--color-negative` | `#993c1d`   | `#d85a30`   | Variação negativa, alertas       |
-| `--color-positive` | `#1d9e75`   | `#5dcaa5`   | Variação positiva                |
-| `--color-neutral`  | `#888780`   | `#888780`   | Séries comparativas, estável     |
+| Token                 | Light       | Dark        | Uso                              |
+|-----------------------|-------------|-------------|----------------------------------|
+| `--color-brand`       | `#1d9e75`   | `#5dcaa5`   | Linha de gráfico, bordas, foco   |
+| `--color-brand-text`  | `#15754f`   | `#5dcaa5`   | Texto e chamadas em tamanho pequeno |
+| `--color-negative`    | `#993c1d`   | `#d85a30`   | Variação negativa, alertas       |
+| `--color-positive`    | `#15754f`   | `#5dcaa5`   | Variação positiva (rótulo `.delta-up`) |
+| `--color-neutral`     | `#888780`   | `#888780`   | Séries comparativas, estável     |
+
+O verde de marca rende 3,4:1 contra o branco: serve a traços e bordas, não a
+texto pequeno. Rótulos, chamadas e links curtos usam `--color-brand-text`, o
+mesmo matiz escurecido até 5,8:1. No tema escuro os dois valores coincidem,
+porque ali o verde de marca já passa com folga.
 
 ### Texto
 

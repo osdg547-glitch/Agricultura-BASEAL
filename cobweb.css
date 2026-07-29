@@ -15,8 +15,14 @@
   /* Cores semânticas */
   --color-brand: #1d9e75;          /* verde profundo · cor de marca */
   --color-brand-soft: rgba(29, 158, 117, 0.08);
+
+  /* O verde de marca em texto pequeno rende 3,4:1 sobre o branco, abaixo do
+     mínimo AA. Este é o mesmo matiz escurecido, para rótulos e chamadas em
+     tamanho pequeno: 5,8:1 sobre o fundo e 5,3:1 sobre o fundo suave. No tema
+     escuro o verde de marca já passa com folga e o token o acompanha. */
+  --color-brand-text: #15754f;
   --color-negative: #993c1d;       /* vermelho-terra · variação negativa */
-  --color-positive: #1d9e75;       /* verde · variação positiva */
+  --color-positive: #15754f;       /* verde · variação positiva em texto (AA) */
   --color-neutral: #888780;        /* cinza · estável/comparativo */
 
   /* Rampa sequencial de mapa · mesmo matiz da cor de marca, do menor ao maior.
@@ -58,6 +64,7 @@
     --color-border-strong: rgba(240, 238, 229, 0.25);
     --color-brand: #5dcaa5;
     --color-brand-soft: rgba(93, 202, 165, 0.1);
+    --color-brand-text: #5dcaa5;
     --color-negative: #d85a30;
     --color-positive: #5dcaa5;
 
