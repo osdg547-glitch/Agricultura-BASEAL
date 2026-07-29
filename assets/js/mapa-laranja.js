@@ -276,9 +276,15 @@
       var nota = estado.variavel === 'rend'
         ? 'Rendimento é razão entre quantidade e área, por isso não se soma entre municípios.'
         : 'Total do estado em ' + estado.ano + ': ' + fmt.format(total) + ' ' + meta.unidade + '.';
+      // A data de extração vem do próprio arquivo de dados, não do código.
+      var credito = 'Fonte: IBGE, Produção Agrícola Municipal';
+      if (dados.extracao) {
+        credito += ', extração em ' + dados.extracao.split('-').reverse().join('/');
+      }
+
       alvo.querySelector('.cw-mapa-nota').textContent =
         nota + ' ' + comDado + ' dos 75 municípios têm valor informado nesse ano. ' +
-        'Fonte: IBGE, Produção Agrícola Municipal.';
+        credito + '.';
     }
 
     atualizar();

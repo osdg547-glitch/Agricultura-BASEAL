@@ -16,10 +16,22 @@
 
   fetch(canvas.dataset.fonte)
     .then(function (r) { return r.json(); })
-    .then(function (d) { renderChart(canvas, d); })
+    .then(function (d) {
+      creditarExtracao(d.extracao);
+      renderChart(canvas, d);
+    })
     .catch(function () {
       console.warn('CobWeb: não foi possível carregar ' + canvas.dataset.fonte);
     });
+
+  /* Completa a linha de crédito com a data que está no próprio arquivo, para
+     que atualizar o dado atualize o crédito. Se o fetch falhar, a linha fica
+     só com a fonte, sem sobra de pontuação. */
+  function creditarExtracao(iso) {
+    const alvo = wrapper && wrapper.querySelector('[data-extracao]');
+    if (!alvo || !iso) return;
+    alvo.textContent = ', extração em ' + iso.split('-').reverse().join('/');
+  }
 
   function renderChart(canvas, d) {
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
