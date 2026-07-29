@@ -244,7 +244,7 @@
     chart = new Chart(canvas, cfg);
   }
 
-  fetch('dados/exportacoes-se.json')
+  fetch(canvas.dataset.fonte || 'dados/exportacoes-se.json')
     .then(function (r) { return r.json(); })
     .then(function (d) {
       render(activeVista, d);

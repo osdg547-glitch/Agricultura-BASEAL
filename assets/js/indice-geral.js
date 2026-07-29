@@ -11,7 +11,11 @@
   const canvas = document.getElementById('indice-geral');
   if (!canvas || typeof Chart === 'undefined') return;
 
-  fetch('dados/exportacoes-se.json')
+  /* O caminho do JSON vem do próprio canvas, para que a mesma página possa
+     viver em qualquer profundidade de diretório. */
+  const fonte = canvas.dataset.fonte || 'dados/exportacoes-se.json';
+
+  fetch(fonte)
     .then(function (r) { return r.json(); })
     .then(function (d) { renderChart(canvas, d); })
     .catch(function () {
