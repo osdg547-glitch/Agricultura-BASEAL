@@ -238,6 +238,17 @@ a:hover { border-bottom-color: currentColor; }
 
 .prose p:last-child { margin-bottom: 0; }
 
+/* Link dentro do texto corrido. A cor é a do próprio texto, para não pintar o
+   parágrafo: o que marca o link é o sublinhado permanente, que fecha em cheio
+   ao passar o mouse ou receber foco. Assim o link não depende de cor para ser
+   identificado. */
+.prose a {
+  border-bottom: 1px solid var(--color-text-tertiary);
+}
+
+.prose a:hover,
+.prose a:focus-visible { border-bottom-color: currentColor; }
+
 @media (max-width: 640px) {
   .headline { font-size: 28px; }
   .deck { font-size: 16px; }
