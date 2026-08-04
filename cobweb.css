@@ -584,6 +584,80 @@ a:hover { border-bottom-color: currentColor; }
 }
 
 /* ============================================================
+   Nota metodológica em janela
+   ============================================================
+   O bloco .method-note vive no HTML ao fim da página; o script
+   nota-metodologica.js o move para dentro deste <dialog> quando o
+   navegador suporta. Sem o script, nada aqui se aplica e a nota
+   segue no fluxo normal do documento.
+   ============================================================ */
+
+.nota-modal {
+  position: relative;
+  width: min(600px, calc(100% - 32px));
+  max-height: min(80vh, 680px);
+  overflow: auto;
+  padding: 0;                       /* o padding vem do .method-note interno */
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* O ::backdrop não herda as variáveis do documento em todos os
+   navegadores, então os valores aqui são literais. */
+.nota-modal::backdrop { background: rgba(26, 26, 26, 0.45); }
+
+@media (prefers-color-scheme: dark) {
+  .nota-modal::backdrop { background: rgba(0, 0, 0, 0.62); }
+}
+
+/* Dentro da janela o bloco perde a margem de fim de página e abre
+   espaço à direita para o botão de fechar. */
+.nota-modal .method-note {
+  margin: 0;
+  padding: 22px 56px 24px 24px;
+  border-radius: var(--radius-lg);
+}
+
+.nota-modal__fechar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  padding: 6px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nota-modal__fechar svg { width: 16px; height: 16px; }
+
+.nota-modal__fechar:hover {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+.nota-modal__fechar:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 1px;
+}
+
+/* Na impressão a nota volta a ser um bloco comum, ao fim do documento */
+@media print {
+  .nota-modal {
+    display: block;
+    position: static;
+    max-height: none;
+    border: none;
+  }
+  .nota-modal__fechar { display: none; }
+}
+
+/* ============================================================
    Conjuntura
    ============================================================ */
 
