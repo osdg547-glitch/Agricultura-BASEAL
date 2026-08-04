@@ -289,9 +289,23 @@
       font-size: 14px;
     }
 
+    /* Chamada e data na mesma linha, como a assinatura de uma matéria */
+    .ensaio__rodape {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
     .ensaio__link {
       font-size: 12px;
       color: var(--color-brand-text);
+    }
+
+    .ensaio__data {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
     }
 
     /* Coluna direita: o que ainda não foi publicado, sem fingir que existe */
@@ -448,10 +462,6 @@
         janela de preços: jan a mar de 2026
       </span>
       <span class="meta-strip__item">
-        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v6c0 1.7 4 3 9 3s9-1.3 9-3V6M3 12v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg>
-        fontes: EMDAGRO, IBGE e Comex Stat
-      </span>
-      <span class="meta-strip__item">
         <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 14l4-5 3 3 4-6"/></svg>
         22 coletas no atacado CEASA-SE
       </span>
@@ -595,7 +605,10 @@
           <div class="ensaio__eyebrow">produção · ibge, pam · 2001 a 2024</div>
           <h3 class="ensaio__titulo">Cenário da produção de laranja e de suco de laranja em Sergipe</h3>
           <p class="ensaio__resumo">Sergipe colhe hoje pouco mais da metade da laranja que colhia em 2011 e, ainda assim, bateu em 2024 o recorde da série em valor exportado de suco. As duas coisas são o mesmo fato visto de dois lados: menos fruta, preço muito maior. Mapa dos 75 municípios, série estadual e localização das plantas processadoras.</p>
-          <span class="ensaio__link">ler o ensaio →</span>
+          <span class="ensaio__rodape">
+            <span class="ensaio__link">ler o ensaio →</span>
+            <time class="ensaio__data" datetime="2026-07-27">publicado em 27 de julho de 2026</time>
+          </span>
         </a>
 
         <div>
@@ -603,7 +616,10 @@
             <div class="ensaio__eyebrow">demanda externa · comex stat · 2016 a 2026</div>
             <h3 class="ensaio__titulo">Sergipe quase não exporta hortifrúti — o limão-taiti é a exceção</h3>
             <p class="ensaio__resumo">Pico de US$ 2,87 milhões em 2016, queda de 99% até 2021 e recuperação depois de 2023. A volatilidade se explica pela troca de composição da pauta e pelo volume embarcado de limão do Platô de Neópolis.</p>
-            <span class="ensaio__link">ler o ensaio →</span>
+            <span class="ensaio__rodape">
+              <span class="ensaio__link">ler o ensaio →</span>
+              <time class="ensaio__data" datetime="2026-05-17">publicado em 17 de maio de 2026</time>
+            </span>
           </a>
 
           <div class="em-preparo">
