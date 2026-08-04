@@ -39,6 +39,20 @@ npx serve .
 
 Acesse `http://localhost:8080`.
 
+## Depois de mexer em CSS ou JS
+
+Sem etapa de build, o navegador e o CDN do GitHub Pages seguram a versão antiga
+do `cobweb.css` por horas depois do deploy, e uma página nova com CSS velho
+quebra em silêncio. Os links dos assets locais carregam uma versão no endereço;
+para renová-la:
+
+```bash
+python3 scripts/versionar-assets.py
+```
+
+O script carimba a data de hoje em todas as páginas. Rode antes do commit sempre
+que alterar `cobweb.css` ou qualquer arquivo de `assets/js/`.
+
 ## Deploy
 
 Recomendado: **GitHub Pages** (grátis, integra com o repositório) ou **Cloudflare Pages** (CDN global, build rápido).
@@ -53,7 +67,7 @@ Veja `docs/BRIEFING.md` para o contexto completo do projeto. Em ordem de priorid
 2. Estabelecer o pipeline de dados a partir do PROHORT
 3. Criar templates de página de produto e de panorama mensal
 4. Versão mobile refinada (auditoria atual)
-5. Página `/sobre/metodologia/` com a explicação do índice
+5. Explicação do índice na nota metodológica, que abre em janela a partir da meta strip
 
 ## Identidade visual
 

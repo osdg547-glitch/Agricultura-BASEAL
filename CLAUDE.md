@@ -53,6 +53,7 @@ Pergunte ao operador antes de migrar, mas pode propor a migração.
 - Sempre incluir `<meta charset="UTF-8">` e `<meta name="viewport">`
 - Sempre incluir `<title>`, `<meta description>` e Open Graph
 - Sempre usar URLs absolutas (`/assets/...`) — facilita deploy em subpaths
+- Depois de mexer em `cobweb.css` ou em `assets/js/`, rodar `python3 scripts/versionar-assets.py` antes do commit: sem isso o leitor recebe HTML novo com CSS em cache
 
 ## Acessibilidade — não negociável
 
