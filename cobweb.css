@@ -214,6 +214,8 @@ a:hover { border-bottom-color: currentColor; }
   color: var(--color-text-secondary);
   max-width: 600px;
   margin: 0 0 24px;
+  text-align: justify;
+  hyphens: auto;
 }
 
 .section-title {

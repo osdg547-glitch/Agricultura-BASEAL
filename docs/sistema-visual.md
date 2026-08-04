@@ -71,6 +71,8 @@ Mobile (≤640px): manchete cai para 28px, deck para 16px, section-title para 20
 - **Caixa baixa** no logo e em rótulos curtos (`/produtos`, `tomate`, `cebola`).
 - **Caixa-alta** só em eyebrows e siglas oficiais (CEASA-SE, PROHORT, IPCA).
 - **Sem itálico decorativo**. Itálico só para citação de obra ou termo técnico não-traduzido.
+- **Justificado no lide e no corpo**, sempre com `hyphens: auto` — sem hifenização, o justificado abre rios de espaço em coluna estreita. Rótulos, notas, resumos de card e textos curtos ficam alinhados à esquerda, porque justificar bloco de duas ou três linhas piora em vez de melhorar.
+- **Sem recuo de primeira linha**. A separação entre parágrafos é feita pelo espaço vertical; recuo e espaço juntos marcam a mesma coisa duas vezes.
 
 ## 4. Espaçamento
 
