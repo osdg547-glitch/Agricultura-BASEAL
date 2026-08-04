@@ -96,7 +96,7 @@
                 const fmt = v >= 1000
                   ? 'US$ ' + (v / 1000).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' mil'
                   : 'US$ ' + v.toLocaleString('pt-BR');
-                return ' ' + item.dataset.label.split(' — ')[0] + ': ' + fmt;
+                return ' ' + item.dataset.label.replace(/,\s*SH\d\s*\d+$/, '') + ': ' + fmt;
               },
               footer: function (items) {
                 const total = items.reduce(function (s, i) { return s + i.parsed.y; }, 0);

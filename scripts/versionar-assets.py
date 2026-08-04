@@ -8,8 +8,8 @@ com um CSS velho quebra em silêncio. Trocar o endereço do arquivo a cada
 mudança resolve: URL nova, cache novo.
 
 Uso:
-    python3 scripts/versionar-assets.py            # carimba a data de hoje
-    python3 scripts/versionar-assets.py 20260804   # carimba uma versão dada
+    python3 scripts/versionar-assets.py                 # carimba data e hora
+    python3 scripts/versionar-assets.py 20260804-1600   # carimba uma versão dada
 
 Rode sempre que mexer em cobweb.css ou em assets/js/.
 """
@@ -21,12 +21,17 @@ import sys
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 
-# Só assets locais. Fontes e Chart.js vêm de CDN e têm versão no próprio caminho.
-ALVO = re.compile(r'((?:href|src)="(?:\.\./)*(?:cobweb\.css|assets/js/[\w-]+\.js))(?:\?v=[^"]*)?"')
+# Só assets locais: a folha de estilo, os scripts e os JSON de dados lidos por
+# fetch. Fontes e Chart.js vêm de CDN e já têm versão no próprio caminho.
+ALVO = re.compile(
+    r'((?:href|src|data-fonte|data-sparklines)="(?:\.\./)*'
+    r'(?:cobweb\.css|assets/js/[\w-]+\.js|dados/[\w-]+\.json))(?:\?v=[^"]*)?"')
 
 
 def main():
-    versao = sys.argv[1] if len(sys.argv) > 1 else datetime.date.today().strftime('%Y%m%d')
+    # Data e hora, não só data: mais de um deploy no mesmo dia precisa de
+    # endereços diferentes para vencer o cache.
+    versao = sys.argv[1] if len(sys.argv) > 1 else datetime.datetime.now().strftime('%Y%m%d-%H%M')
 
     paginas = sorted(RAIZ.rglob('*.html'))
     tocadas = 0

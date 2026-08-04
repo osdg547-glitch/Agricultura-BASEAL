@@ -1,7 +1,7 @@
 {
   "meta": {
     "fonte": "Comex Stat / MDIC",
-    "descricao": "Exportações de Sergipe — SH2 07 e 08 combinados",
+    "descricao": "Exportações de Sergipe, SH2 07 e 08 combinados",
     "sh2": ["07", "08"],
     "geracao": "2026-05-17",
     "janela": "2016–2026",
@@ -15,19 +15,19 @@
     "nota": "Decomposição por SH4 do Valor US$ FOB. Fonte: Comex Stat / MDIC, geração 17/mai/2026.",
     "series": {
       "0805": {
-        "label": "Citrinos (laranja, limão, lima) — 0805",
+        "label": "Citrinos (laranja, limão, lima), SH4 0805",
         "data": [833105, 999973, 521181, 443012, 133062, 69, 149865, 2151485, 2231772, 1199604, 172127]
       },
       "0813": {
-        "label": "Frutas secas / mistura desidratada — 0813",
+        "label": "Frutas secas / mistura desidratada, SH4 0813",
         "data": [1693639, 1753011, 1548, 0, 0, 0, 0, 0, 0, 0, 0]
       },
       "0804": {
-        "label": "Manga, abacaxi, abacate, goiaba, mamão — 0804",
+        "label": "Manga, abacaxi, abacate, goiaba, mamão, SH4 0804",
         "data": [236189, 91347, 58728, 0, 0, 27640, 0, 0, 0, 0, 0]
       },
       "0811": {
-        "label": "Frutas congeladas — 0811",
+        "label": "Frutas congeladas, SH4 0811",
         "data": [0, 0, 0, 0, 0, 0, 64836, 0, 0, 0, 0]
       },
       "outros": {
@@ -40,23 +40,23 @@
     "nota": "Decomposição por SH6 do Valor US$ FOB, série anual. Fonte: Comex Stat / MDIC, geração 17/mai/2026.",
     "series": {
       "080550": {
-        "label": "Limões e limas, frescos ou secos — 080550",
+        "label": "Limões e limas, frescos ou secos, SH6 080550",
         "data": [833105, 999973, 521181, 443012, 133062, 16, 149865, 2151485, 2231772, 1199604, 172127]
       },
       "081340": {
-        "label": "Pêras e outras frutas secas — 081340",
+        "label": "Pêras e outras frutas secas, SH6 081340",
         "data": [1693639, 1752011, 1548, 0, 0, 0, 0, 0, 0, 0, 0]
       },
       "081350": {
-        "label": "Misturas de frutas secas ou de frutas de casca rija — 081350",
+        "label": "Misturas de frutas secas ou de frutas de casca rija, SH6 081350",
         "data": [0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       },
       "080450": {
-        "label": "Goiabas, mangas e mangostões, frescos ou secos — 080450",
+        "label": "Goiabas, mangas e mangostões, frescos ou secos, SH6 080450",
         "data": [345212, 90997, 58728, 0, 0, 27650, 0, 0, 0, 0, 0]
       },
       "081190": {
-        "label": "Outras frutas congeladas — 081190",
+        "label": "Outras frutas congeladas, SH6 081190",
         "data": [0, 0, 0, 0, 0, 0, 64836, 0, 0, 0, 0]
       },
       "outros_sh6": {

@@ -164,7 +164,7 @@
         labels: LABELS,
         datasets: [
           {
-            label:                'Citrinos — 0805',
+            label:                'Citrinos (0805)',
             data:                 PRECO_0805,
             borderColor:          c.brand,
             backgroundColor:      'transparent',
@@ -176,7 +176,7 @@
             spanGaps:             false
           },
           {
-            label:                'Frutas secas — 0813',
+            label:                'Frutas secas (0813)',
             data:                 PRECO_0813,
             borderColor:          c.accent,
             backgroundColor:      'transparent',
@@ -188,7 +188,7 @@
             spanGaps:             false
           },
           {
-            label:                'Manga / abacaxi — 0804',
+            label:                'Manga / abacaxi (0804)',
             data:                 PRECO_0804,
             borderColor:          c.neutral,
             backgroundColor:      'transparent',

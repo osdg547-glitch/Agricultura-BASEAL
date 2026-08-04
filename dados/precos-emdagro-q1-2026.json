@@ -1,12 +1,12 @@
 {
   "meta": {
-    "fonte": "EMDAGRO — Empresa de Desenvolvimento Agropecuário de Sergipe / ASPLAN",
+    "fonte": "EMDAGRO, Empresa de Desenvolvimento Agropecuário de Sergipe / ASPLAN",
     "janela": "2026-01 a 2026-03",
     "geracao": "2026-05-22",
     "unidade_padrao": "R$/kg",
     "canais": {
       "atacado_ceasa": {
-        "descricao": "Atacado CEASA-SE — Centrais de Abastecimento de Sergipe (Aracaju)",
+        "descricao": "Atacado CEASA-SE, Centrais de Abastecimento de Sergipe (Aracaju)",
         "frequencia": "boletim semanal com 2 coletas por semana",
         "n_datas": 22,
         "datas": [
