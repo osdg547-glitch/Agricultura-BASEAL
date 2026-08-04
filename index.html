@@ -110,6 +110,11 @@
       margin-bottom: 52px;
     }
 
+    /* O último bloco encosta no fio do rodapé sem folga dupla */
+    .bloco:last-child {
+      margin-bottom: 0;
+    }
+
     .bloco__header {
       display: flex;
       align-items: baseline;
@@ -317,27 +322,6 @@
       border-bottom: none;
     }
 
-    /* ---------- tese, em duas colunas ---------- */
-
-    .tese {
-      column-count: 2;
-      column-gap: 44px;
-      border-top: 1px solid var(--color-border);
-      padding-top: 24px;
-    }
-
-    .tese p {
-      font-size: 15px;
-      line-height: 1.7;
-      margin: 0 0 14px;
-      text-align: justify;
-      hyphens: auto;
-    }
-
-    .tese p:first-child {
-      margin-top: 0;
-    }
-
     /* ---------- foco visível ---------- */
 
     .sumario__item:focus-visible,
@@ -371,7 +355,6 @@
       .capa__deck { font-size: 16px; }
       .mural { grid-template-columns: repeat(2, 1fr); }
       .ensaio__titulo { font-size: 24px; }
-      .tese { column-count: 1; }
     }
   </style>
 </head>
@@ -633,29 +616,6 @@
 
       </div>
     </section>
-
-    <!-- ============================================================
-         A tese, em duas colunas
-         ============================================================ -->
-    <section class="bloco" aria-label="Por que o portal existe">
-
-      <div class="bloco__header">
-        <h2 class="section-title" style="margin: 0;">Por que o portal existe</h2>
-        <p class="bloco__desc">Uma assimetria de informação que se resolve com organização, não com plataforma.</p>
-      </div>
-
-      <div class="tese">
-        <p>Há uma assimetria de informação real na cadeia do hortifrúti, e ela pesa sobre quem tem menos margem para errar. O produtor familiar decide o que plantar meses antes de saber a que preço venderá; o comprador de varejo negocia com quem conhece o mercado melhor do que ele. O dado que resolveria boa parte disso é público — está nos boletins semanais da EMDAGRO, nas tabelas da Produção Agrícola Municipal e nos microdados do Comex Stat. Mas está espalhado, em unidades incompatíveis, sem série contínua e sem qualquer narrativa que ligue um número ao outro.</p>
-        <p>O CobWeb trata dessa parte específica do problema, a parte informacional. Não é marketplace, não faz intermediação e não promete crédito nem logística. Converte preços por caixa e por saco em reais por quilo, alinha as séries de três canais de comercialização de Aracaju, agrega a produção município a município e coloca ao lado o que o estado embarca para fora.</p>
-        <p>O primeiro trimestre de 2026 dá a medida do que essa organização revela. O tomate mais que dobrou no atacado entre janeiro e março, e o varejo de bairro repassou o choque com folga. O inhame da costa caiu 54% no atacado, e o mesmo varejo repassou menos da metade da queda. Repasse assimétrico não é impressão de quem vai à feira: é o que as séries mostram quando são postas na mesma escala.</p>
-      </div>
-    </section>
-
-    <!-- Nota metodológica -->
-    <aside class="method-note">
-      <div class="method-note__label">nota metodológica</div>
-      <p class="method-note__text">Os preços vêm dos boletins semanais da EMDAGRO/ASPLAN para três canais de Aracaju — atacado CEASA-SE, varejo do Mercado Central e varejo do Mercado Setorial do Augusto Franco — entre janeiro e março de 2026, convertidos de embalagem para R$/kg pelo peso nominal. O mural mostra o preço do atacado ao fim de março e a variação desde janeiro; a apuração completa de cada produto está na sua ficha. A produção municipal vem da Produção Agrícola Municipal do IBGE, tabela 1613, e as exportações do Comex Stat/MDIC, capítulos SH2 07 e 08. O índice agregado das CEASAs, que será a manchete desta capa, ainda está em construção: até lá, nada aqui é estimativa própria.</p>
-    </aside>
 
   </main>
 
