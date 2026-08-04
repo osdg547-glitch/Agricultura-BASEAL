@@ -310,34 +310,6 @@
       color: var(--color-text-tertiary);
     }
 
-    /* Coluna direita: o que ainda não foi publicado, sem fingir que existe */
-    .em-preparo {
-      margin-top: 28px;
-      border-top: 1px solid var(--color-border);
-      padding-top: 14px;
-    }
-
-    .em-preparo__label {
-      font-size: 10px;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--color-text-tertiary);
-      margin-bottom: 10px;
-    }
-
-    .em-preparo__item {
-      font-size: 13px;
-      line-height: 1.5;
-      color: var(--color-text-secondary);
-      margin: 0;
-      padding: 7px 0;
-      border-bottom: 1px dashed var(--color-border);
-    }
-
-    .em-preparo__item:last-child {
-      border-bottom: none;
-    }
-
     /* ---------- foco visível ---------- */
 
     .sumario__item:focus-visible,
@@ -613,24 +585,15 @@
           </span>
         </a>
 
-        <div>
-          <a href="panoramas/exportacoes/" class="ensaio ensaio--secundario">
-            <div class="ensaio__eyebrow">demanda externa · comex stat · 2016 a 2026</div>
-            <h3 class="ensaio__titulo">Desde 2023, o limão-taiti é a exportação de hortifrúti de Sergipe</h3>
-            <p class="ensaio__resumo">Nos três últimos anos completos, todo o valor exportado saiu de um único produto. Antes de 2018 quem puxava a pauta eram as frutas secas; a troca de composição explica a volatilidade da série, que teve pico de US$ 2,87 milhões em 2016 e queda de 99% até 2021.</p>
-            <span class="ensaio__rodape">
-              <span class="ensaio__link">ler o ensaio →</span>
-              <time class="ensaio__data" datetime="2026-05-17">publicado em 17 de maio de 2026</time>
-            </span>
-          </a>
-
-          <div class="em-preparo">
-            <div class="em-preparo__label">em preparo</div>
-            <p class="em-preparo__item">Índice agregado das CEASAs, base 100: a manchete que esta capa ainda não tem.</p>
-            <p class="em-preparo__item">Cotações internacionais de frutas e hortaliças: FAO, ITC Trade Map e USDA.</p>
-            <p class="em-preparo__item">Preço médio FOB por destino, a partir dos microdados do Comex Stat.</p>
-          </div>
-        </div>
+        <a href="panoramas/exportacoes/" class="ensaio ensaio--secundario">
+          <div class="ensaio__eyebrow">demanda externa · comex stat · 2016 a 2026</div>
+          <h3 class="ensaio__titulo">Desde 2023, o limão-taiti é a exportação de hortifrúti de Sergipe</h3>
+          <p class="ensaio__resumo">Nos três últimos anos completos, todo o valor exportado saiu de um único produto. Antes de 2018 quem puxava a pauta eram as frutas secas; a troca de composição explica a volatilidade da série, que teve pico de US$ 2,87 milhões em 2016 e queda de 99% até 2021.</p>
+          <span class="ensaio__rodape">
+            <span class="ensaio__link">ler o ensaio →</span>
+            <time class="ensaio__data" datetime="2026-05-17">publicado em 17 de maio de 2026</time>
+          </span>
+        </a>
 
       </div>
     </section>
