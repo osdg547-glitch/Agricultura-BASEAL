@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serviços · CobWeb · hortifrúti · Sergipe</title>
+  <meta name="description" content="Serviços de análise econômica do CobWeb: análise de viabilidade econômica de produto em um país de destino, pesquisa de mercado e execução de proteção cambial.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+
+  <!-- Tipografia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../cobweb.css?v=20260804-2253">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Serviços · CobWeb · hortifrúti · Sergipe">
+  <meta property="og:description" content="Análise de viabilidade econômica, pesquisa de mercado e proteção cambial, com o mesmo método e a mesma transparência do conteúdo que publicamos.">
+  <meta property="og:type" content="website">
+
+  <style>
+    .servicos-section {
+      border-top: 1px solid var(--color-border);
+      padding-top: 28px;
+      margin-bottom: 40px;
+    }
+
+    /* Lista dos serviços. Cada item é um bloco editorial numerado, não um
+       card de produto: a hierarquia é título → descrição → o que é entregue. */
+    .servico-lista {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .servico {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 0 20px;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .servico:first-child {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .servico__ordem {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--color-text-tertiary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .servico__nome {
+      font-family: var(--font-serif);
+      font-size: 21px;
+      font-weight: 500;
+      letter-spacing: -0.012em;
+      line-height: 1.25;
+      margin: 0 0 10px;
+      color: var(--color-text);
+    }
+
+    .servico__desc {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--color-text-secondary);
+      margin: 0 0 16px;
+      max-width: 560px;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .servico__entrega-label {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .servico__entrega {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .servico__entrega li {
+      position: relative;
+      padding-left: 16px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--color-text);
+    }
+
+    /* Marcador desenhado em CSS: não é um ícone e não deve ser lido em voz alta */
+    .servico__entrega li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 6px;
+      height: 1px;
+      background: var(--color-border-strong);
+    }
+
+    .servico__ressalva {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      border-left: 2px solid var(--color-border-strong);
+      padding-left: 14px;
+      margin: 16px 0 0;
+    }
+
+    @media (max-width: 640px) {
+      .servico {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .servico__ordem {
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+      .servico__nome { font-size: 19px; }
+    }
+
+    /* Etapas do trabalho — mesma leveza dos cards de subíndice */
+    .etapas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .etapa-card {
+      background: var(--color-bg-soft);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+    }
+
+    .etapa-card__label {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .etapa-card__texto {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    .contato-block {
+      background: var(--color-bg-soft);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 40px;
+    }
+
+    .contato-block__label {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .contato-block__email {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--color-text);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .contato-block__email:hover,
+    .contato-block__email:focus-visible {
+      border-bottom-color: var(--color-brand);
+    }
+
+    .contato-block__desc {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       Cabeçalho
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container container--wide site-header__inner">
+      <a href="../" class="site-logo" aria-label="CobWeb · página inicial">
+        <svg class="site-logo__mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M 16 4 L 28 16 L 16 28 L 4 16 Z" stroke-width="1"/>
+            <path d="M 16 9 L 23 16 L 16 23 L 9 16 Z" stroke-width="1"/>
+            <path d="M 16 13 L 19 16 L 16 19 L 13 16 Z" stroke-width="1"/>
+            <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+          </g>
+        </svg>
+        <div>
+          <div class="site-logo__name">CobWeb</div>
+          <div class="site-logo__tag">mercados integrados · sergipe</div>
+        </div>
+      </a>
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="../">home</a>
+        <a href="." class="is-active">serviços</a>
+        <a href="../panoramas/">panoramas</a>
+        <a href="../sobre/">sobre</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       Conteúdo principal
+       ============================================================ -->
+  <main class="container">
+
+    <!-- Manchete -->
+    <section>
+      <div class="eyebrow">serviços · análise econômica</div>
+      <h1 class="headline">O que fazemos sob demanda</h1>
+      <p class="deck">Além do que publicamos abertamente, prestamos serviços de análise econômica para quem precisa de uma resposta específica: se vale a pena levar um produto a um determinado país, como se comporta um mercado que ainda não se conhece, e quanto de risco cambial uma operação carrega.</p>
+    </section>
+
+    <!-- Por que o conteúdo é aberto -->
+    <section class="commentary">
+      <div class="prose">
+        <p>O portal publica ensaios, panoramas e indicadores de preço sem cobrar por isso, e essa escolha é deliberada. A dificuldade de contratar análise econômica não é de preço, é de informação: quem contrata não consegue avaliar, antes de contratar, a qualidade do que vai receber. Publicar em aberto resolve essa assimetria pelo único caminho honesto disponível, que é mostrar o trabalho: o método está descrito, as fontes estão citadas e qualquer número pode ser conferido, citado ou contestado.</p>
+        <p>Os serviços abaixo aplicam esse mesmo método a uma pergunta que é sua, com dados que muitas vezes não são públicos e com um recorte que o portal não teria por que cobrir. A área de atuação é a que já sustenta o portal: agricultura e hortifrúti, dos preços de mercado interno ao comércio exterior de produtos agrícolas.</p>
+      </div>
+    </section>
+
+    <!-- Serviços -->
+    <section class="servicos-section">
+      <h2 class="section-title">Serviços</h2>
+
+      <ol class="servico-lista" role="list">
+
+        <!-- 1 -->
+        <li class="servico">
+          <div class="servico__ordem" aria-hidden="true">01</div>
+          <div>
+            <h3 class="servico__nome">Análise de viabilidade econômica de produto em determinado país</h3>
+            <p class="servico__desc">Avaliação de se um produto tem mercado em um destino específico, e sob quais condições. Reunimos o tamanho e a trajetória da demanda no país, os preços praticados, quem já abastece esse mercado e a que custo, as barreiras tarifárias e sanitárias de entrada, e o custo de colocar o produto lá. O resultado é uma resposta fundamentada sobre a viabilidade, com as premissas explícitas, e não uma projeção de retorno.</p>
+            <div class="servico__entrega-label">o que é entregue</div>
+            <ul class="servico__entrega" role="list">
+              <li>Dimensionamento da demanda e da sua trajetória recente no país de destino</li>
+              <li>Estrutura de preços no destino e margem estimada, com as premissas de custo abertas</li>
+              <li>Mapeamento das exigências tarifárias, sanitárias e documentais de entrada</li>
+              <li>Concorrência instalada: quais origens já abastecem o mercado, em que volume e em que época do ano</li>
+              <li>Comparação com destinos alternativos, quando a comparação muda a decisão</li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- 2 -->
+        <li class="servico">
+          <div class="servico__ordem" aria-hidden="true">02</div>
+          <div>
+            <h3 class="servico__nome">Pesquisa de mercado</h3>
+            <p class="servico__desc">Levantamento e tratamento de dados sobre um mercado específico: preços, volumes, sazonalidade, canais de comercialização e perfil de quem compra. Partimos de fontes públicas e oficiais e, quando elas não bastam para responder à pergunta, desenhamos a coleta primária necessária. Cada série entregue vem com nota sobre origem, periodicidade e limitações.</p>
+            <div class="servico__entrega-label">o que é entregue</div>
+            <ul class="servico__entrega" role="list">
+              <li>Séries de preço e volume tratadas, comparáveis entre si e documentadas</li>
+              <li>Leitura de sazonalidade e do ciclo de preços do produto</li>
+              <li>Mapa de canais de comercialização e dos agentes que operam em cada um</li>
+              <li>Relatório interpretativo com o que os dados sustentam e o que não sustentam</li>
+              <li>Base de dados em formato aberto, entregue junto ao relatório</li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- 3 -->
+        <li class="servico">
+          <div class="servico__ordem" aria-hidden="true">03</div>
+          <div>
+            <h3 class="servico__nome">Execução de proteção cambial</h3>
+            <p class="servico__desc">Para quem compra ou vende em moeda estrangeira, o preço de venda já está fechado bem antes de o dinheiro entrar, e a variação do câmbio nesse intervalo pode consumir a margem inteira. O trabalho consiste em dimensionar essa exposição ao longo do calendário da operação, definir quanto dela convém proteger e em que horizonte, e acompanhar a execução da política acordada.</p>
+            <div class="servico__entrega-label">o que é entregue</div>
+            <ul class="servico__entrega" role="list">
+              <li>Levantamento da exposição cambial por contrato e por período</li>
+              <li>Política de proteção proposta: parcela protegida, horizonte e instrumentos cabíveis</li>
+              <li>Custo estimado da proteção e o que ela deixa de cobrir</li>
+              <li>Acompanhamento da execução e revisão periódica da política</li>
+            </ul>
+            <p class="servico__ressalva">Serviço avaliado caso a caso, conforme o porte e a estrutura da operação. Não constitui recomendação de investimento nem intermediação de operações financeiras: a contratação dos instrumentos é feita pelo próprio cliente, junto à instituição financeira com que já opera.</p>
+          </div>
+        </li>
+
+      </ol>
+    </section>
+
+    <!-- Como funciona -->
+    <section class="servicos-section">
+      <h2 class="section-title">Como o trabalho corre</h2>
+      <p class="deck" style="font-size: 15px; margin-bottom: 0;">O percurso é o mesmo nos três serviços, e o escopo é fechado por escrito antes de qualquer coisa começar.</p>
+      <div class="etapas-grid">
+        <div class="etapa-card">
+          <div class="etapa-card__label">primeiro</div>
+          <p class="etapa-card__texto">Conversa inicial para entender a decisão que precisa ser tomada. Sem custo.</p>
+        </div>
+        <div class="etapa-card">
+          <div class="etapa-card__label">segundo</div>
+          <p class="etapa-card__texto">Proposta com escopo, fontes previstas, prazo e preço fechado.</p>
+        </div>
+        <div class="etapa-card">
+          <div class="etapa-card__label">terceiro</div>
+          <p class="etapa-card__texto">Execução, com um ponto de checagem no meio do caminho para corrigir rumo.</p>
+        </div>
+        <div class="etapa-card">
+          <div class="etapa-card__label">quarto</div>
+          <p class="etapa-card__texto">Entrega do relatório e da base de dados, seguida de reunião de apresentação.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section class="servicos-section">
+      <h2 class="section-title">Para contratar</h2>
+      <div class="contato-block">
+        <div class="contato-block__label">e-mail</div>
+        <a href="mailto:cobweb@outlook.com.br" class="contato-block__email">cobweb@outlook.com.br</a>
+        <p class="contato-block__desc">Descreva a decisão que você precisa tomar e o prazo que tem. Respondemos dizendo se é um trabalho que fazemos e, quando não for, indicando quem faz.</p>
+      </div>
+    </section>
+
+    <!-- Nota -->
+    <aside class="method-note">
+      <div class="method-note__label">nota</div>
+      <p class="method-note__text">O conteúdo publicado no portal segue aberto e gratuito, e é independente da carteira de clientes: nenhum serviço contratado define o que o portal cobre ou deixa de cobrir. Quando um trabalho contratado gerar dado de interesse público e o cliente autorizar a divulgação, ele é publicado com a mesma nota de método dos demais.</p>
+    </aside>
+
+  </main>
+
+  <!-- ============================================================
+       Footer
+       ============================================================ -->
+  <footer class="site-footer container container--wide">
+    <span>CobWeb · publicação editorial independente</span>
+    <span>cc by-sa 4.0</span>
+  </footer>
+
+</body>
+</html>
