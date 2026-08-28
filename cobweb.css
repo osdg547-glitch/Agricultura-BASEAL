@@ -35,6 +35,13 @@
   --color-map-zero: #e6e3d9;
   --color-map-nodata: #b6b4aa;
 
+  /* Séries de preço · uma cor por canal de coleta. Os três matizes são
+     distinguíveis também em visão monocromática pela forma da linha (contínua,
+     tracejada, pontilhada), que o gráfico aplica junto da cor. */
+  --serie-atacado: #1d9e75;
+  --serie-varejo-mc: #a0762a;
+  --serie-varejo-af: #3a6ea5;
+
   /* Bordas */
   --color-border: rgba(26, 26, 26, 0.12);
   --color-border-strong: rgba(26, 26, 26, 0.25);
@@ -78,6 +85,10 @@
     --color-map-5: #90e7c3;
     --color-map-zero: #2a2a23;
     --color-map-nodata: #4a493f;
+
+    --serie-atacado: #5dcaa5;
+    --serie-varejo-mc: #d4a96a;
+    --serie-varejo-af: #7aa6d4;
   }
 }
 
@@ -395,6 +406,140 @@ a:hover { border-bottom-color: currentColor; }
 .serie-btn:focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
+}
+
+/* Canal sem coleta para o produto escolhido. Fica visível, e não escondido,
+   porque a ausência de dado é informação: o leitor precisa saber que aquele
+   canal existe e não cobre este produto.
+
+   O estado se distingue pela borda tracejada e pelo ponto de cor apagado, não
+   por opacidade sobre o botão inteiro: apagar o rótulo derrubaria o contraste
+   abaixo de AA justamente no controle que precisa ser lido para se entender
+   por que ele não pode ser usado. */
+.serie-btn[disabled] {
+  cursor: not-allowed;
+  border-style: dashed;
+  border-color: var(--color-border);
+}
+
+.serie-btn[disabled] .serie-btn__cor { opacity: 0.35; }
+
+.serie-btn[disabled]:hover {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+/* Ponto da cor da série dentro do botão do canal. */
+.serie-btn__cor {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 7px;
+  vertical-align: 1px;
+  background: currentColor;
+}
+
+/* ============================================================
+   Filtro em dois estágios
+   ============================================================
+   Usado na página de produtos, onde um gráfico só serve 54 séries.
+   O primeiro estágio escolhe o produto; o segundo, quais canais de
+   coleta entram no desenho. Os dois estágios ficam sempre visíveis:
+   esconder o segundo atrás do primeiro economizaria espaço e custaria
+   ao leitor a noção de que a escolha de canal existe.
+   ============================================================ */
+
+.filtro {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-soft);
+  padding: 20px;
+  margin-bottom: 28px;
+}
+
+.filtro__etapa + .filtro__etapa {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.filtro__titulo {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.filtro__num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  /* Secundário, e não terciário: em 11px o terciário fica em 3,3:1 no tema
+     claro, abaixo de AA. */
+  color: var(--color-text-secondary);
+}
+
+.filtro__nome {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.filtro__ajuda {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin: 0 0 12px;
+}
+
+.filtro__busca {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  width: 100%;
+  max-width: 320px;
+  padding: 7px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-card);
+  color: var(--color-text);
+}
+
+.filtro__busca::placeholder { color: var(--color-text-tertiary); }
+
+.filtro__busca:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 1px;
+  border-color: var(--color-brand);
+}
+
+/* A lista rola dentro da própria caixa: 54 produtos empurrariam o gráfico
+   para fora da tela se a página inteira crescesse com eles. */
+.filtro__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 168px;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.filtro__vazio {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.filtro__aviso {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin: 10px 0 0;
 }
 
 /* ============================================================

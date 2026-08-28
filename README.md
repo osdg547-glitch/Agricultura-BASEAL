@@ -17,7 +17,7 @@ cobweb/
 │   ├── css/cobweb.css         # sistema de design completo
 │   ├── js/indice-geral.js     # gráfico do índice
 │   └── img/                   # logo e favicon (SVG)
-├── produtos/                  # fichas individuais por produto
+├── produtos/                  # série de preço de todos os produtos, em uma página
 ├── panoramas/                 # arquivo de comentários mensais
 ├── dados/                     # exports em JSON e CSV
 │   └── fontes/                # planilhas de origem, para conferência
@@ -25,22 +25,34 @@ cobweb/
 └── docs/
     ├── BRIEFING.md            # contexto do projeto (leia primeiro)
     ├── sistema-visual.md      # tokens e regras de design
-    └── dados-atacado-ceasa.md # série de atacado do CEASA-SE, jan–jul/2026
+    └── dados-precos-se.md     # séries de preço de Aracaju, cobertura e ressalvas
 ```
 
-## Dados de atacado
+## Séries de preço
 
-`dados/precos-atacado-ceasa-se-2026.json` é a série de referência do atacado em
-Sergipe: 54 produtos, 48 coletas de janeiro a julho de 2026, a partir dos boletins
-EMDAGRO/ASPLAN do CEASA Aracaju. Regeneração a partir da planilha de origem:
+`dados/series-precos-se-2026.json` é a série de referência do preço interno: 54
+produtos em três canais dos boletins EMDAGRO/ASPLAN de Aracaju — atacado CEASA-SE
+com 48 coletas de janeiro a julho de 2026, mais dois pontos de varejo com 23
+coletas no primeiro trimestre. É o arquivo que a página `/produtos/` lê.
+Regeneração a partir das fontes:
 
 ```bash
 pip install openpyxl
-python3 scripts/importar-atacado-ceasa.py
+python3 scripts/importar-series-precos.py
 ```
 
 Cobertura, unidades, ressalvas metodológicas e o erro de publicação de junho estão
-em `docs/dados-atacado-ceasa.md`. Leia antes de publicar qualquer número da série.
+em `docs/dados-precos-se.md`. Leia antes de publicar qualquer número da série.
+
+## A página de produtos
+
+`/produtos/` é uma página só para as 54 séries. O leitor escolhe em dois estágios:
+primeiro o produto, depois quais canais entram no gráfico. Tudo que aparece na tela
+— cartões, estatísticas, rótulo do gráfico, nota de unidade, cobertura na meta
+strip — é calculado a partir do JSON pelo `assets/js/series-precos.js`. Atualizar a
+série não pede reescrever a página, e a escolha vive na barra de endereço
+(`/produtos/?p=tomate&c=atacado,mercado-central`), de modo que um link para uma
+série específica continua sendo compartilhável.
 
 ## Uso local
 

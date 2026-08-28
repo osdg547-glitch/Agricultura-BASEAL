@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="../../cobweb.css?v=20260804-2253">
+  <link rel="stylesheet" href="../../cobweb.css?v=20260828-2240">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Cenário da produção de laranja e de suco de laranja em Sergipe · CobWeb">
@@ -211,6 +211,7 @@
       </a>
       <nav class="site-nav" aria-label="Navegação principal">
         <a href="../../">home</a>
+        <a href="../../produtos/">produtos</a>
         <a href="../../servicos/">serviços</a>
         <a href="../" class="is-active">panoramas</a>
         <a href="../../sobre/">sobre</a>
@@ -316,7 +317,7 @@
       </div>
 
       <div class="chart-container" style="height: 300px;">
-        <canvas id="laranja-estado" data-fonte="../../dados/laranja-municipios.json?v=20260804-2253"
+        <canvas id="laranja-estado" data-fonte="../../dados/laranja-municipios.json?v=20260828-2240"
                 role="img"
                 aria-label="Série anual da laranja em Sergipe, 2001 a 2024, em três variáveis alternáveis: área colhida em hectares, quantidade produzida em toneladas e rendimento médio em quilogramas por hectare.">
           Série anual agregada da laranja em Sergipe, de 2001 a 2024. A área colhida sobe de 49.728 hectares em 2001 até o pico de 56.542 em 2011, cai de forma contínua até 30.208 em 2021 e fecha 2024 em 31.279. A quantidade produzida acompanha: 581.268 toneladas em 2001, pico de 822.468 em 2011, mínimo de 354.960 em 2018 e 443.661 em 2024. O rendimento médio oscila entre 11.087 quilogramas por hectare em 2017 e 14.799 em 2009, e chega a 14.184 em 2024.
@@ -373,7 +374,7 @@
       </div>
 
       <div class="chart-container" style="height: 300px;">
-        <canvas id="suco-exportacoes" data-fonte="../../dados/exportacoes-suco-laranja-se.json?v=20260804-2253"
+        <canvas id="suco-exportacoes" data-fonte="../../dados/exportacoes-suco-laranja-se.json?v=20260828-2240"
                 role="img"
                 aria-label="Exportações sergipanas de suco de laranja, 2001 a 2025, em três métricas alternáveis: valor em dólares FOB, quilograma líquido e preço implícito em dólares por quilograma.">
           Série anual das exportações de suco de laranja de Sergipe, de 2001 a 2025. O valor sai de US$ 6,3 milhões FOB em 2001, passa por US$ 94,2 milhões em 2012 e atinge o máximo da série em 2024, US$ 141,3 milhões, recuando para US$ 114,0 milhões em 2025. O volume tem trajetória distinta: máximo de 51,4 mil toneladas em 2012 e 25,9 mil em 2024. O preço implícito fica entre US$ 0,70 e US$ 2,04 por quilograma até 2022 e salta para US$ 5,46 em 2024.
@@ -421,10 +422,10 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="../../assets/js/laranja-estado.js?v=20260804-2253"></script>
-  <script src="../../assets/js/suco-exportacoes.js?v=20260804-2253"></script>
-  <script src="../../assets/js/mapa-laranja.js?v=20260804-2253"></script>
-  <script src="../../assets/js/nota-metodologica.js?v=20260804-2253"></script>
+  <script src="../../assets/js/laranja-estado.js?v=20260828-2240"></script>
+  <script src="../../assets/js/suco-exportacoes.js?v=20260828-2240"></script>
+  <script src="../../assets/js/mapa-laranja.js?v=20260828-2240"></script>
+  <script src="../../assets/js/nota-metodologica.js?v=20260828-2240"></script>
   <script>
     CobWebMapaLaranja.montar('#mapa-laranja', {
       geojson: '../../dados/se-municipios.geojson',

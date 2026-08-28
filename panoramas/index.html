@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="../cobweb.css?v=20260804-2253">
+  <link rel="stylesheet" href="../cobweb.css?v=20260828-2240">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Panoramas · CobWeb">
@@ -240,6 +240,7 @@
       </a>
       <nav class="site-nav" aria-label="Navegação principal">
         <a href="../">home</a>
+        <a href="../produtos/">produtos</a>
         <a href="../servicos/">serviços</a>
         <a href="." class="is-active">panoramas</a>
         <a href="../sobre/">sobre</a>
@@ -271,11 +272,11 @@
         </div>
       </div>
 
-      <div class="panorama-grid" data-sparklines="../dados/precos-emdagro-q1-2026.json?v=20260804-2253"
+      <div class="panorama-grid" data-sparklines="../dados/precos-emdagro-q1-2026.json?v=20260828-2240"
            aria-label="Produtos monitorados internamente; role para o lado para ver mais">
 
         <!-- Coluna 1, linha 1 — Tomate -->
-        <a href="../produtos/tomate/" class="panorama-card" data-produto="tomate">
+        <a href="../produtos/?p=tomate" class="panorama-card" data-produto="tomate">
           <div class="panorama-card__eyebrow">tomate · ceasa-se</div>
           <div class="panorama-card__nome">Tomate</div>
           <div class="panorama-card__preco-row">
@@ -286,11 +287,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Choque de oferta em março. Atacado mais que dobra; varejo confirma com amortecimento.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 1, linha 2 — Inhame da costa -->
-        <a href="../produtos/inhame-da-costa/" class="panorama-card" data-produto="inhame_da_costa">
+        <a href="../produtos/?p=inhame_da_costa" class="panorama-card" data-produto="inhame_da_costa">
           <div class="panorama-card__eyebrow">inhame da costa · ceasa-se</div>
           <div class="panorama-card__nome">Inhame da costa</div>
           <div class="panorama-card__preco-row">
@@ -301,11 +302,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Queda de 54% no atacado não chega ao varejo de bairro. Assimetria de repasse.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 2, linha 1 — Cebola roxa -->
-        <a href="../produtos/cebola-roxa/" class="panorama-card" data-produto="cebola_roxa">
+        <a href="../produtos/?p=cebola_roxa" class="panorama-card" data-produto="cebola_roxa">
           <div class="panorama-card__eyebrow">cebola roxa · ceasa-se</div>
           <div class="panorama-card__nome">Cebola roxa</div>
           <div class="panorama-card__preco-row">
@@ -316,11 +317,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Atacado travado o trimestre inteiro; varejo cobra 25–50% acima sem movimento de fundo.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 2, linha 2 — Batata lisa -->
-        <a href="../produtos/batata-lisa/" class="panorama-card" data-produto="batata_lisa">
+        <a href="../produtos/?p=batata_lisa" class="panorama-card" data-produto="batata_lisa">
           <div class="panorama-card__eyebrow">batata lisa · ceasa-se</div>
           <div class="panorama-card__nome">Batata lisa</div>
           <div class="panorama-card__preco-row">
@@ -331,11 +332,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Atacado quase parado; varejo dispara 60–75% em março. Repasse desproporcional.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 3, linha 1 — Cenoura -->
-        <a href="../produtos/cenoura/" class="panorama-card" data-produto="cenoura">
+        <a href="../produtos/?p=cenoura" class="panorama-card" data-produto="cenoura">
           <div class="panorama-card__eyebrow">cenoura · ceasa-se</div>
           <div class="panorama-card__nome">Cenoura</div>
           <div class="panorama-card__preco-row">
@@ -346,11 +347,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Estável em jan–fev; salto de 43% no atacado em março, amplificado no varejo.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 3, linha 2 — Manga tommy -->
-        <a href="../produtos/manga-tommy/" class="panorama-card" data-produto="manga_tommy">
+        <a href="../produtos/?p=manga_tommy" class="panorama-card" data-produto="manga_tommy">
           <div class="panorama-card__eyebrow">manga tommy · ceasa-se</div>
           <div class="panorama-card__nome">Manga tommy</div>
           <div class="panorama-card__preco-row">
@@ -361,11 +362,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Atacado em queda; varejo travado e sem repassar a baixa. Spread triplicou no trimestre.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 4, linha 1 — Limão taiti -->
-        <a href="../produtos/limao-taiti/" class="panorama-card" data-produto="limao_taiti">
+        <a href="../produtos/?p=limao_taiti" class="panorama-card" data-produto="limao_taiti">
           <div class="panorama-card__eyebrow">limão taiti · ceasa-se</div>
           <div class="panorama-card__nome">Limão taiti</div>
           <div class="panorama-card__preco-row">
@@ -376,11 +377,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Pilar das exportações de SE e, ironia local, o mais barato da cesta CEASA.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 4, linha 2 — Mamão hawai -->
-        <a href="../produtos/mamao-hawai/" class="panorama-card" data-produto="mamao_hawai">
+        <a href="../produtos/?p=mamao_hawai" class="panorama-card" data-produto="mamao_hawai">
           <div class="panorama-card__eyebrow">mamão hawai · ceasa-se</div>
           <div class="panorama-card__nome">Mamão hawai</div>
           <div class="panorama-card__preco-row">
@@ -391,11 +392,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Atacado despenca 45%; Augusto Franco mantém R$ 5,00/kg as 23 semanas sem repassar.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 5, linha 1 — Repolho verde — entra com scroll horizontal -->
-        <a href="../produtos/repolho-verde/" class="panorama-card" data-produto="repolho_verde">
+        <a href="../produtos/?p=repolho_verde" class="panorama-card" data-produto="repolho_verde">
           <div class="panorama-card__eyebrow">repolho verde · ceasa-se</div>
           <div class="panorama-card__nome">Repolho verde</div>
           <div class="panorama-card__preco-row">
@@ -406,11 +407,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Atacado em leve alta; varejo do Augusto Franco recua 29%. Direções opostas.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 5, linha 2 — Macaxeira -->
-        <a href="../produtos/macaxeira/" class="panorama-card" data-produto="macaxeira">
+        <a href="../produtos/?p=macaxeira" class="panorama-card" data-produto="macaxeira">
           <div class="panorama-card__eyebrow">macaxeira · ceasa-se</div>
           <div class="panorama-card__nome">Macaxeira</div>
           <div class="panorama-card__preco-row">
@@ -421,11 +422,11 @@
             </div>
           </div>
           <div class="panorama-card__nota">Três canais, 68 observações, três preços rigorosamente constantes. Inércia institucional.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
         <!-- Coluna 6, linha 1 — Acerola -->
-        <a href="../produtos/acerola/" class="panorama-card" data-produto="acerola">
+        <a href="../produtos/?p=acerola" class="panorama-card" data-produto="acerola">
           <div class="panorama-card__eyebrow">acerola · ceasa-se</div>
           <div class="panorama-card__nome">Acerola</div>
           <div class="panorama-card__preco-row">
@@ -436,7 +437,7 @@
             </div>
           </div>
           <div class="panorama-card__nota">Atacado sobe 40%, mas varejo do Mercado Central cai 34%. Direções opostas.</div>
-          <span class="panorama-card__cta">ver análise →</span>
+          <span class="panorama-card__cta">ver série →</span>
         </a>
 
       </div>
@@ -515,7 +516,7 @@
   </footer>
 
   <!-- Sparklines dos cards do mercado interno -->
-  <script src="../assets/js/sparklines.js?v=20260804-2253"></script>
+  <script src="../assets/js/sparklines.js?v=20260828-2240"></script>
 
 </body>
 </html>
