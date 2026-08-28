@@ -25,6 +25,13 @@
   --color-positive: #15754f;       /* verde · variação positiva em texto (AA) */
   --color-neutral: #888780;        /* cinza · estável/comparativo */
 
+  /* Traço das séries de preço · o mesmo matiz da tendência, calibrado para
+     linha fina sobre o fundo (não para texto pequeno, que usa os tokens de
+     variação acima). Verde sobe, âmbar cai, cinza fica. */
+  --color-serie-alta: #1d9e75;
+  --color-serie-baixa: #a0762a;
+  --color-serie-estavel: #b4b2a9;
+
   /* Rampa sequencial de mapa · mesmo matiz da cor de marca, do menor ao maior.
      Dois neutros fora da rampa distinguem "zero declarado" de "sem informação". */
   --color-map-1: #d7ebe1;
@@ -67,6 +74,10 @@
     --color-brand-text: #5dcaa5;
     --color-negative: #d85a30;
     --color-positive: #5dcaa5;
+
+    --color-serie-alta: #5dcaa5;
+    --color-serie-baixa: #d4a96a;
+    --color-serie-estavel: #8c8b84;
 
     /* No tema escuro a rampa inverte: o maior valor é o tom mais claro. O piso
        da rampa fica acima do neutro de sem informação, para que a menor classe
