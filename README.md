@@ -20,10 +20,27 @@ cobweb/
 ├── produtos/                  # fichas individuais por produto
 ├── panoramas/                 # arquivo de comentários mensais
 ├── dados/                     # exports em JSON e CSV
+│   └── fontes/                # planilhas de origem, para conferência
+├── scripts/                   # importação de dados e versionamento de assets
 └── docs/
     ├── BRIEFING.md            # contexto do projeto (leia primeiro)
-    └── sistema-visual.md      # tokens e regras de design
+    ├── sistema-visual.md      # tokens e regras de design
+    └── dados-atacado-ceasa.md # série de atacado do CEASA-SE, jan–jul/2026
 ```
+
+## Dados de atacado
+
+`dados/precos-atacado-ceasa-se-2026.json` é a série de referência do atacado em
+Sergipe: 54 produtos, 48 coletas de janeiro a julho de 2026, a partir dos boletins
+EMDAGRO/ASPLAN do CEASA Aracaju. Regeneração a partir da planilha de origem:
+
+```bash
+pip install openpyxl
+python3 scripts/importar-atacado-ceasa.py
+```
+
+Cobertura, unidades, ressalvas metodológicas e o erro de publicação de junho estão
+em `docs/dados-atacado-ceasa.md`. Leia antes de publicar qualquer número da série.
 
 ## Uso local
 
