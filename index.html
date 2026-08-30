@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CobWeb · mercados do hortifrúti em Sergipe</title>
-  <meta name="description" content="Portal editorial de preços, produção e comércio exterior do hortifrúti sergipano. Onze séries de preço no atacado de Aracaju, a produção município a município e as exportações do estado.">
+  <meta name="description" content="Portal editorial de preços, produção e comércio exterior do hortifrúti sergipano. As séries de preço do boletim EMDAGRO no atacado de Aracaju, a produção município a município e as exportações do estado.">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
@@ -15,11 +15,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="cobweb.css?v=20260830-1545">
+  <link rel="stylesheet" href="cobweb.css?v=20260830-1600">
 
   <!-- Open Graph -->
   <meta property="og:title" content="CobWeb · mercados do hortifrúti em Sergipe">
-  <meta property="og:description" content="Onze séries de preço no atacado de Aracaju, a produção município a município e as exportações do estado. Dados públicos organizados e comentados.">
+  <meta property="og:description" content="As séries de preço do boletim EMDAGRO no atacado de Aracaju, a produção município a município e as exportações do estado. Dados públicos organizados e comentados.">
   <meta property="og:type" content="website">
 
   <style>
@@ -28,7 +28,7 @@
        ============================================================
        A home não é um artigo: é o sumário do que existe no site. O
        layout trabalha em três registros — a capa com o sumário
-       numerado, o mural das séries de preço e a grade de ensaios.
+       numerado, a vitrine das séries de preço e a grade de ensaios.
        Todos os valores vêm dos tokens do cobweb.css; o único tamanho
        novo é o da manchete de capa, maior que a de artigo.
        ============================================================ */
@@ -106,7 +106,7 @@
       margin-top: 2px;
     }
 
-    /* ---------- mural das séries ---------- */
+    /* ---------- vitrine das séries ---------- */
 
     .bloco {
       margin-bottom: 52px;
@@ -136,101 +136,225 @@
       text-align: right;
     }
 
-    /* Grade de fios: o fundo do contêiner aparece nas frestas de 1px e
-       faz as divisórias, sem borda em cada célula. */
-    .mural {
+    /* Vitrine: à esquerda o que a série é, à direita uma série por vez.
+       O painel troca de produto a cada dez segundos e leva os próprios
+       controles no rodapé; a página de produtos é o caminho estável para
+       buscar um produto pelo nome. */
+    .vitrine {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--color-border);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      gap: 40px;
+      align-items: start;
     }
 
-    .mural__item {
-      background: var(--color-bg);
-      padding: 14px 16px 10px;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      transition: background 0.15s;
+    .vitrine__texto p {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--color-text-secondary);
+      margin: 0 0 14px;
     }
 
-    .mural__item:hover {
-      background: var(--color-bg-soft);
+    .vitrine__texto p:first-child {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--color-text);
     }
 
-    .mural__topo {
+    /* Quatro números que dimensionam a série, em fio fino */
+    .vitrine__fatos {
+      margin: 20px 0 0;
+      padding: 0;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .vitrine__fato {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 8px;
+      gap: 16px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 13px;
     }
 
-    .mural__nome {
-      font-size: 13px;
+    .vitrine__fato dt { color: var(--color-text-secondary); }
+
+    .vitrine__fato dd {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    .vitrine__cta {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--color-brand-text);
+    }
+
+    /* ---------- painel giratório ---------- */
+
+    .painel {
+      margin: 0;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-bg-soft);
+      padding: 18px 20px 14px;
+      position: relative;
+      overflow: hidden;
+      /* A cor da tendência vale para linha, área e ponto do gráfico */
+      --serie-cor: var(--serie-estavel);
+    }
+
+    .painel--alta    { --serie-cor: var(--serie-alta); }
+    .painel--baixa   { --serie-cor: var(--serie-baixa); }
+    .painel--estavel { --serie-cor: var(--serie-estavel); }
+
+    /* Régua de tempo: mostra quanto falta para a próxima série entrar */
+    .painel::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      background: var(--serie-cor);
+      transform-origin: left center;
+      animation: painel-regua 10s linear infinite;
+    }
+
+    .painel--parado::after { animation-play-state: paused; }
+
+    @keyframes painel-regua {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    .painel__conteudo { transition: opacity 0.2s ease; }
+    .painel--trocando .painel__conteudo { opacity: 0; }
+
+    .painel__topo {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .painel__nome {
+      font-size: 15px;
       font-weight: 500;
       text-transform: lowercase;
-      line-height: 1.25;
     }
 
-    .mural__delta {
-      font-size: 12px;
+    .painel__delta {
+      font-size: 14px;
       font-weight: 500;
       white-space: nowrap;
     }
 
-    .mural__preco {
+    .painel__preco {
       font-family: var(--font-serif);
-      font-size: 22px;
+      font-size: 34px;
       font-weight: 500;
-      line-height: 1;
+      line-height: 1.1;
       letter-spacing: -0.02em;
     }
 
-    .mural__unid {
+    .painel__unid {
       font-family: var(--font-sans);
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 400;
       color: var(--color-text-secondary);
       letter-spacing: 0;
     }
 
-    .mural__spark {
+    .painel__base {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      margin-top: 4px;
+    }
+
+    .painel__grafico {
+      display: block;
       width: 100%;
       height: auto;
-      margin-top: auto;
-      padding-top: 10px;
+      margin-top: 10px;
     }
 
-    /* Última célula: fecha a grade em 12 e leva ao panorama completo */
-    .mural__item--cta {
+    .spark__area   { fill: var(--serie-cor); opacity: 0.12; }
+    .spark__linha  { fill: none; stroke: var(--serie-cor); stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+    .spark__ponto  { fill: var(--serie-cor); }
+    .spark__ref    { stroke: var(--color-text-tertiary); stroke-width: 1; stroke-dasharray: 3 4; }
+
+    .painel__eixo {
+      display: flex;
       justify-content: space-between;
-      background: var(--color-bg-soft);
-    }
-
-    .mural__cta-titulo {
-      display: block;
-      font-family: var(--font-serif);
-      font-size: 16px;
-      font-weight: 500;
-      line-height: 1.2;
-      margin-bottom: 8px;
-    }
-
-    .mural__cta-texto {
-      display: block;
-      font-size: 12px;
-      line-height: 1.5;
-      color: var(--color-text-secondary);
-    }
-
-    .mural__cta-link {
       font-size: 11px;
+      color: var(--color-text-tertiary);
+      border-top: 1px solid var(--color-border);
+      padding-top: 6px;
+      margin-top: 2px;
+    }
+
+    .painel__nota {
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--color-text-tertiary);
+      margin: 10px 0 0;
+    }
+
+    .painel__link {
+      font-size: 12px;
       color: var(--color-brand-text);
+    }
+
+    /* ---------- controles da vitrine ---------- */
+
+    .painel__rodape {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
       margin-top: 12px;
+    }
+
+    .painel__controles {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .painel__posicao {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      font-variant-numeric: tabular-nums;
+      margin-right: 4px;
+    }
+
+    .painel__botao {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      line-height: 1.4;
+      color: var(--color-text-secondary);
+      background: transparent;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-sm);
+      padding: 3px 8px;
+      min-width: 26px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .painel__botao--pausa { padding: 3px 10px; }
+
+    .painel__botao:hover {
+      color: var(--color-text);
+      border-color: var(--color-text-secondary);
     }
 
     /* ---------- grade de ensaios ---------- */
@@ -313,7 +437,7 @@
     /* ---------- foco visível ---------- */
 
     .sumario__item:focus-visible,
-    .mural__item:focus-visible,
+    .painel__botao:focus-visible,
     .ensaio:focus-visible {
       outline: 2px solid var(--color-brand);
       outline-offset: -2px;
@@ -328,7 +452,11 @@
       }
 
       .capa__manchete { font-size: 34px; }
-      .mural { grid-template-columns: repeat(3, 1fr); }
+
+      .vitrine {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
 
       .ensaios {
         grid-template-columns: 1fr;
@@ -341,7 +469,7 @@
     @media (max-width: 640px) {
       .capa__manchete { font-size: 28px; }
       .capa__deck { font-size: 16px; }
-      .mural { grid-template-columns: repeat(2, 1fr); }
+      .painel__preco { font-size: 28px; }
       .ensaio__titulo { font-size: 24px; }
     }
   </style>
@@ -395,11 +523,11 @@
 
       <nav class="sumario" aria-label="Sumário do portal">
 
-        <a href="panoramas/#internas" class="sumario__item">
+        <a href="produtos/" class="sumario__item">
           <span class="sumario__num" aria-hidden="true">01</span>
           <span>
             <span class="sumario__nome">Mercado interno</span>
-            <span class="sumario__meta">11 produtos em três canais de Aracaju · jan a mar de 2026</span>
+            <span class="sumario__meta"><span data-resumo="produtos">71</span> produtos em Aracaju, <span data-resumo="varejo">48</span> deles nos dois canais · <span data-resumo="janela">janeiro a julho de 2026</span></span>
           </span>
         </a>
 
@@ -434,132 +562,107 @@
     <div class="meta-strip">
       <span class="meta-strip__item">
         <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
-        janela de preços: jan a mar de 2026
+        janela de preços: <span data-resumo="janela">janeiro a julho de 2026</span>
       </span>
       <span class="meta-strip__item">
         <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 14l4-5 3 3 4-6"/></svg>
-        22 coletas no atacado CEASA-SE
+        <span data-resumo="coletas">48</span> coletas no atacado CEASA-SE
       </span>
     </div>
 
     <!-- ============================================================
-         Mural — o trimestre inteiro em uma tela
+         Vitrine — o que a série é, e uma série de cada vez
+         ============================================================
+         O painel da direita percorre as séries do atacado, uma a
+         cada dez segundos, e cada uma abre na página de produtos
+         pelo endereço ?p=chave. A troca para quando o leitor
+         sobrevoa ou tabula a vitrine, os botões de anterior e
+         próxima a desligam de vez, e com prefers-reduced-motion a
+         vitrine nasce parada.
+
+         Nenhum número aqui é escrito à mão: contagens, janela,
+         unidade e variação saem do JSON, com as convenções da
+         página de produtos (variação contra a primeira coleta,
+         produto cotado por cento mantido na unidade do boletim).
+         O HTML carrega a primeira série já desenhada, para que a
+         home diga alguma coisa antes do JavaScript rodar.
          ============================================================ -->
     <section class="bloco" aria-label="Séries de preço no atacado">
 
       <div class="bloco__header">
-        <h2 class="section-title" style="margin: 0;">O trimestre em onze séries</h2>
-        <p class="bloco__desc">Preço no atacado CEASA-SE ao fim de março e variação desde janeiro. Cada série abre na página de produtos, com os dois canais de varejo ao lado.</p>
+        <h2 class="section-title" style="margin: 0;">Séries temporais de preços</h2>
       </div>
 
-      <div class="mural" data-sparklines="dados/precos-emdagro-q1-2026.json?v=20260830-1545">
+      <div class="vitrine" data-vitrine data-json="dados/series-precos-se-2026.json?v=20260830-1600">
 
-        <a href="produtos/?p=tomate" class="mural__item" data-produto="tomate">
-          <span class="mural__topo">
-            <span class="mural__nome">tomate</span>
-            <span class="mural__delta delta-up">+114%</span>
-          </span>
-          <span class="mural__preco">R$ 6,00<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+        <div class="vitrine__texto">
+          <p>Os preços dos dois principais mercados de Aracaju são apresentados graficamente, facilitando a visualização de suas respectivas tendências temporais.</p>
+          <p>As séries usam como fonte os boletins semanais de preços da EMDAGRO, coletados de duas a três vezes por semana.</p>
 
-        <a href="produtos/?p=inhame_da_costa" class="mural__item" data-produto="inhame_da_costa">
-          <span class="mural__topo">
-            <span class="mural__nome">inhame da costa</span>
-            <span class="mural__delta delta-down">−54%</span>
-          </span>
-          <span class="mural__preco">R$ 6,00<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+          <dl class="vitrine__fatos">
+            <div class="vitrine__fato">
+              <dt>produtos no boletim</dt>
+              <dd data-resumo="produtos">71</dd>
+            </div>
+            <div class="vitrine__fato">
+              <dt>coletas no atacado</dt>
+              <dd data-resumo="coletas">48</dd>
+            </div>
+            <div class="vitrine__fato">
+              <dt>atacado e varejo</dt>
+              <dd data-resumo="varejo">48</dd>
+            </div>
+            <div class="vitrine__fato">
+              <dt>janela</dt>
+              <dd data-resumo="janela">janeiro a julho de 2026</dd>
+            </div>
+          </dl>
 
-        <a href="produtos/?p=mamao_hawai" class="mural__item" data-produto="mamao_hawai">
-          <span class="mural__topo">
-            <span class="mural__nome">mamão hawai</span>
-            <span class="mural__delta delta-down">−45%</span>
-          </span>
-          <span class="mural__preco">R$ 1,60<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+          <a href="produtos/" class="vitrine__cta">escolher produto e canais &rarr;</a>
+        </div>
 
-        <a href="produtos/?p=cenoura" class="mural__item" data-produto="cenoura">
-          <span class="mural__topo">
-            <span class="mural__nome">cenoura</span>
-            <span class="mural__delta delta-up">+43%</span>
-          </span>
-          <span class="mural__preco">R$ 5,00<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+        <figure class="painel painel--alta" data-painel>
 
-        <a href="produtos/?p=acerola" class="mural__item" data-produto="acerola">
-          <span class="mural__topo">
-            <span class="mural__nome">acerola</span>
-            <span class="mural__delta delta-up">+40%</span>
-          </span>
-          <span class="mural__preco">R$ 3,50<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+          <div class="painel__conteudo">
+            <div class="painel__topo">
+              <span class="painel__nome" data-painel-nome>acerola</span>
+              <span class="painel__delta delta-up" data-painel-delta>+100%</span>
+            </div>
 
-        <a href="produtos/?p=repolho_verde" class="mural__item" data-produto="repolho_verde">
-          <span class="mural__topo">
-            <span class="mural__nome">repolho verde</span>
-            <span class="mural__delta delta-up">+8%</span>
-          </span>
-          <span class="mural__preco">R$ 4,67<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+            <div class="painel__preco" data-painel-preco>R$&nbsp;5,00<span class="painel__unid">/kg</span></div>
+            <div class="painel__base" data-painel-base>21/jul/2026 · R$ por quilo · vs. primeira coleta</div>
 
-        <a href="produtos/?p=batata_lisa" class="mural__item" data-produto="batata_lisa">
-          <span class="mural__topo">
-            <span class="mural__nome">batata lisa</span>
-            <span class="mural__delta delta-up">+7%</span>
-          </span>
-          <span class="mural__preco">R$ 3,20<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+            <svg class="painel__grafico" data-painel-grafico viewBox="0 0 480 220" role="img"
+                 aria-label="Série de preço de acerola no atacado do CEASA-SE, janeiro a julho de 2026: alta de 100% contra a primeira coleta, de R$ 2,50 para R$ 5,00 em R$ por quilo.">
+              <path class="spark__area" d="M 10.0,202 L 10.0,202.0 L 19.8,202.0 L 29.6,202.0 L 39.4,202.0 L 49.1,202.0 L 58.9,202.0 L 68.7,202.0 L 78.5,202.0 L 88.3,202.0 L 98.1,202.0 L 107.9,202.0 L 117.7,202.0 L 127.4,202.0 L 137.2,202.0 L 147.0,128.4 L 156.8,128.4 L 166.6,128.4 L 176.4,128.4 L 186.2,128.4 L 196.0,128.4 L 205.7,128.4 L 215.5,128.4 L 225.3,110.0 L 235.1,110.0 L 244.9,110.0 L 254.7,110.0 L 264.5,18.0 L 274.3,18.0 L 284.0,18.0 L 293.8,18.0 L 303.6,18.0 L 313.4,18.0 L 323.2,18.0 L 333.0,18.0 L 342.8,18.0 L 352.6,18.0 L 362.3,18.0 L 372.1,18.0 L 381.9,18.0 L 391.7,18.0 L 401.5,18.0 L 411.3,18.0 L 421.1,18.0 L 430.9,18.0 L 440.6,18.0 L 450.4,18.0 L 460.2,18.0 L 470.0,18.0 L 470.0,202 Z"/>
+              <line class="spark__ref" x1="10" y1="202.0" x2="470" y2="202.0"/>
+              <polyline class="spark__linha" points="10.0,202.0 19.8,202.0 29.6,202.0 39.4,202.0 49.1,202.0 58.9,202.0 68.7,202.0 78.5,202.0 88.3,202.0 98.1,202.0 107.9,202.0 117.7,202.0 127.4,202.0 137.2,202.0 147.0,128.4 156.8,128.4 166.6,128.4 176.4,128.4 186.2,128.4 196.0,128.4 205.7,128.4 215.5,128.4 225.3,110.0 235.1,110.0 244.9,110.0 254.7,110.0 264.5,18.0 274.3,18.0 284.0,18.0 293.8,18.0 303.6,18.0 313.4,18.0 323.2,18.0 333.0,18.0 342.8,18.0 352.6,18.0 362.3,18.0 372.1,18.0 381.9,18.0 391.7,18.0 401.5,18.0 411.3,18.0 421.1,18.0 430.9,18.0 440.6,18.0 450.4,18.0 460.2,18.0 470.0,18.0"/>
+              <circle class="spark__ponto" cx="470.0" cy="18.0" r="4"/>
+            </svg>
 
-        <a href="produtos/?p=cebola_roxa" class="mural__item" data-produto="cebola_roxa">
-          <span class="mural__topo">
-            <span class="mural__nome">cebola roxa</span>
-            <span class="mural__delta delta-flat">0%</span>
-          </span>
-          <span class="mural__preco">R$ 4,00<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+            <div class="painel__eixo">
+              <span data-painel-eixo-inicio>jan de 2026</span>
+              <span data-painel-eixo-fim>jul de 2026</span>
+            </div>
 
-        <a href="produtos/?p=macaxeira" class="mural__item" data-produto="macaxeira">
-          <span class="mural__topo">
-            <span class="mural__nome">macaxeira</span>
-            <span class="mural__delta delta-flat">0%</span>
-          </span>
-          <span class="mural__preco">R$ 2,33<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+            <p class="painel__nota" data-painel-nota>Linha tracejada: a primeira coleta, base da variação.</p>
+            <p class="sr-only" data-painel-resumo>Mínimo de R$ 2,50 e máximo de R$ 5,00 em 48 coletas.</p>
 
-        <a href="produtos/?p=manga_tommy" class="mural__item" data-produto="manga_tommy">
-          <span class="mural__topo">
-            <span class="mural__nome">manga tommy</span>
-            <span class="mural__delta delta-down">−7%</span>
-          </span>
-          <span class="mural__preco">R$ 2,60<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+            <div class="painel__rodape">
+              <a class="painel__link" data-painel-link href="produtos/?p=acerola">abrir a série de <span data-painel-link-nome>acerola</span> &rarr;</a>
 
-        <a href="produtos/?p=limao_taiti" class="mural__item" data-produto="limao_taiti">
-          <span class="mural__topo">
-            <span class="mural__nome">limão taiti</span>
-            <span class="mural__delta delta-down">−9%</span>
-          </span>
-          <span class="mural__preco">R$ 2,00<span class="mural__unid">/kg</span></span>
-          <svg class="mural__spark" data-spark viewBox="0 0 120 40" aria-hidden="true"></svg>
-        </a>
+              <div class="painel__controles">
+                <span class="painel__posicao" data-painel-posicao>4 de 54</span>
+                <button type="button" class="painel__botao" data-painel-anterior aria-label="Série anterior">&larr;</button>
+                <button type="button" class="painel__botao" data-painel-proxima aria-label="Próxima série">&rarr;</button>
+                <button type="button" class="painel__botao painel__botao--pausa" data-painel-pausa aria-pressed="false"
+                        aria-label="Pausar a troca automática de série">pausar</button>
+              </div>
+            </div>
+          </div>
 
-        <a href="panoramas/#internas" class="mural__item mural__item--cta">
-          <span>
-            <span class="mural__cta-titulo">Atacado e varejo, lado a lado</span>
-            <span class="mural__cta-texto">As mesmas onze séries nos três canais de Aracaju, com a leitura de cada repasse.</span>
-          </span>
-          <span class="mural__cta-link">ver o panorama →</span>
-        </a>
+          <figcaption class="sr-only">Painel que alterna as séries de preço no atacado, uma a cada dez segundos. Use os botões de série anterior e próxima para escolher uma, o botão de pausa para interromper a troca, ou a página de produtos para buscar um produto pelo nome.</figcaption>
+        </figure>
 
       </div>
     </section>
@@ -609,7 +712,7 @@
     <span>cc by-sa 4.0</span>
   </footer>
 
-  <!-- Sparklines do mural -->
-  <script src="assets/js/sparklines.js?v=20260830-1545"></script>
+  <!-- Vitrine giratória das séries de preço -->
+  <script src="assets/js/vitrine-series.js?v=20260830-1600"></script>
 </body>
 </html>
