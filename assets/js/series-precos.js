@@ -370,10 +370,10 @@
     if (el.aviso) {
       const semVarejo = disponiveis.length === 1;
       el.aviso.textContent = semVarejo
-        ? 'Este produto só tem coleta no atacado. Os dois canais de varejo cobrem os 11 produtos '
-          + 'da cesta acompanhada pela EMDAGRO no primeiro trimestre.'
-        : 'O atacado vai de janeiro a julho; os dois canais de varejo param em março. '
-          + 'A diferença de janela é da fonte, não do recorte.';
+        ? 'Este produto só tem série de atacado. O varejo do portal cobre onze produtos no '
+          + 'primeiro trimestre: é até onde a transcrição chegou, não um limite conhecido do boletim.'
+        : 'O atacado vai de janeiro a julho; os dois canais de varejo param em março, que é até '
+          + 'onde a transcrição do varejo chegou. Nada foi estendido para emparelhar as janelas.';
     }
   }
 

@@ -10,10 +10,14 @@ produtos, três canais de coleta, tudo vindo dos boletins da EMDAGRO/ASPLAN.
 | Varejo Mercado Central | 11 | 23 | 05/01/2026 a 30/03/2026 |
 | Varejo Augusto Franco | 11 | 23 | 07/01/2026 a 27/03/2026 |
 
-As janelas são diferentes porque a fonte é assim: o atacado foi transcrito até
-julho, o varejo só até março. O portal não estende, não interpola e não estima
-nada para emparelhar as três. Cada canal carrega a própria lista de datas, e o
-gráfico da página desenha a união delas.
+As janelas são diferentes porque a transcrição é assim, não porque a fonte pare:
+o atacado foi transcrito até julho, o varejo só até março, e os onze produtos de
+varejo são os que a consolidação do primeiro trimestre trouxe. Nada no material
+que temos diz que a EMDAGRO publique varejo só para esses onze — descobrir isso
+depende de olhar os boletins de varejo de abril em diante, que ainda não foram
+transcritos. O portal não estende, não interpola e não estima nada para
+emparelhar os três canais: cada um carrega a própria lista de datas, e o gráfico
+da página desenha a união delas.
 
 ## Origem
 
@@ -126,6 +130,9 @@ depende do arquivo original da EMDAGRO ou de consulta à ASPLAN.
   que captura erro sistemático de leitura é validação cruzada contra fonte
   independente (CODERSE, PROHORT/CONAB), ainda por fazer.
 - **Uma praça só.** Aracaju. Não descreve o preço no interior do estado.
+- **A cobertura do varejo é da transcrição, não da fonte.** Onze produtos e um
+  trimestre é o que existe transcrito, e as ressalvas da página dizem isso. Se os
+  boletins de varejo cobrem mais produtos ou meses, o portal ainda não sabe.
 - **O Mercado Central não é varejo final.** A fonte o rotula como varejo, mas os
   preços ficam próximos ou abaixo do atacado. É canal híbrido, de atacarejo
   popular. Usá-lo como proxy de preço de supermercado subestima o varejo.
