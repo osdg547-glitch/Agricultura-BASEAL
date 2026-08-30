@@ -88,23 +88,21 @@ meta
   arquivos_de_origem{}
 produtos{slug}
   label, grupo                        "vegetal" ou "animal"
+  unidade_referencia                a unidade do produto: tipo, peça, sufixo, legenda
   {canal}                             presente só onde há coleta
-    unidade_origem, tipo_unidade      "peso", "unidade" ou "mista"
+    unidade_origem, tipo_unidade      "peso", "unidade", "opaca" ou "mista"
     peca_contada                      unidade, molho, pé, cabeça — quando é contagem
     fator_conversao_kg, itens_por_unidade
-    base_comparacao                   "kg", "unidade:<x>" ou "mista"
     unidade_variou                    true onde a unidade muda no meio da série
     unidades_por_data[]               só quando variou
-    trechos[]                         só quando variou: unidade, início, fim, estatísticas
     precos_unidade_origem[]           preço como o boletim publica
-    precos_rs_kg[]                    preço convertido, ou null se não converte
-    medias_mensais_*{}                média por mês das coletas daquele mês
-    estatisticas_*{}                  n, mínimo, máximo, média, CV, nº de mudanças
+    precos_referencia[]               o mesmo preço na unidade do produto, com
+                                      null onde a conversão não existe
+    conversoes[]                      as divisões aplicadas, em texto
+    convertivel, n_convertidas        se entra no gráfico, e com quantas coletas
+    trechos[]                         faixas contínuas de valor convertido
+    medias_mensais{}, estatisticas{}  na unidade de referência, sobre o que converteu
 ```
-
-`base_comparacao` é o que decide quais canais entram no mesmo gráfico. Dois
-canais só se comparam quando têm a mesma base: preço por cento e preço por molho
-são ambos "por peça", mas quantas peças o cento traz a fonte não diz.
 
 Cada array de preço tem o mesmo comprimento da lista de datas do seu canal. Não
 há buraco: toda data publicada tem preço em todos os produtos daquele canal.
@@ -116,16 +114,36 @@ panoramas continuam achando o produto pelo mesmo identificador, e o endereço
 
 ## Unidades
 
-O boletim cota por embalagem. A conversão para R$/kg divide pelo peso nominal
-declarado na própria unidade — caixa de 25 kg, saco de 60 kg, arroba de 15 kg.
+**Cada produto tem uma unidade só, a mesma em todos os canais**, declarada em
+`unidade_referencia`. A regra é:
 
-Doze produtos são cotados por contagem e ficam **sem** conversão, com
-`precos_rs_kg: null`: abacaxi, alface lisa, banana prata, cebolinha, coco seco,
-coco verde, coentro, couve, laranja pera e milho verde, todos por cento; ovo
-branco e ovo vermelho, por caixa de 30 dúzias. Converter exigiria um peso médio
-por peça que a EMDAGRO não publica, e estimá-lo seria inventar número. A página
-detecta esse caso sozinha: mantém o eixo na unidade do boletim e diz isso na nota
-metodológica.
+- Algum canal cota por peso → a unidade é o **quilo**. O preço da embalagem é
+  dividido pelo peso nominal que ela nomeia: caixa de 25 kg, saco de 60 kg,
+  arroba de 15 kg.
+- Nenhum canal cota por peso → a unidade é a **peça**. A embalagem de contagem é
+  dividida pelo número de peças que ela nomeia: o cento por cem, a caixa de
+  trinta dúzias por trezentos e sessenta, a dúzia por doze. São 14 produtos, e a
+  peça herda o nome mais específico entre os canais — "R$ por molho" para o
+  coentro, "R$ por espiga" para o milho verde.
+
+A divisão é aritmética da própria unidade, não estimativa. O que ela supõe é que
+a embalagem do atacado conta a mesma peça que o varejo vende: que o cento de
+coentro são 100 molhos, que o cento de alface são 100 pés. A nota metodológica da
+página declara essa premissa.
+
+**Onde a conversão não existe, o preço fica nulo em vez de ser suposto.** Quilo
+não vira peça, nem peça vira quilo, sem um peso por peça que a EMDAGRO não
+publica. Dois casos:
+
+- **Canal inteiro fora da unidade.** O quiabo é cotado por saco de 25 kg no
+  atacado e por cento no varejo: a unidade do produto é o quilo, e o varejo fica
+  com `convertivel: false` — existe no arquivo, não entra no gráfico.
+- **Trecho fora da unidade.** Nos sete produtos de unidade variável, só as
+  coletas na unidade do produto convertem. O campo `n_convertidas` diz quantas
+  são: 16 de 58 no alho, 3 de 58 no chuchu, 40 de 58 no melão.
+
+A lata, unidade do amendoim em parte da série, não é peça nem peso: é recipiente
+de conteúdo não declarado, e não converte para nada.
 
 ## Unidade que muda no meio da série
 
@@ -134,11 +152,12 @@ chuchu, melão espanhol e pimentão verde — a unidade de venda alterna ao long
 período, entre quilo e peça. O alho, por exemplo, vai de cabeça para quilo e volta
 seis vezes entre janeiro e julho.
 
-Nesses produtos o bloco do canal não publica média mensal nem conversão global:
-média de preço por cabeça com preço por quilo não significa nada. O que ele traz
-é `trechos`, um por intervalo de unidade constante, com as estatísticas de cada
-um. A página desenha um segmento por trecho, e a linha se interrompe a cada
-troca — ligar os pontos desenharia uma alta que não aconteceu.
+Nesses produtos só as coletas que estão na unidade do produto entram em
+`precos_referencia`; as outras ficam nulas. `trechos` guarda as faixas contínuas
+que sobraram, e a página desenha uma linha por faixa: a série se interrompe onde
+a comparação deixaria de valer, em vez de ligar por cima do buraco. As médias e
+estatísticas do canal são calculadas só sobre o que converteu, e o cartão diz
+quantas coletas são de quantas.
 
 ## Saltos abruptos no varejo
 

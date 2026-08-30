@@ -124,9 +124,12 @@ ROTULOS_CURTOS = {
     CANAL_AF: "Augusto Franco",
 }
 
-# Unidades de contagem: o boletim cota por peça, não por peso. Sem peso nominal
-# publicado pela fonte, converter para R$/kg seria inventar número. O valor é
-# (itens por unidade, nome da peça contada).
+# Unidades de contagem: o boletim cota por peça, não por peso. O valor é
+# (peças por unidade, nome da peça). Cento e caixa de dúzias são embalagens de
+# peças, e dividir por 100 ou por 360 é aritmética da própria unidade — não
+# estimativa. O que essa divisão assume é que o cento conta a mesma peça que o
+# varejo vende: 100 molhos de coentro, 100 pés de alface. A nota metodológica
+# declara essa premissa.
 UNIDADES_CONTAGEM = {
     "cento": (100, "unidade"),
     "cx 30 dz": (360, "unidade"),
@@ -138,8 +141,15 @@ UNIDADES_CONTAGEM = {
     "cab.": (1, "cabeça"),
     "molho": (1, "molho"),
     "espiga": (1, "espiga"),
-    "lata": (1, "lata"),
 }
+
+# A lata não é peça nem peso: é recipiente de conteúdo não declarado. Não
+# converte para nada, e o preço fica só na unidade de origem.
+UNIDADES_OPACAS = {"lata"}
+
+# Quando dois canais nomeiam a peça de formas diferentes, vale a mais específica:
+# "R$ por molho" diz mais ao leitor do que "R$ por unidade".
+PECAS_ESPECIFICAS = ("molho", "pé", "espiga", "cabeça")
 
 
 def slug(rotulo):
@@ -163,6 +173,8 @@ def analisar_unidade(unidade):
     unidade de origem e a página precisa dizer isso ao leitor.
     """
     chave = unidade.strip().lower()
+    if chave in UNIDADES_OPACAS:
+        return None, None, "opaca", None
     if chave in UNIDADES_CONTAGEM:
         itens, peca = UNIDADES_CONTAGEM[chave]
         return None, itens, "unidade", peca
@@ -204,13 +216,11 @@ def estatisticas(precos):
 
 
 def bloco_de_serie(datas, unidades, precos):
-    """Monta o bloco de um canal a partir dos preços na unidade de origem.
+    """Descreve a série de um canal na unidade em que o boletim a publica.
 
-    `unidades` traz a unidade de cada data. Quase sempre é uma só; em sete
-    produtos do varejo a unidade de venda muda no meio da série, e aí a série
-    deixa de ser uma série: vira trechos que não se comparam entre si. O bloco
-    guarda os trechos e não publica média nem conversão global, porque média de
-    preço por cabeça com preço por quilo não significa nada.
+    A conversão para a unidade de referência do produto acontece depois, em
+    converter_para_referencia(): ela depende dos outros canais, que este bloco
+    ainda não conhece.
     """
     distintas = []
     for u in unidades:
@@ -219,54 +229,113 @@ def bloco_de_serie(datas, unidades, precos):
     variou = len(set(unidades)) > 1
 
     bloco = OrderedDict()
+    bloco["unidade_origem"] = distintas[0] if not variou else " → ".join(distintas)
+    bloco["unidade_variou"] = variou
+    if variou:
+        bloco["unidades_por_data"] = list(unidades)
+    bloco["precos_unidade_origem"] = [arred(p) for p in precos]
+
     if not variou:
-        unidade = unidades[0]
-        fator, itens, tipo, peca = analisar_unidade(unidade)
-        bloco["unidade_origem"] = unidade
+        fator, itens, tipo, peca = analisar_unidade(unidades[0])
         bloco["tipo_unidade"] = tipo
         bloco["peca_contada"] = peca
         bloco["fator_conversao_kg"] = arred(fator) if fator else None
         bloco["itens_por_unidade"] = itens
-        bloco["unidade_variou"] = False
-        bloco["base_comparacao"] = "kg" if fator else "unidade:" + normalizar_nome(unidade)
-        bloco["precos_unidade_origem"] = [arred(p) for p in precos]
-        if fator:
-            em_kg = [arred(p / fator) for p in precos]
-            bloco["precos_rs_kg"] = em_kg
-            bloco["medias_mensais_rs_kg"] = medias_mensais(datas, em_kg)
-            bloco["estatisticas_rs_kg"] = estatisticas(em_kg)
+    else:
+        bloco["tipo_unidade"] = "mista"
+        bloco["peca_contada"] = None
+        bloco["fator_conversao_kg"] = None
+        bloco["itens_por_unidade"] = None
+
+    bloco["_datas"] = datas
+    bloco["_unidades"] = list(unidades)
+    return bloco
+
+
+def unidade_de_referencia(ficha, canais):
+    """Escolhe a unidade única em que o produto será publicado e comparado.
+
+    Peso ganha de contagem: R$/kg é o padrão do portal e é o que a maior parte
+    da série suporta. Só quando nenhum canal cota por peso — coco, coentro, ovo —
+    a referência passa a ser o preço por peça.
+    """
+    tem_peso = False
+    peca = None
+    for canal in canais:
+        bloco = ficha.get(canal)
+        if not bloco:
+            continue
+        for unidade in bloco["_unidades"]:
+            fator, _, tipo, nome = analisar_unidade(unidade)
+            if fator:
+                tem_peso = True
+            elif nome and (peca is None or (nome in PECAS_ESPECIFICAS and peca == "unidade")):
+                peca = nome
+
+    if tem_peso:
+        return OrderedDict([("tipo", "kg"), ("peca", None),
+                            ("sufixo", "/kg"), ("legenda", "R$ por quilo")])
+    peca = peca or "unidade"
+    return OrderedDict([("tipo", "peca"), ("peca", peca),
+                        ("sufixo", "/" + peca), ("legenda", "R$ por " + peca)])
+
+
+def converter_para_referencia(bloco, referencia):
+    """Reescreve a série do canal na unidade de referência do produto.
+
+    O preço de uma data vira null quando a unidade daquela data não converte:
+    quilo não vira peça sem peso por peça, e peça não vira quilo pelo mesmo
+    motivo. Preferimos o buraco à suposição — e é o buraco que faz a linha do
+    gráfico se interromper onde a comparação deixaria de valer.
+    """
+    valores = []
+    conversoes = []
+    for unidade, preco in zip(bloco["_unidades"], bloco["precos_unidade_origem"]):
+        fator, itens, tipo, _ = analisar_unidade(unidade)
+        if referencia["tipo"] == "kg":
+            valores.append(arred(preco / fator) if fator else None)
+            conversoes.append("÷ %g kg" % fator if fator else None)
         else:
-            bloco["precos_rs_kg"] = None
-            bloco["medias_mensais_unidade_origem"] = medias_mensais(datas, precos)
-            bloco["estatisticas_unidade_origem"] = estatisticas(precos)
-        return bloco
+            valores.append(arred(preco / itens) if itens else None)
+            conversoes.append(("÷ %d peças" % itens) if itens and itens > 1
+                              else ("igual" if itens else None))
 
-    bloco["unidade_origem"] = " → ".join(distintas)
-    bloco["tipo_unidade"] = "mista"
-    bloco["peca_contada"] = None
-    bloco["fator_conversao_kg"] = None
-    bloco["itens_por_unidade"] = None
-    bloco["unidade_variou"] = True
-    bloco["base_comparacao"] = "mista"
-    bloco["unidades_por_data"] = list(unidades)
-    bloco["precos_unidade_origem"] = [arred(p) for p in precos]
-    bloco["precos_rs_kg"] = None
+    bloco["precos_referencia"] = valores
+    bloco["conversoes"] = sorted({c for c in conversoes if c})
+    bloco["convertivel"] = any(v is not None for v in valores)
 
+    # Trechos contínuos de valor convertido: cada um vira uma linha no gráfico,
+    # e o corte entre eles marca onde a série muda de unidade.
     trechos = []
-    inicio = 0
-    for fim in range(1, len(unidades) + 1):
-        if fim == len(unidades) or unidades[fim] != unidades[inicio]:
-            fatia = precos[inicio:fim]
+    inicio = None
+    for i, valor in enumerate(valores + [None]):
+        if valor is not None and inicio is None:
+            inicio = i
+        elif valor is None and inicio is not None:
             trechos.append(OrderedDict([
-                ("unidade", unidades[inicio]),
-                ("inicio", datas[inicio]),
-                ("fim", datas[fim - 1]),
+                ("inicio", bloco["_datas"][inicio]),
+                ("fim", bloco["_datas"][i - 1]),
                 ("indice_inicio", inicio),
-                ("indice_fim", fim - 1),
-                ("estatisticas", estatisticas(fatia)),
+                ("indice_fim", i - 1),
+                ("unidade", bloco["_unidades"][inicio]),
+                ("estatisticas", estatisticas(valores[inicio:i])),
             ]))
-            inicio = fim
+            inicio = None
     bloco["trechos"] = trechos
+
+    if bloco["convertivel"]:
+        limpos = [v for v in valores if v is not None]
+        datas_limpas = [d for d, v in zip(bloco["_datas"], valores) if v is not None]
+        bloco["medias_mensais"] = medias_mensais(datas_limpas, limpos)
+        bloco["estatisticas"] = estatisticas(limpos)
+        bloco["n_convertidas"] = len(limpos)
+    else:
+        bloco["medias_mensais"] = None
+        bloco["estatisticas"] = None
+        bloco["n_convertidas"] = 0
+
+    del bloco["_datas"]
+    del bloco["_unidades"]
     return bloco
 
 
@@ -399,6 +468,16 @@ def main():
         unidade = origem["unidade_origem"].strip()
         produtos[chave][CANAL_AF] = bloco_de_serie(datas_af, [unidade] * len(datas_af), precos)
 
+    # Com todos os canais de cada produto na mão, escolhe a unidade única em que
+    # ele será publicado e reescreve cada canal nela.
+    canais_todos = (CANAL_ATACADO, CANAL_MC, CANAL_AF)
+    for ficha in produtos.values():
+        referencia = unidade_de_referencia(ficha, canais_todos)
+        ficha["unidade_referencia"] = referencia
+        for canal in canais_todos:
+            if canal in ficha:
+                converter_para_referencia(ficha[canal], referencia)
+
     produtos = OrderedDict(sorted(produtos.items(), key=lambda kv: normalizar_nome(kv[1]["label"])))
 
     canais = OrderedDict()
@@ -463,8 +542,9 @@ def main():
             ("unidades", "Preço na unidade de origem do boletim. A conversão para R$/kg usa o "
                          "peso nominal da embalagem. Produtos cotados por peça — cento, dúzia, "
                          "molho, pé, cabeça — ficam sem conversão: a fonte não publica peso por "
-                         "peça. Dois canais só entram no mesmo gráfico quando compartilham a "
-                         "unidade de comparação, declarada em base_comparacao."),
+                         "peça. Cada produto tem uma unidade de referência, em unidade_referencia, "
+                         "e todos os seus canais são publicados nela: onde a conversão não existe, "
+                         "o preço fica nulo em vez de ser suposto."),
             ("canais", canais),
             ("arquivos_de_origem", OrderedDict([
                 (CANAL_ATACADO, "dados/fontes/precos-atacado-ceasa-se-consolidado-v3.xlsx"),
@@ -481,6 +561,21 @@ def main():
         return sum(1 for p in produtos.values() if canal in p)
 
     print("%s: %d produtos" % (SAIDA.relative_to(RAIZ), len(produtos)))
+    referencias = {}
+    for ficha in produtos.values():
+        referencias[ficha["unidade_referencia"]["legenda"]] = referencias.get(
+            ficha["unidade_referencia"]["legenda"], 0) + 1
+    print("  unidades de referência: %s" % ", ".join(
+        "%s (%d)" % (k, v) for k, v in sorted(referencias.items())))
+    parciais = [(p["label"], c) for p in produtos.values() for c in canais_todos
+                if c in p and p[c]["n_convertidas"] < len(p[c]["precos_unidade_origem"])]
+    print("  canais com trecho fora da unidade de referência: %d" % len(parciais))
+    for rotulo, canal in parciais:
+        ficha = [p for p in produtos.values() if p["label"] == rotulo][0]
+        bloco = ficha[canal]
+        print("     %-22s %-24s %d de %d coletas · %s" % (
+            rotulo, canal, bloco["n_convertidas"], len(bloco["precos_unidade_origem"]),
+            bloco["unidade_origem"]))
     print("  atacado CEASA-SE      %2d produtos · %d coletas" % (conta(CANAL_ATACADO), len(datas_atacado)))
     print("  varejo Mercado Central %2d produtos · %d coletas" % (conta(CANAL_MC), len(datas_mc)))
     print("  varejo Augusto Franco  %2d produtos · %d coletas" % (conta(CANAL_AF), len(datas_af)))

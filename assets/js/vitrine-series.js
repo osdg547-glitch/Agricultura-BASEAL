@@ -107,7 +107,7 @@
       const atacado = ficha.atacado_ceasa;
       if (!atacado) return null;
 
-      const unidade = unidadeDoProduto(atacado);
+      const unidade = unidadeDoProduto(ficha);
       const valores = [];
       const datas = [];
       (atacado[unidade.campo] || []).forEach(function (v, i) {
@@ -148,18 +148,15 @@
       .filter(function (c) { return ficha[c]; });
   }
 
-  /* Produto cotado por peso vira R$/kg; produto cotado por cento ou por caixa
-     de dúzias fica na unidade do boletim, porque a fonte não publica peso por
-     peça e estimá-lo seria inventar número. */
-  function unidadeDoProduto(atacado) {
-    if (atacado.precos_rs_kg) {
-      return { campo: 'precos_rs_kg', sufixo: '/kg', legenda: 'R$ por quilo' };
-    }
-    const nome = atacado.unidade_origem.toLowerCase();
+  /* Cada produto tem uma unidade só, escolhida na importação e declarada em
+     unidade_referencia: quilo quando algum canal cota por peso, preço por peça
+     quando nenhum cota. Todos os canais são publicados nela. */
+  function unidadeDoProduto(ficha) {
+    const referencia = ficha.unidade_referencia;
     return {
-      campo: 'precos_unidade_origem',
-      sufixo: '/' + nome,
-      legenda: 'R$ por ' + nome
+      campo: 'precos_referencia',
+      sufixo: referencia.sufixo,
+      legenda: referencia.legenda
     };
   }
 
@@ -301,7 +298,7 @@
     el.eixoIni.textContent = mesAno(serie.datas[0]);
     el.eixoFim.textContent = mesAno(serie.datas[serie.datas.length - 1]);
 
-    el.nota.textContent = serie.unidade.campo === 'precos_rs_kg'
+    el.nota.textContent = serie.unidade.sufixo === '/kg'
       ? 'Linha tracejada: a primeira coleta, base da variação.'
       : 'Linha tracejada: a primeira coleta. Cotado por ' + serie.unidade.sufixo.slice(1)
         + ', sem conversão para quilo: a fonte não publica peso por peça.';

@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="../cobweb.css?v=20260830-1600">
+  <link rel="stylesheet" href="../cobweb.css?v=20260830-1650">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Produtos · CobWeb">
@@ -94,7 +94,7 @@
 
     <!-- Filtro em dois estágios -->
     <section aria-label="Escolha da série">
-      <div class="filtro" data-series-precos data-json="../dados/series-precos-se-2026.json?v=20260830-1600">
+      <div class="filtro" data-series-precos data-json="../dados/series-precos-se-2026.json?v=20260830-1650">
 
         <div class="filtro__etapa">
           <h2 class="filtro__titulo">
@@ -154,10 +154,13 @@
         <strong>Os três canais:</strong> o atacado do CEASA-SE é a cotação por embalagem no entreposto. O Mercado Central, oficialmente Mercado Maria Virgínia Leite Franco, aparece rotulado como varejo na fonte, mas pratica preços próximos ou abaixo do atacado: é canal híbrido, de atacarejo popular, e não proxy de supermercado. O Mercado Setorial do Augusto Franco, oficialmente Vereador Nilton Santos, é varejo de bairro, sistematicamente acima do híbrido. Comparar os três mostra o spread; tomá-los como três medidas da mesma coisa é erro de leitura.
       </p>
       <p class="method-note__text" style="margin-top:10px;">
-        <strong>Unidade:</strong> <span data-nota-unidade>o boletim cota por embalagem, e a conversão para R$/kg usa o peso nominal declarado.</span> Produtos cotados por peça — cento, dúzia, molho, pé, cabeça — ficam sem conversão, na unidade do boletim. Dois canais só entram no mesmo gráfico quando compartilham a unidade: comparar preço por cento com preço por molho exigiria supor quantas peças o cento traz, e a fonte não diz.
+        <strong>Unidade:</strong> cada produto é publicado numa unidade só, a mesma em todos os canais. Quando algum canal cota por peso, a unidade é o quilo, e o preço da embalagem é dividido pelo peso nominal dela. Quando nenhum cota por peso — coco, coentro, ovo —, a unidade é a peça, e a embalagem de contagem é dividida pelo número de peças que ela nomeia: o cento por cem, a caixa de trinta dúzias por trezentos e sessenta. Essa conta é aritmética da própria unidade, mas supõe que a embalagem do atacado conta a mesma peça que o varejo vende. <span data-nota-unidade></span>
       </p>
       <p class="method-note__text" style="margin-top:10px;">
-        <strong>Unidade que muda:</strong> em sete produtos do varejo — alface, alho, amendoim, caju, chuchu, melão espanhol e pimentão verde — a unidade de venda alterna ao longo do período, entre quilo e peça. O gráfico interrompe a linha a cada troca e não converte entre os trechos: a fonte não publica equivalência, e ligar preço por cabeça a preço por quilo desenharia uma alta que não aconteceu.
+        <strong>Onde a conversão não existe:</strong> quilo não vira peça, nem peça vira quilo, sem um peso por peça que a EMDAGRO não publica. O quiabo é o caso visível: o atacado cota por saco de 25 kg e o varejo por cento, então a série de varejo não entra no gráfico. Preferimos o buraco à suposição.
+      </p>
+      <p class="method-note__text" style="margin-top:10px;">
+        <strong>Unidade que muda:</strong> em sete produtos do varejo — alface, alho, amendoim, caju, chuchu, melão espanhol e pimentão verde — a unidade de venda alterna ao longo do período. Entram no gráfico só as coletas que estão na unidade do produto, e o cartão diz quantas de quantas são. A linha se interrompe no resto: ligar preço por cabeça a preço por quilo desenharia uma alta que não aconteceu.
       </p>
       <p class="method-note__text" style="margin-top:10px;">
         <strong>Junho de 2026:</strong> dois boletins do mês saíram com a coluna de nomes de produto reordenada sem que as colunas numéricas acompanhassem, e cada linha impressa exibia o preço de outro produto. Os valores das seis datas afetadas foram realinhados para a ordem padrão e conferidos contra o boletim íntegro de 2/9/11 de junho na data coberta pelos dois: coincidem em 54 de 54 produtos. É inferência verificada, não confirmação da fonte. A transcrição literal do que a EMDAGRO publicou está preservada na planilha de origem.
@@ -185,8 +188,8 @@
 
   <!-- Chart.js + scripts da página -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="../assets/js/series-precos.js?v=20260830-1600"></script>
-  <script src="../assets/js/nota-metodologica.js?v=20260830-1600"></script>
+  <script src="../assets/js/series-precos.js?v=20260830-1650"></script>
+  <script src="../assets/js/nota-metodologica.js?v=20260830-1650"></script>
 
 </body>
 </html>
