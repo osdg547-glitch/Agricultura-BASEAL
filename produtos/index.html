@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="../cobweb.css?v=20260828-2240">
+  <link rel="stylesheet" href="../cobweb.css?v=20260828-2302">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Produtos · CobWeb">
@@ -94,28 +94,24 @@
 
     <!-- Filtro em dois estágios -->
     <section aria-label="Escolha da série">
-      <div class="filtro" data-series-precos data-json="../dados/series-precos-se-2026.json?v=20260828-2240">
+      <div class="filtro" data-series-precos data-json="../dados/series-precos-se-2026.json?v=20260828-2302">
 
         <div class="filtro__etapa">
           <h2 class="filtro__titulo">
             <span class="filtro__num" aria-hidden="true">01</span>
             <span class="filtro__nome">Produto</span>
           </h2>
-          <p class="filtro__ajuda">Busque pelo nome ou percorra a lista. Onze produtos da cesta têm também os dois canais de varejo; o resto é atacado.</p>
+          <p class="filtro__ajuda" id="ajuda-produto">Digite o nome do produto, ou clique no campo para percorrer a lista inteira.</p>
 
-          <label class="sr-only" for="busca-produto">Buscar produto pelo nome</label>
-          <input class="filtro__busca" id="busca-produto" type="search" data-busca
-                 placeholder="buscar produto" autocomplete="off">
-
-          <div class="serie-toggle" data-grupos role="group" aria-label="Filtrar a lista de produtos">
-            <button type="button" class="serie-btn" data-grupo-filtro="todos" aria-pressed="true">todos</button>
-            <button type="button" class="serie-btn" data-grupo-filtro="vegetal" aria-pressed="false">origem vegetal</button>
-            <button type="button" class="serie-btn" data-grupo-filtro="animal" aria-pressed="false">origem animal</button>
-            <button type="button" class="serie-btn" data-grupo-filtro="varejo" aria-pressed="false">com varejo</button>
+          <label class="sr-only" for="busca-produto">Produto</label>
+          <div class="combo">
+            <input class="combo__campo" id="busca-produto" type="text" data-busca
+                   role="combobox" aria-expanded="false" aria-controls="lista-produtos"
+                   aria-autocomplete="list" aria-describedby="ajuda-produto"
+                   placeholder="buscar produto" autocomplete="off" spellcheck="false">
+            <ul class="combo__lista" id="lista-produtos" data-lista role="listbox"
+                aria-label="Produtos da série" hidden></ul>
           </div>
-
-          <div class="filtro__lista" data-lista role="group" aria-label="Produtos disponíveis"></div>
-          <p class="filtro__vazio" data-vazio hidden>Nenhum produto com esse nome na série.</p>
         </div>
 
         <div class="filtro__etapa">
@@ -133,7 +129,11 @@
     </section>
 
     <!-- Gráfico -->
-    <section aria-label="Evolução do preço no tempo">
+    <section aria-labelledby="titulo-serie">
+      <div class="serie-titulo">
+        <h2 class="section-title" style="margin:0;" id="titulo-serie" data-titulo-serie>Série de preço</h2>
+        <p class="serie-titulo__meta" data-subtitulo-serie></p>
+      </div>
       <div class="chart-container">
         <canvas data-grafico role="img"
                 aria-label="Série de preço do produto selecionado, nos canais selecionados.">
@@ -179,8 +179,8 @@
 
   <!-- Chart.js + scripts da página -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="../assets/js/series-precos.js?v=20260828-2240"></script>
-  <script src="../assets/js/nota-metodologica.js?v=20260828-2240"></script>
+  <script src="../assets/js/series-precos.js?v=20260828-2302"></script>
+  <script src="../assets/js/nota-metodologica.js?v=20260828-2302"></script>
 
 </body>
 </html>

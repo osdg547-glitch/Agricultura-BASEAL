@@ -495,43 +495,106 @@ a:hover { border-bottom-color: currentColor; }
   margin: 0 0 12px;
 }
 
-.filtro__busca {
+/* ------------------------------------------------------------
+   Campo com sugestões
+   ------------------------------------------------------------
+   Cinquenta e quatro produtos numa lista sempre aberta ocupam a tela
+   inteira antes de o leitor chegar ao gráfico. A lista passa a
+   aparecer sob demanda: ao focar o campo, ou conforme se digita.
+   ------------------------------------------------------------ */
+
+.combo {
+  position: relative;
+  max-width: 340px;
+}
+
+.combo__campo {
   font-family: var(--font-sans);
   font-size: 13px;
   width: 100%;
-  max-width: 320px;
-  padding: 7px 12px;
-  margin-bottom: 12px;
+  padding: 8px 12px;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm);
   background: var(--color-bg-card);
   color: var(--color-text);
 }
 
-.filtro__busca::placeholder { color: var(--color-text-tertiary); }
+.combo__campo::placeholder { color: var(--color-text-secondary); }
 
-.filtro__busca:focus-visible {
+.combo__campo:focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 1px;
   border-color: var(--color-brand);
 }
 
-/* A lista rola dentro da própria caixa: 54 produtos empurrariam o gráfico
-   para fora da tela se a página inteira crescesse com eles. */
-.filtro__lista {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  max-height: 168px;
+.combo__lista {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  max-height: 264px;
   overflow-y: auto;
-  padding: 2px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
 }
 
-.filtro__vazio {
+.combo__opcao {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+/* Um só destaque para o item sob o cursor e para o item sob o teclado: são
+   a mesma intenção, e duas ênfases competindo confundiriam qual vale. */
+.combo__opcao:hover,
+.combo__opcao.is-ativa {
+  background: var(--color-brand-soft);
+}
+
+.combo__opcao[aria-selected="true"] {
+  color: var(--color-brand-text);
+  font-weight: 500;
+}
+
+.combo__opcao__meta {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.combo__vazio {
+  padding: 6px 10px;
   font-family: var(--font-sans);
   font-size: 12px;
   color: var(--color-text-secondary);
-  margin: 0;
+}
+
+/* ------------------------------------------------------------
+   Título da série desenhada
+   ------------------------------------------------------------ */
+
+.serie-titulo {
+  margin-bottom: 16px;
+}
+
+.serie-titulo__meta {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin: 4px 0 0;
 }
 
 .filtro__aviso {

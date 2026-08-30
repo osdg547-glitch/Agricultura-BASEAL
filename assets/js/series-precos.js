@@ -20,9 +20,7 @@
 
   const el = {
     busca: painel.querySelector('[data-busca]'),
-    grupos: painel.querySelector('[data-grupos]'),
     lista: painel.querySelector('[data-lista]'),
-    vazio: painel.querySelector('[data-vazio]'),
     canais: painel.querySelector('[data-canais]'),
     aviso: painel.querySelector('[data-aviso]')
   };
@@ -88,7 +86,9 @@
   let grafico = null;
   let produtoAtivo = null;
   let canaisAtivos = [];
-  let grupoAtivo = 'todos';
+  let aberta = false;
+  let realcada = -1;      // índice da opção sob o teclado
+  let visiveis = [];      // chaves dos produtos que a busca deixou na lista
 
   fetch(painel.dataset.json)
     .then((r) => {
@@ -116,10 +116,7 @@
     canaisAtivos = inicial.canais;
 
     escreverResumo();
-    montarListaDeProdutos();
-    if (el.busca) el.busca.addEventListener('input', filtrarLista);
-    if (el.grupos) el.grupos.addEventListener('click', aoClicarGrupo);
-    if (el.lista) el.lista.addEventListener('click', aoClicarProduto);
+    ligarCombo();
     if (el.canais) el.canais.addEventListener('click', aoClicarCanal);
 
     desenhar();
@@ -175,77 +172,152 @@
   }
 
   /* ----------------------------------------------------------
-     Estágio 1 · produto
+     Estágio 1 · produto, num campo com sugestões
      ---------------------------------------------------------- */
 
-  function montarListaDeProdutos() {
-    if (!el.lista) return;
-    const fragmento = document.createDocumentFragment();
+  function ligarCombo() {
+    if (!el.busca || !el.lista) return;
+    el.busca.value = dados.produtos[produtoAtivo].label;
 
-    Object.keys(dados.produtos).forEach((chave) => {
-      const ficha = dados.produtos[chave];
-      const botao = document.createElement('button');
-      botao.type = 'button';
-      botao.className = 'serie-btn';
-      botao.dataset.produto = chave;
-      botao.dataset.grupo = ficha.grupo;
-      botao.dataset.varejo = canaisDoProduto(chave).length > 1 ? 'sim' : 'nao';
-      botao.dataset.nome = simplificar(ficha.label);
-      botao.textContent = ficha.label;
-      botao.setAttribute('aria-pressed', String(chave === produtoAtivo));
-      fragmento.appendChild(botao);
+    el.busca.addEventListener('input', function () {
+      abrir(el.busca.value);
     });
 
-    el.lista.appendChild(fragmento);
-    revelarProdutoAtivo();
+    /* Clicar no campo abre a lista inteira e seleciona o texto: quem veio
+       navegar vê os 54; quem veio digitar sobrescreve o nome atual. */
+    el.busca.addEventListener('focus', function () {
+      el.busca.select();
+      abrir('');
+    });
+
+    /* Clicar num campo que já está com o foco não dispara focus de novo. Sem
+       este par, reabrir a lista depois de um Escape exigiria sair do campo e
+       voltar. */
+    el.busca.addEventListener('click', function () {
+      if (!aberta) abrir('');
+    });
+
+    el.busca.addEventListener('keydown', aoTeclar);
+
+    /* mousedown, e não click: o clique só chegaria depois do blur, que já
+       teria fechado a lista e desfeito a escolha. */
+    el.lista.addEventListener('mousedown', function (evento) {
+      const opcao = evento.target.closest('[data-produto]');
+      if (!opcao) return;
+      evento.preventDefault();
+      escolher(opcao.dataset.produto);
+    });
+
+    document.addEventListener('click', function (evento) {
+      if (!painel.contains(evento.target)) fechar();
+    });
+
+    el.busca.addEventListener('blur', fechar);
   }
 
-  /* Chegando por link direto, o produto escolhido pode estar fora da parte
-     visível da lista. Rola a caixa, e só ela: scrollIntoView levaria a página
-     inteira junto. */
-  function revelarProdutoAtivo() {
-    const ativo = el.lista.querySelector('[aria-pressed="true"]');
-    if (!ativo) return;
-    const alvo = ativo.offsetTop - el.lista.offsetTop;
-    if (alvo + ativo.offsetHeight > el.lista.clientHeight) {
-      el.lista.scrollTop = alvo - (el.lista.clientHeight - ativo.offsetHeight) / 2;
+  function abrir(termo) {
+    const busca = simplificar(termo);
+    const rotuloAtual = simplificar(dados.produtos[produtoAtivo].label);
+
+    /* Campo intocado desde a última escolha lista tudo: o nome que está lá é
+       rótulo do estado, não busca que o leitor acabou de digitar. */
+    const filtrar = busca && busca !== rotuloAtual;
+    const posicao = (chave) => simplificar(dados.produtos[chave].label).indexOf(busca);
+
+    visiveis = Object.keys(dados.produtos).filter((chave) => !filtrar || posicao(chave) !== -1);
+
+    /* Quem começa pelo termo vem primeiro: buscando "co", coco e coentro
+       interessam mais do que amendoim com casca cozido. Dentro de cada grupo
+       a ordem alfabética do arquivo se mantém. */
+    if (filtrar) {
+      visiveis.sort((a, b) => (posicao(a) === 0 ? 0 : 1) - (posicao(b) === 0 ? 0 : 1));
+    }
+
+    el.lista.innerHTML = '';
+
+    if (!visiveis.length) {
+      const vazio = document.createElement('li');
+      vazio.className = 'combo__vazio';
+      vazio.textContent = 'Nenhum produto com esse nome na série.';
+      el.lista.appendChild(vazio);
+    } else {
+      visiveis.forEach((chave, indice) => {
+        const ficha = dados.produtos[chave];
+        const canais = canaisDoProduto(chave).length;
+        const opcao = document.createElement('li');
+        opcao.className = 'combo__opcao';
+        opcao.id = 'opcao-' + chave;
+        opcao.setAttribute('role', 'option');
+        opcao.setAttribute('aria-selected', String(chave === produtoAtivo));
+        opcao.dataset.produto = chave;
+        opcao.dataset.indice = String(indice);
+        opcao.innerHTML = '<span>' + ficha.label + '</span>'
+          + '<span class="combo__opcao__meta">' + (canais > 1 ? canais + ' canais' : 'atacado') + '</span>';
+        el.lista.appendChild(opcao);
+      });
+    }
+
+    el.lista.hidden = false;
+    el.busca.setAttribute('aria-expanded', 'true');
+    aberta = true;
+    realcar(visiveis.indexOf(produtoAtivo));
+  }
+
+  function fechar() {
+    if (!aberta) return;
+    el.lista.hidden = true;
+    el.busca.setAttribute('aria-expanded', 'false');
+    el.busca.removeAttribute('aria-activedescendant');
+    /* O campo volta a mostrar o produto desenhado: busca abandonada no meio
+       não pode deixar o rótulo dizendo uma coisa e o gráfico outra. */
+    el.busca.value = dados.produtos[produtoAtivo].label;
+    aberta = false;
+    realcada = -1;
+  }
+
+  function realcar(indice) {
+    const opcoes = el.lista.querySelectorAll('[data-produto]');
+    if (!opcoes.length) return;
+    realcada = Math.max(0, Math.min(indice, opcoes.length - 1));
+
+    opcoes.forEach((opcao, i) => opcao.classList.toggle('is-ativa', i === realcada));
+    const ativa = opcoes[realcada];
+    el.busca.setAttribute('aria-activedescendant', ativa.id);
+
+    /* Rola só a caixa da lista, nunca a página. */
+    const topo = ativa.offsetTop - el.lista.offsetTop;
+    if (topo < el.lista.scrollTop) el.lista.scrollTop = topo;
+    else if (topo + ativa.offsetHeight > el.lista.scrollTop + el.lista.clientHeight) {
+      el.lista.scrollTop = topo + ativa.offsetHeight - el.lista.clientHeight;
     }
   }
 
-  function filtrarLista() {
-    const termo = simplificar(el.busca ? el.busca.value : '');
-    let visiveis = 0;
+  function aoTeclar(evento) {
+    const tecla = evento.key;
 
-    Array.prototype.forEach.call(el.lista.children, (botao) => {
-      const casaNome = !termo || botao.dataset.nome.indexOf(termo) !== -1;
-      const casaGrupo = grupoAtivo === 'todos'
-        || (grupoAtivo === 'varejo' ? botao.dataset.varejo === 'sim' : botao.dataset.grupo === grupoAtivo);
-      const mostrar = casaNome && casaGrupo;
-      botao.hidden = !mostrar;
-      if (mostrar) visiveis++;
-    });
-
-    if (el.vazio) el.vazio.hidden = visiveis > 0;
+    if (tecla === 'ArrowDown' || tecla === 'ArrowUp') {
+      evento.preventDefault();
+      if (!aberta) return abrir('');
+      return realcar(realcada + (tecla === 'ArrowDown' ? 1 : -1));
+    }
+    if (tecla === 'Home' && aberta) { evento.preventDefault(); return realcar(0); }
+    if (tecla === 'End' && aberta) { evento.preventDefault(); return realcar(visiveis.length - 1); }
+    if (tecla === 'Enter' && aberta && visiveis[realcada]) {
+      evento.preventDefault();
+      return escolher(visiveis[realcada]);
+    }
+    if (tecla === 'Escape' && aberta) {
+      evento.preventDefault();
+      return fechar();
+    }
   }
 
-  function aoClicarGrupo(evento) {
-    const botao = evento.target.closest('[data-grupo-filtro]');
-    if (!botao) return;
-    grupoAtivo = botao.dataset.grupoFiltro;
-    Array.prototype.forEach.call(el.grupos.querySelectorAll('[data-grupo-filtro]'), (b) => {
-      b.setAttribute('aria-pressed', String(b === botao));
-    });
-    filtrarLista();
-  }
+  function escolher(chave) {
+    fechar();
+    if (chave === produtoAtivo) return;
 
-  function aoClicarProduto(evento) {
-    const botao = evento.target.closest('[data-produto]');
-    if (!botao || botao.dataset.produto === produtoAtivo) return;
-
-    produtoAtivo = botao.dataset.produto;
-    Array.prototype.forEach.call(el.lista.children, (b) => {
-      b.setAttribute('aria-pressed', String(b.dataset.produto === produtoAtivo));
-    });
+    produtoAtivo = chave;
+    el.busca.value = dados.produtos[chave].label;
 
     /* Troca de produto preserva os canais que o novo produto também tem; os
        que ele não tem saem da seleção em vez de virar linha vazia. */
@@ -314,11 +386,26 @@
     const ficha = dados.produtos[produtoAtivo];
     const unidade = unidadeDoProduto(ficha);
 
+    escreverTitulo(ficha, unidade);
     desenharGrafico(ficha, unidade);
     desenharCartoes(ficha, unidade);
     escreverNotaDeUnidade(ficha, unidade);
     anunciar(ficha, unidade);
     escreverEndereco();
+  }
+
+  /* Sem a lista de produtos sempre aberta, é o título que diz o que está
+     desenhado — e ele descreve a série, não o produto em abstrato. */
+  function escreverTitulo(ficha, unidade) {
+    const titulo = document.querySelector('[data-titulo-serie]');
+    const meta = document.querySelector('[data-subtitulo-serie]');
+    if (titulo) titulo.textContent = ficha.label;
+    if (!meta) return;
+
+    const nomes = CANAIS.filter((c) => canaisAtivos.indexOf(c.chave) !== -1)
+      .map((c) => dados.meta.canais[c.chave].label_curto || dados.meta.canais[c.chave].label);
+    meta.textContent = unidade.legenda + ' · ' + nomes.join(', ') + ' · '
+      + janelaLegivel(janelaDosCanais());
   }
 
   /* Produto cotado por peso vira R$/kg; produto cotado por cento ou por caixa
