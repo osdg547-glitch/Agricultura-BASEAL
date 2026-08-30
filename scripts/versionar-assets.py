@@ -24,7 +24,7 @@ RAIZ = pathlib.Path(__file__).resolve().parent.parent
 # Só assets locais: a folha de estilo, os scripts e os JSON de dados lidos por
 # fetch. Fontes e Chart.js vêm de CDN e já têm versão no próprio caminho.
 ALVO = re.compile(
-    r'((?:href|src|data-fonte|data-sparklines|data-vitrine)="(?:\.\./)*'
+    r'((?:href|src|data-fonte|data-sparklines|data-json)="(?:\.\./)*'
     r'(?:cobweb\.css|assets/js/[\w-]+\.js|dados/[\w-]+\.json))(?:\?v=[^"]*)?"')
 
 

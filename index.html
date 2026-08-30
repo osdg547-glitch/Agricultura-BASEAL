@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CobWeb · mercados do hortifrúti em Sergipe</title>
-  <meta name="description" content="Portal editorial de preços, produção e comércio exterior do hortifrúti sergipano. Onze séries de preço no atacado de Aracaju, a produção município a município e as exportações do estado.">
+  <meta name="description" content="Portal editorial de preços, produção e comércio exterior do hortifrúti sergipano. As séries de preço do boletim EMDAGRO no atacado de Aracaju, a produção município a município e as exportações do estado.">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
@@ -15,11 +15,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="cobweb.css?v=20260828-2213">
+  <link rel="stylesheet" href="cobweb.css?v=20260830-0051">
 
   <!-- Open Graph -->
   <meta property="og:title" content="CobWeb · mercados do hortifrúti em Sergipe">
-  <meta property="og:description" content="Onze séries de preço no atacado de Aracaju, a produção município a município e as exportações do estado. Dados públicos organizados e comentados.">
+  <meta property="og:description" content="As séries de preço do boletim EMDAGRO no atacado de Aracaju, a produção município a município e as exportações do estado. Dados públicos organizados e comentados.">
   <meta property="og:type" content="website">
 
   <style>
@@ -205,12 +205,12 @@
       position: relative;
       overflow: hidden;
       /* A cor da tendência vale para linha, área e ponto do gráfico */
-      --serie-cor: var(--color-serie-estavel);
+      --serie-cor: var(--serie-estavel);
     }
 
-    .painel--alta    { --serie-cor: var(--color-serie-alta); }
-    .painel--baixa   { --serie-cor: var(--color-serie-baixa); }
-    .painel--estavel { --serie-cor: var(--color-serie-estavel); }
+    .painel--alta    { --serie-cor: var(--serie-alta); }
+    .painel--baixa   { --serie-cor: var(--serie-baixa); }
+    .painel--estavel { --serie-cor: var(--serie-estavel); }
 
     /* Régua de tempo: mostra quanto falta para a próxima série entrar */
     .painel::after {
@@ -306,66 +306,54 @@
       margin: 10px 0 0;
     }
 
-    .painel__rodape {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 16px;
-      margin-top: 10px;
-    }
-
     .painel__link {
       font-size: 12px;
       color: var(--color-brand-text);
     }
 
-    .painel__pausa {
+    /* ---------- controles da vitrine ---------- */
+
+    .painel__rodape {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .painel__controles {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .painel__posicao {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      font-variant-numeric: tabular-nums;
+      margin-right: 4px;
+    }
+
+    .painel__botao {
       font-family: var(--font-sans);
       font-size: 11px;
+      line-height: 1.4;
       color: var(--color-text-secondary);
       background: transparent;
       border: 1px solid var(--color-border-strong);
       border-radius: var(--radius-sm);
-      padding: 3px 10px;
+      padding: 3px 8px;
+      min-width: 26px;
       cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
     }
 
-    .painel__pausa:hover {
+    .painel__botao--pausa { padding: 3px 10px; }
+
+    .painel__botao:hover {
       color: var(--color-text);
       border-color: var(--color-text-secondary);
-    }
-
-    /* ---------- lista das onze fichas ---------- */
-
-    .vitrine__chips {
-      grid-column: 1 / -1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 24px;
-      border-top: 1px solid var(--color-border);
-      padding-top: 16px;
-    }
-
-    .chip-serie {
-      font-size: 12px;
-      color: var(--color-text-secondary);
-      text-transform: lowercase;
-      border: 1px solid var(--color-border);
-      border-radius: 999px;
-      padding: 4px 12px;
-      transition: color 0.15s, border-color 0.15s, background 0.15s;
-    }
-
-    .chip-serie:hover {
-      color: var(--color-text);
-      border-color: var(--color-text-secondary);
-    }
-
-    .chip-serie[aria-current="true"] {
-      color: var(--color-brand-text);
-      border-color: var(--color-brand);
-      background: var(--color-brand-soft);
     }
 
     /* ---------- grade de ensaios ---------- */
@@ -448,8 +436,7 @@
     /* ---------- foco visível ---------- */
 
     .sumario__item:focus-visible,
-    .chip-serie:focus-visible,
-    .painel__pausa:focus-visible,
+    .painel__botao:focus-visible,
     .ensaio:focus-visible {
       outline: 2px solid var(--color-brand);
       outline-offset: -2px;
@@ -509,6 +496,7 @@
       </a>
       <nav class="site-nav" aria-label="Navegação principal">
         <a href="." class="is-active">home</a>
+        <a href="produtos/">produtos</a>
         <a href="servicos/">serviços</a>
         <a href="panoramas/">panoramas</a>
         <a href="sobre/">sobre</a>
@@ -534,11 +522,11 @@
 
       <nav class="sumario" aria-label="Sumário do portal">
 
-        <a href="panoramas/#internas" class="sumario__item">
+        <a href="produtos/" class="sumario__item">
           <span class="sumario__num" aria-hidden="true">01</span>
           <span>
             <span class="sumario__nome">Mercado interno</span>
-            <span class="sumario__meta">11 produtos em três canais de Aracaju · jan a mar de 2026</span>
+            <span class="sumario__meta"><span data-resumo="produtos">54</span> produtos no atacado de Aracaju, <span data-resumo="varejo">11</span> deles também no varejo · <span data-resumo="janela">janeiro a julho de 2026</span></span>
           </span>
         </a>
 
@@ -573,110 +561,108 @@
     <div class="meta-strip">
       <span class="meta-strip__item">
         <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
-        janela de preços: jan a mar de 2026
+        janela de preços: <span data-resumo="janela">janeiro a julho de 2026</span>
       </span>
       <span class="meta-strip__item">
         <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 14l4-5 3 3 4-6"/></svg>
-        22 coletas no atacado CEASA-SE
+        <span data-resumo="coletas">48</span> coletas no atacado CEASA-SE
       </span>
     </div>
 
     <!-- ============================================================
          Vitrine — o que a série é, e uma série de cada vez
          ============================================================
-         O painel da direita troca de produto a cada cinco segundos.
-         A troca para quando o leitor sobrevoa ou tabula a vitrine, e
-         o botão de pausa a desliga de vez; com prefers-reduced-motion
-         a vitrine nasce parada. Sem JavaScript o leitor ainda vê a
-         série do tomate desenhada e os onze links das fichas.
+         O painel da direita percorre as séries do atacado, uma a
+         cada cinco segundos, e cada uma abre na página de produtos
+         pelo endereço ?p=chave. A troca para quando o leitor
+         sobrevoa ou tabula a vitrine, os botões de anterior e
+         próxima a desligam de vez, e com prefers-reduced-motion a
+         vitrine nasce parada.
+
+         Nenhum número aqui é escrito à mão: contagens, janela,
+         unidade e variação saem do JSON, com as convenções da
+         página de produtos (variação contra a primeira coleta,
+         produto cotado por cento mantido na unidade do boletim).
+         O HTML carrega a primeira série já desenhada, para que a
+         home diga alguma coisa antes do JavaScript rodar.
          ============================================================ -->
     <section class="bloco" aria-label="Séries de preço no atacado">
 
       <div class="bloco__header">
-        <h2 class="section-title" style="margin: 0;">O trimestre em onze séries</h2>
-        <p class="bloco__desc">Preço da última coleta no atacado CEASA-SE e variação sobre a média de janeiro, uma série por vez.</p>
+        <h2 class="section-title" style="margin: 0;">As séries de preço, uma por vez</h2>
+        <p class="bloco__desc">Preço da última coleta no atacado CEASA-SE e variação contra a primeira coleta da janela.</p>
       </div>
 
-      <div class="vitrine" data-vitrine="dados/precos-emdagro-q1-2026.json?v=20260828-2213">
+      <div class="vitrine" data-vitrine data-json="dados/series-precos-se-2026.json?v=20260830-0051">
 
         <div class="vitrine__texto">
-          <p>Toda semana a EMDAGRO publica o boletim de preços do hortifrúti em Aracaju. Reunimos aqui as 22 coletas do atacado do CEASA-SE entre janeiro e março de 2026, convertemos os preços de caixa e saco para reais por quilo e organizamos onze séries comparáveis entre si.</p>
-          <p>Ao lado, cada uma delas passa por vez: o preço da última coleta de março, a variação sobre a média de janeiro e o desenho do trimestre inteiro. A ficha de cada produto traz a mesma série ao lado dos dois canais de varejo pesquisados.</p>
+          <p>A EMDAGRO publica, de duas a três vezes por semana, o boletim de preços médios praticados em Aracaju. É a única série pública, regular e nomeada por produto que existe para a praça — e é dela que sai tudo o que este portal diz sobre preço interno.</p>
+          <p>Ao lado, cada produto do boletim passa por vez: o preço da última coleta, a variação contra a primeira e o desenho da janela inteira no atacado do CEASA-SE. Clique para abrir a série na página de produtos, onde ela pode ser comparada com os dois pontos de varejo.</p>
 
           <dl class="vitrine__fatos">
             <div class="vitrine__fato">
-              <dt>produtos acompanhados</dt>
-              <dd>11</dd>
+              <dt>produtos no boletim</dt>
+              <dd data-resumo="produtos">54</dd>
             </div>
             <div class="vitrine__fato">
               <dt>coletas no atacado</dt>
-              <dd>22</dd>
+              <dd data-resumo="coletas">48</dd>
             </div>
             <div class="vitrine__fato">
-              <dt>canais em Aracaju</dt>
-              <dd>3</dd>
+              <dt>produtos com varejo</dt>
+              <dd data-resumo="varejo">11</dd>
             </div>
             <div class="vitrine__fato">
               <dt>janela</dt>
-              <dd>jan a mar de 2026</dd>
+              <dd data-resumo="janela">janeiro a julho de 2026</dd>
             </div>
           </dl>
 
-          <a href="panoramas/#internas" class="vitrine__cta">ver atacado e varejo lado a lado &rarr;</a>
+          <a href="produtos/" class="vitrine__cta">escolher produto e canais &rarr;</a>
         </div>
 
         <figure class="painel painel--alta" data-painel>
 
           <div class="painel__conteudo">
             <div class="painel__topo">
-              <span class="painel__nome" data-painel-nome>tomate</span>
-              <span class="painel__delta delta-up" data-painel-delta>+114%</span>
+              <span class="painel__nome" data-painel-nome>acerola</span>
+              <span class="painel__delta delta-up" data-painel-delta>+100%</span>
             </div>
 
-            <div class="painel__preco" data-painel-preco>R$&nbsp;6,00<span class="painel__unid">/kg</span></div>
-            <div class="painel__base">26/mar/2026 · última coleta · vs. média de jan/2026</div>
+            <div class="painel__preco" data-painel-preco>R$&nbsp;5,00<span class="painel__unid">/kg</span></div>
+            <div class="painel__base" data-painel-base>21/jul/2026 · R$ por quilo · vs. primeira coleta</div>
 
             <svg class="painel__grafico" data-painel-grafico viewBox="0 0 480 220" role="img"
-                 aria-label="Série de preço de tomate no atacado do CEASA-SE, de janeiro a março de 2026: alta de 114% sobre a média de janeiro, de R$ 2,80 para R$ 6,00 por quilo na última coleta.">
-              <path class="spark__area" d="M 10.0,202 L 10.0,202.0 L 31.9,202.0 L 53.8,202.0 L 75.7,202.0 L 97.6,202.0 L 119.5,202.0 L 141.4,202.0 L 163.3,202.0 L 185.2,202.0 L 207.1,202.0 L 229.0,202.0 L 251.0,133.0 L 272.9,133.0 L 294.8,133.0 L 316.7,133.0 L 338.6,87.0 L 360.5,18.0 L 382.4,18.0 L 404.3,18.0 L 426.2,87.0 L 448.1,87.0 L 470.0,18.0 L 470.0,202 Z"/>
+                 aria-label="Série de preço de acerola no atacado do CEASA-SE, janeiro a julho de 2026: alta de 100% contra a primeira coleta, de R$ 2,50 para R$ 5,00 em R$ por quilo.">
+              <path class="spark__area" d="M 10.0,202 L 10.0,202.0 L 19.8,202.0 L 29.6,202.0 L 39.4,202.0 L 49.1,202.0 L 58.9,202.0 L 68.7,202.0 L 78.5,202.0 L 88.3,202.0 L 98.1,202.0 L 107.9,202.0 L 117.7,202.0 L 127.4,202.0 L 137.2,202.0 L 147.0,128.4 L 156.8,128.4 L 166.6,128.4 L 176.4,128.4 L 186.2,128.4 L 196.0,128.4 L 205.7,128.4 L 215.5,128.4 L 225.3,110.0 L 235.1,110.0 L 244.9,110.0 L 254.7,110.0 L 264.5,18.0 L 274.3,18.0 L 284.0,18.0 L 293.8,18.0 L 303.6,18.0 L 313.4,18.0 L 323.2,18.0 L 333.0,18.0 L 342.8,18.0 L 352.6,18.0 L 362.3,18.0 L 372.1,18.0 L 381.9,18.0 L 391.7,18.0 L 401.5,18.0 L 411.3,18.0 L 421.1,18.0 L 430.9,18.0 L 440.6,18.0 L 450.4,18.0 L 460.2,18.0 L 470.0,18.0 L 470.0,202 Z"/>
               <line class="spark__ref" x1="10" y1="202.0" x2="470" y2="202.0"/>
-              <polyline class="spark__linha" points="10.0,202.0 31.9,202.0 53.8,202.0 75.7,202.0 97.6,202.0 119.5,202.0 141.4,202.0 163.3,202.0 185.2,202.0 207.1,202.0 229.0,202.0 251.0,133.0 272.9,133.0 294.8,133.0 316.7,133.0 338.6,87.0 360.5,18.0 382.4,18.0 404.3,18.0 426.2,87.0 448.1,87.0 470.0,18.0"/>
+              <polyline class="spark__linha" points="10.0,202.0 19.8,202.0 29.6,202.0 39.4,202.0 49.1,202.0 58.9,202.0 68.7,202.0 78.5,202.0 88.3,202.0 98.1,202.0 107.9,202.0 117.7,202.0 127.4,202.0 137.2,202.0 147.0,128.4 156.8,128.4 166.6,128.4 176.4,128.4 186.2,128.4 196.0,128.4 205.7,128.4 215.5,128.4 225.3,110.0 235.1,110.0 244.9,110.0 254.7,110.0 264.5,18.0 274.3,18.0 284.0,18.0 293.8,18.0 303.6,18.0 313.4,18.0 323.2,18.0 333.0,18.0 342.8,18.0 352.6,18.0 362.3,18.0 372.1,18.0 381.9,18.0 391.7,18.0 401.5,18.0 411.3,18.0 421.1,18.0 430.9,18.0 440.6,18.0 450.4,18.0 460.2,18.0 470.0,18.0"/>
               <circle class="spark__ponto" cx="470.0" cy="18.0" r="4"/>
             </svg>
 
             <div class="painel__eixo">
-              <span>jan de 2026</span>
-              <span>mar de 2026</span>
+              <span data-painel-eixo-inicio>jan de 2026</span>
+              <span data-painel-eixo-fim>jul de 2026</span>
             </div>
 
-            <p class="painel__nota">
-              Linha tracejada: a média de janeiro, base da variação.
-              <span class="sr-only" data-painel-resumo>Mínimo de R$ 2,80 e máximo de R$ 6,00 por quilo nas 22 coletas do trimestre.</span>
-            </p>
+            <p class="painel__nota" data-painel-nota>Linha tracejada: a primeira coleta, base da variação.</p>
+            <p class="sr-only" data-painel-resumo>Mínimo de R$ 2,50 e máximo de R$ 5,00 em 48 coletas.</p>
 
             <div class="painel__rodape">
-              <a class="painel__link" data-painel-link href="produtos/tomate/">ver a ficha de <span data-painel-link-nome>tomate</span> &rarr;</a>
-              <button type="button" class="painel__pausa" data-painel-pausa aria-pressed="false"
-                      aria-label="Pausar a troca automática de série">pausar</button>
+              <a class="painel__link" data-painel-link href="produtos/?p=acerola">abrir a série de <span data-painel-link-nome>acerola</span> &rarr;</a>
+
+              <div class="painel__controles">
+                <span class="painel__posicao" data-painel-posicao>4 de 54</span>
+                <button type="button" class="painel__botao" data-painel-anterior aria-label="Série anterior">&larr;</button>
+                <button type="button" class="painel__botao" data-painel-proxima aria-label="Próxima série">&rarr;</button>
+                <button type="button" class="painel__botao painel__botao--pausa" data-painel-pausa aria-pressed="false"
+                        aria-label="Pausar a troca automática de série">pausar</button>
+              </div>
             </div>
           </div>
 
-          <figcaption class="sr-only">Painel que alterna as onze séries de preço no atacado, uma a cada cinco segundos. Use a lista de produtos abaixo para escolher uma série, ou o botão de pausa para interromper a troca.</figcaption>
+          <figcaption class="sr-only">Painel que alterna as séries de preço no atacado, uma a cada cinco segundos. Use os botões de série anterior e próxima para escolher uma, o botão de pausa para interromper a troca, ou a página de produtos para buscar um produto pelo nome.</figcaption>
         </figure>
-
-        <nav class="vitrine__chips" data-vitrine-chips aria-label="As onze séries acompanhadas">
-          <a href="produtos/tomate/" class="chip-serie" data-produto="tomate" aria-current="true">tomate</a>
-          <a href="produtos/inhame-da-costa/" class="chip-serie" data-produto="inhame_da_costa">inhame da costa</a>
-          <a href="produtos/mamao-hawai/" class="chip-serie" data-produto="mamao_hawai">mamão hawai</a>
-          <a href="produtos/cenoura/" class="chip-serie" data-produto="cenoura">cenoura</a>
-          <a href="produtos/acerola/" class="chip-serie" data-produto="acerola">acerola</a>
-          <a href="produtos/repolho-verde/" class="chip-serie" data-produto="repolho_verde">repolho verde</a>
-          <a href="produtos/batata-lisa/" class="chip-serie" data-produto="batata_lisa">batata lisa</a>
-          <a href="produtos/cebola-roxa/" class="chip-serie" data-produto="cebola_roxa">cebola roxa</a>
-          <a href="produtos/macaxeira/" class="chip-serie" data-produto="macaxeira">macaxeira</a>
-          <a href="produtos/manga-tommy/" class="chip-serie" data-produto="manga_tommy">manga tommy</a>
-          <a href="produtos/limao-taiti/" class="chip-serie" data-produto="limao_taiti">limão taiti</a>
-        </nav>
 
       </div>
     </section>
@@ -727,6 +713,6 @@
   </footer>
 
   <!-- Vitrine giratória das séries de preço -->
-  <script src="assets/js/vitrine-series.js?v=20260828-2213"></script>
+  <script src="assets/js/vitrine-series.js?v=20260830-0051"></script>
 </body>
 </html>

@@ -1,14 +1,15 @@
 /* ============================================================
    cobweb · vitrine das séries de preço
    ============================================================
-   Um painel só, que troca de produto a cada cinco segundos:
-   nome, preço no fim do trimestre, variação desde janeiro e o
-   desenho da série inteira no atacado do CEASA-SE.
+   A home mostra uma série por vez: o painel troca de produto a
+   cada cinco segundos e percorre as 54 séries do atacado, com o
+   link de cada uma para a página de produtos.
 
-   A ordem e os endereços saem das próprias fichas listadas em
-   [data-vitrine-chips] — o HTML continua sendo a fonte da lista,
-   e sem JavaScript o leitor ainda vê a primeira série e todos os
-   onze links.
+   Tudo — nome, unidade, preço, variação, janela, contagens do
+   cabeçalho — sai do JSON, com as mesmas convenções do explorador
+   em produtos/: variação contra a primeira coleta, produto cotado
+   por cento ou por caixa de dúzias mantido na unidade do boletim.
+   Atualizar a série não pede reescrever a home.
 
    Cores: nenhuma cor aqui. O painel recebe a classe de tendência
    (painel--alta, --baixa, --estavel) e o cobweb.css resolve o
@@ -25,75 +26,170 @@
   if (!vitrine) return;
 
   const painel = vitrine.querySelector('[data-painel]');
-  const chips = Array.prototype.slice.call(
-    vitrine.querySelectorAll('[data-vitrine-chips] [data-produto]')
-  );
-  if (!painel || !chips.length) return;
+  if (!painel) return;
 
   const el = {
-    nome:     painel.querySelector('[data-painel-nome]'),
-    delta:    painel.querySelector('[data-painel-delta]'),
-    preco:    painel.querySelector('[data-painel-preco]'),
-    grafico:  painel.querySelector('[data-painel-grafico]'),
-    link:     painel.querySelector('[data-painel-link]'),
-    linkNome: painel.querySelector('[data-painel-link-nome]'),
-    pausa:    painel.querySelector('[data-painel-pausa]'),
-    resumo:   painel.querySelector('[data-painel-resumo]')
+    nome:      painel.querySelector('[data-painel-nome]'),
+    delta:     painel.querySelector('[data-painel-delta]'),
+    preco:     painel.querySelector('[data-painel-preco]'),
+    base:      painel.querySelector('[data-painel-base]'),
+    grafico:   painel.querySelector('[data-painel-grafico]'),
+    eixoIni:   painel.querySelector('[data-painel-eixo-inicio]'),
+    eixoFim:   painel.querySelector('[data-painel-eixo-fim]'),
+    nota:      painel.querySelector('[data-painel-nota]'),
+    resumo:    painel.querySelector('[data-painel-resumo]'),
+    link:      painel.querySelector('[data-painel-link]'),
+    linkNome:  painel.querySelector('[data-painel-link-nome]'),
+    anterior:  painel.querySelector('[data-painel-anterior]'),
+    proxima:   painel.querySelector('[data-painel-proxima]'),
+    pausa:     painel.querySelector('[data-painel-pausa]'),
+    posicao:   painel.querySelector('[data-painel-posicao]')
   };
 
   const menosMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const moeda = new Intl.NumberFormat('pt-BR', {
-    style: 'currency', currency: 'BRL', minimumFractionDigits: 2
-  });
+  const MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+    'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+  const MESES_CURTOS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun',
+    'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 
-  let series = [];      /* {chave, rotulo, href, precos} na ordem dos chips */
+  const moeda = function (v) {
+    return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
+  const dataLonga = function (iso) {
+    const p = iso.split('-');
+    return parseInt(p[2], 10) + '/' + MESES_CURTOS[parseInt(p[1], 10) - 1] + '/' + p[0];
+  };
+
+  const mesAno = function (iso) {
+    const p = iso.split('-');
+    return MESES_CURTOS[parseInt(p[1], 10) - 1] + ' de ' + p[0];
+  };
+
+  /* '2026-01 a 2026-07' → 'janeiro a julho de 2026' — mesma leitura da
+     página de produtos. */
+  const janelaLegivel = function (janela) {
+    const extremos = String(janela).split(' a ');
+    if (extremos.length !== 2) return janela;
+    const ini = extremos[0].split('-'), fim = extremos[1].split('-');
+    const mes = function (p) { return MESES[parseInt(p[1], 10) - 1]; };
+    return ini[0] === fim[0]
+      ? mes(ini) + ' a ' + mes(fim) + ' de ' + fim[0]
+      : mes(ini) + ' de ' + ini[0] + ' a ' + mes(fim) + ' de ' + fim[0];
+  };
+
+  let dados = null;
+  let series = [];      /* uma entrada por produto com série de atacado */
   let atual = 0;
   let timer = null;
   let pausadoPeloLeitor = menosMovimento;  /* sem movimento: começa parado */
   let sobrevoando = false;
 
-  fetch(vitrine.dataset.vitrine)
-    .then(function (r) { return r.json(); })
+  fetch(vitrine.dataset.json)
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
     .then(iniciar)
     .catch(function (e) {
-      console.warn('CobWeb: vitrine não carregada de ' + vitrine.dataset.vitrine, e);
+      console.warn('CobWeb: vitrine não carregada de ' + vitrine.dataset.json, e);
     });
 
-  function iniciar(dados) {
-    const produtos = dados.produtos || {};
+  /* ---------- partida ---------- */
 
-    series = chips.map(function (chip) {
-      const bloco = produtos[chip.dataset.produto];
-      const canal = bloco && bloco.atacado_ceasa;
-      const precos = canal
-        ? canal.precos_rs_kg.filter(function (v) { return v !== null; })
-        : [];
+  function iniciar(json) {
+    dados = json;
+    const canal = dados.meta.canais.atacado_ceasa;
+
+    series = Object.keys(dados.produtos).map(function (chave) {
+      const ficha = dados.produtos[chave];
+      const atacado = ficha.atacado_ceasa;
+      if (!atacado) return null;
+
+      const unidade = unidadeDoProduto(atacado);
+      const valores = [];
+      const datas = [];
+      (atacado[unidade.campo] || []).forEach(function (v, i) {
+        if (v !== null && v !== undefined) { valores.push(v); datas.push(canal.datas[i]); }
+      });
+      if (valores.length < 2) return null;
+
       return {
-        chave: chip.dataset.produto,
-        rotulo: chip.textContent.trim(),
-        href: chip.getAttribute('href'),
-        precos: precos,
-        /* Base da variação: a média de janeiro, como nas fichas de produto
-           ("vs. jan/2026"). Sem médias mensais, cai na primeira coleta. */
-        base: canal ? mediaDoPrimeiroMes(canal, precos) : 0,
-        chip: chip
+        chave: chave,
+        rotulo: ficha.label.toLowerCase(),
+        unidade: unidade,
+        valores: valores,
+        datas: datas,
+        temVarejo: canaisDoProduto(ficha).length > 1
       };
-    }).filter(function (s) { return s.precos.length > 1; });
+    }).filter(Boolean);
 
     if (!series.length) return;
 
+    escreverResumo();
     ligarControles();
-    mostrar(0, true);
+    mostrar(indicePadrao(), true);
     if (!pausadoPeloLeitor) agendar();
     sincronizarBotao();
+  }
+
+  /* Abre na primeira série com os três canais, como a página de produtos
+     faz na ausência de ?p= — e não num produto qualquer da ordem do arquivo. */
+  function indicePadrao() {
+    for (let i = 0; i < series.length; i++) {
+      if (series[i].temVarejo) return i;
+    }
+    return 0;
+  }
+
+  function canaisDoProduto(ficha) {
+    return ['atacado_ceasa', 'varejo_mercado_central', 'varejo_augusto_franco']
+      .filter(function (c) { return ficha[c]; });
+  }
+
+  /* Produto cotado por peso vira R$/kg; produto cotado por cento ou por caixa
+     de dúzias fica na unidade do boletim, porque a fonte não publica peso por
+     peça e estimá-lo seria inventar número. */
+  function unidadeDoProduto(atacado) {
+    if (atacado.precos_rs_kg) {
+      return { campo: 'precos_rs_kg', sufixo: '/kg', legenda: 'R$ por quilo' };
+    }
+    const nome = atacado.unidade_origem.toLowerCase();
+    return {
+      campo: 'precos_unidade_origem',
+      sufixo: '/' + nome,
+      legenda: 'R$ por ' + nome
+    };
+  }
+
+  /* O cabeçalho descreve a cobertura do arquivo, não uma cobertura escrita à
+     mão: quando a série crescer, a home cresce junto. */
+  function escreverResumo() {
+    const canal = dados.meta.canais.atacado_ceasa;
+    const comVarejo = Object.keys(dados.produtos).filter(function (k) {
+      return canaisDoProduto(dados.produtos[k]).length > 1;
+    }).length;
+
+    const campos = {
+      produtos: dados.meta.n_produtos || Object.keys(dados.produtos).length,
+      coletas: canal.n_datas || canal.datas.length,
+      varejo: comVarejo,
+      janela: janelaLegivel(canal.janela)
+    };
+
+    Object.keys(campos).forEach(function (nome) {
+      document.querySelectorAll('[data-resumo="' + nome + '"]').forEach(function (alvo) {
+        alvo.textContent = campos[nome];
+      });
+    });
   }
 
   /* ---------- controles de leitura ---------- */
 
   function ligarControles() {
-    /* Sobrevoar ou tabular pela vitrine congela a troca: ninguém perde
-       de vista a série que estava lendo. */
+    /* Sobrevoar ou tabular a vitrine congela a troca: ninguém perde de vista
+       a série que estava lendo. */
     vitrine.addEventListener('mouseenter', function () { sobrevoando = true; parar(); });
     vitrine.addEventListener('mouseleave', function () { sobrevoando = false; retomarSePuder(); });
     vitrine.addEventListener('focusin',  function () { sobrevoando = true; parar(); });
@@ -101,17 +197,15 @@
       if (!vitrine.contains(ev.relatedTarget)) { sobrevoando = false; retomarSePuder(); }
     });
 
-    /* Cada ficha da lista chama a própria série para o painel; o clique
-       continua levando à página do produto. */
-    series.forEach(function (serie, i) {
-      serie.chip.addEventListener('mouseenter', function () { mostrar(i); });
-      serie.chip.addEventListener('focus', function () { mostrar(i); });
-    });
+    if (el.anterior) el.anterior.addEventListener('click', function () { passar(-1); });
+    if (el.proxima)  el.proxima.addEventListener('click', function () { passar(1); });
 
     if (el.pausa) {
       el.pausa.addEventListener('click', function () {
         pausadoPeloLeitor = !pausadoPeloLeitor;
-        if (pausadoPeloLeitor) parar(); else retomarSePuder();
+        /* Retomar é ordem explícita e vence o congelamento por sobrevoo: o
+           botão fica dentro da vitrine, e quem o aperta está com o foco nela. */
+        if (pausadoPeloLeitor) parar(); else agendar();
         sincronizarBotao();
       });
     }
@@ -120,6 +214,15 @@
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) parar(); else retomarSePuder();
     });
+  }
+
+  /* Passar à mão desliga o giro automático: quem escolheu uma série não
+     quer vê-la trocar sozinha três segundos depois. */
+  function passar(direcao) {
+    pausadoPeloLeitor = true;
+    parar();
+    sincronizarBotao();
+    mostrar((atual + direcao + series.length) % series.length);
   }
 
   function sincronizarBotao() {
@@ -169,53 +272,52 @@
     }, FADE);
   }
 
-  function mediaDoPrimeiroMes(canal, precos) {
-    const medias = canal.medias_mensais_rs_kg;
-    const meses = medias ? Object.keys(medias).sort() : [];
-    return meses.length ? medias[meses[0]] : precos[0];
-  }
-
   function pintar(serie) {
-    const precos = serie.precos;
-    const base = serie.base;
-    const ultima = precos[precos.length - 1];
-    const variacao = base === 0 ? 0 : Math.round((ultima / base - 1) * 100);
+    const valores = serie.valores;
+    const primeira = valores[0];
+    const ultima = valores[valores.length - 1];
 
-    const tendencia = variacao >= 1 ? 'alta' : variacao <= -1 ? 'baixa' : 'estavel';
+    /* Mesma convenção dos cartões da página de produtos: variação contra a
+       primeira coleta da janela, com faixa morta de meio ponto. */
+    const variacao = primeira ? ((ultima - primeira) / primeira) * 100 : 0;
+    const tendencia = variacao > 0.5 ? 'alta' : variacao < -0.5 ? 'baixa' : 'estavel';
 
     painel.classList.remove('painel--alta', 'painel--baixa', 'painel--estavel');
     painel.classList.add('painel--' + tendencia);
 
     el.nome.textContent = serie.rotulo;
 
-    el.delta.textContent = formatarVariacao(variacao);
+    el.delta.textContent = (tendencia === 'alta' ? '+' : tendencia === 'baixa' ? '−' : '±')
+      + Math.abs(variacao).toFixed(0) + '%';
     el.delta.className = 'painel__delta '
       + (tendencia === 'alta' ? 'delta-up' : tendencia === 'baixa' ? 'delta-down' : 'delta-flat');
 
-    el.preco.innerHTML = moeda.format(ultima)
-      + '<span class="painel__unid">/kg</span>';
+    el.preco.innerHTML = moeda(ultima)
+      + '<span class="painel__unid">' + serie.unidade.sufixo + '</span>';
 
-    if (el.link) el.link.setAttribute('href', serie.href);
-    if (el.linkNome) el.linkNome.textContent = serie.rotulo;
+    el.base.textContent = dataLonga(serie.datas[serie.datas.length - 1])
+      + ' · ' + serie.unidade.legenda + ' · vs. primeira coleta';
 
-    if (el.resumo) {
-      el.resumo.textContent = 'Mínimo de ' + moeda.format(Math.min.apply(null, precos))
-        + ' e máximo de ' + moeda.format(Math.max.apply(null, precos))
-        + ' por quilo nas ' + precos.length + ' coletas do trimestre.';
+    el.eixoIni.textContent = mesAno(serie.datas[0]);
+    el.eixoFim.textContent = mesAno(serie.datas[serie.datas.length - 1]);
+
+    el.nota.textContent = serie.unidade.campo === 'precos_rs_kg'
+      ? 'Linha tracejada: a primeira coleta, base da variação.'
+      : 'Linha tracejada: a primeira coleta. Cotado por ' + serie.unidade.sufixo.slice(1)
+        + ', sem conversão para quilo: a fonte não publica peso por peça.';
+
+    el.resumo.textContent = 'Mínimo de ' + moeda(Math.min.apply(null, valores))
+      + ' e máximo de ' + moeda(Math.max.apply(null, valores))
+      + ' em ' + valores.length + ' coletas.';
+
+    el.link.setAttribute('href', 'produtos/?p=' + serie.chave);
+    el.linkNome.textContent = serie.rotulo;
+
+    if (el.posicao) {
+      el.posicao.textContent = (series.indexOf(serie) + 1) + ' de ' + series.length;
     }
 
-    series.forEach(function (s) {
-      if (s === serie) s.chip.setAttribute('aria-current', 'true');
-      else s.chip.removeAttribute('aria-current');
-    });
-
     desenhar(serie, variacao);
-  }
-
-  function formatarVariacao(v) {
-    if (v > 0) return '+' + v + '%';
-    if (v < 0) return '−' + Math.abs(v) + '%';  /* sinal de menos, não hífen */
-    return '0%';
   }
 
   /* ---------- desenho ---------- */
@@ -224,8 +326,8 @@
     const svg = el.grafico;
     if (!svg) return;
 
-    const caixa = (svg.getAttribute('viewBox') || '0 0 480 180').split(/\s+/).map(Number);
-    const geo = geometria(serie.precos, serie.base, caixa[2], caixa[3]);
+    const caixa = (svg.getAttribute('viewBox') || '0 0 480 220').split(/\s+/).map(Number);
+    const geo = geometria(serie.valores, caixa[2], caixa[3]);
 
     svg.setAttribute('aria-label', rotuloAcessivel(serie, variacao));
     svg.innerHTML =
@@ -252,36 +354,38 @@
   }
 
   function rotuloAcessivel(serie, variacao) {
-    const precos = serie.precos;
-    const sentido = variacao > 0 ? 'alta de ' + variacao + '%'
-                  : variacao < 0 ? 'queda de ' + Math.abs(variacao) + '%'
+    const valores = serie.valores;
+    const sentido = variacao > 0.5 ? 'alta de ' + variacao.toFixed(0) + '%'
+                  : variacao < -0.5 ? 'queda de ' + Math.abs(variacao).toFixed(0) + '%'
                   : 'estabilidade';
-    return 'Série de preço de ' + serie.rotulo + ' no atacado do CEASA-SE, de janeiro a março de 2026: '
-      + sentido + ' sobre a média de janeiro, de ' + moeda.format(serie.base) + ' para '
-      + moeda.format(precos[precos.length - 1]) + ' por quilo na última coleta.';
+    return 'Série de preço de ' + serie.rotulo + ' no atacado do CEASA-SE, '
+      + janelaLegivel(dados.meta.canais.atacado_ceasa.janela) + ': ' + sentido
+      + ' contra a primeira coleta, de ' + moeda(valores[0]) + ' para '
+      + moeda(valores[valores.length - 1]) + ' em ' + serie.unidade.legenda + '.';
   }
 
-  /* Mesma matemática da sparkline do mural, em caixa grande: a série
-     normalizada entre o mínimo e o máximo, com folga para a linha não
-     encostar na borda. Série constante vai para o meio da caixa. */
-  function geometria(serie, base, W, H) {
+  /* Série normalizada entre o mínimo e o máximo, com folga para a linha não
+     encostar na borda. Série constante vai para o meio da caixa, e não para o
+     piso, que leria como ausência de dado. */
+  function geometria(valores, W, H) {
     const PAD_X = 10, PAD_Y = 18;
-    const min = Math.min.apply(null, serie);
-    const max = Math.max.apply(null, serie);
+    const min = Math.min.apply(null, valores);
+    const max = Math.max.apply(null, valores);
     const amplitude = max - min;
     const piso = H - PAD_Y;
 
-    const coords = serie.map(function (v, i) {
-      const x = PAD_X + (i / (serie.length - 1)) * (W - 2 * PAD_X);
-      const y = amplitude === 0
-        ? H / 2
-        : PAD_Y + (1 - (v - min) / amplitude) * (H - 2 * PAD_Y);
-      return { x: +x.toFixed(1), y: +y.toFixed(1) };
-    });
-
     const escalaY = function (v) {
-      return amplitude === 0 ? H / 2 : +(PAD_Y + (1 - (v - min) / amplitude) * (H - 2 * PAD_Y)).toFixed(1);
+      return amplitude === 0
+        ? H / 2
+        : +(PAD_Y + (1 - (v - min) / amplitude) * (H - 2 * PAD_Y)).toFixed(1);
     };
+
+    const coords = valores.map(function (v, i) {
+      return {
+        x: +(PAD_X + (i / (valores.length - 1)) * (W - 2 * PAD_X)).toFixed(1),
+        y: escalaY(v)
+      };
+    });
 
     const pontos = coords.map(function (p) { return p.x + ',' + p.y; });
     const fim = coords[coords.length - 1];
@@ -293,7 +397,7 @@
       pontos: pontos,
       area: area,
       fim: fim,
-      yBase: escalaY(base),
+      yBase: escalaY(valores[0]),
       pad: { x: PAD_X, y: PAD_Y }
     };
   }

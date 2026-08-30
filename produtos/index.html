@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos · CobWeb</title>
+  <meta name="description" content="Série de preço de 54 produtos do hortifrúti em Aracaju, dos boletins EMDAGRO/ASPLAN: atacado CEASA-SE de janeiro a julho de 2026 e dois pontos de varejo no primeiro trimestre.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+
+  <!-- Tipografia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../cobweb.css?v=20260830-0051">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Produtos · CobWeb">
+  <meta property="og:description" content="Escolha o produto, escolha os canais: 54 séries de preço do hortifrúti em Aracaju, dos boletins EMDAGRO/ASPLAN.">
+  <meta property="og:type" content="website">
+</head>
+<body>
+
+  <!-- ============================================================
+       Cabeçalho
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container container--wide site-header__inner">
+      <a href="../" class="site-logo" aria-label="CobWeb · página inicial">
+        <svg class="site-logo__mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M 16 4 L 28 16 L 16 28 L 4 16 Z" stroke-width="1"/>
+            <path d="M 16 9 L 23 16 L 16 23 L 9 16 Z" stroke-width="1"/>
+            <path d="M 16 13 L 19 16 L 16 19 L 13 16 Z" stroke-width="1"/>
+            <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+          </g>
+        </svg>
+        <div>
+          <div class="site-logo__name">CobWeb</div>
+          <div class="site-logo__tag">mercados integrados · sergipe</div>
+        </div>
+      </a>
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="../">home</a>
+        <a href="." class="is-active">produtos</a>
+        <a href="../servicos/">serviços</a>
+        <a href="../panoramas/">panoramas</a>
+        <a href="../sobre/">sobre</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       Conteúdo principal
+       ============================================================ -->
+  <main class="container">
+
+    <!-- Manchete -->
+    <section>
+      <div class="eyebrow">produtos · aracaju · série de preço</div>
+      <h1 class="headline">O preço de cada produto do hortifrúti em Aracaju, série a série</h1>
+      <p class="deck">Escolha o produto e escolha os canais. As séries vêm dos boletins de preços médios da EMDAGRO/ASPLAN: o atacado do CEASA-SE e dois pontos de varejo da capital, publicados duas a três vezes por semana.</p>
+    </section>
+
+    <!-- Meta strip -->
+    <div class="meta-strip">
+      <span class="meta-strip__item">
+        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+        <span data-resumo-janela>janela em carregamento</span>
+      </span>
+      <span class="meta-strip__item">
+        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v6c0 1.7 4 3 9 3s9-1.3 9-3V6M3 12v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg>
+        <span data-resumo-cobertura>cobertura em carregamento</span>
+      </span>
+      <span class="meta-strip__item">
+        <a href="#nota-metodologica">
+          <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align: -3px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          metodologia
+        </a>
+      </span>
+    </div>
+
+    <!-- Descrição geral dos dados -->
+    <section class="commentary">
+      <h2 class="section-title">O que esta série é</h2>
+      <div class="prose">
+        <p>A EMDAGRO publica, pela sua assessoria de planejamento, um boletim de preços médios praticados em Aracaju. O boletim sai de duas a três vezes por semana, não todo dia, e cobre a cesta do hortifrúti mais um bloco pequeno de produtos de origem animal. É a única série pública, regular e nomeada por produto que existe para a praça de Aracaju, e é dela que sai tudo o que este portal publica sobre preço interno.</p>
+        <p>São três canais, e eles não medem a mesma coisa: o que cada um é, e o que cada série não suporta afirmar, está na <a href="#nota-metodologica">nota metodológica</a>.</p>
+      </div>
+    </section>
+
+    <!-- Filtro em dois estágios -->
+    <section aria-label="Escolha da série">
+      <div class="filtro" data-series-precos data-json="../dados/series-precos-se-2026.json?v=20260830-0051">
+
+        <div class="filtro__etapa">
+          <h2 class="filtro__titulo">
+            <span class="filtro__num" aria-hidden="true">01</span>
+            <span class="filtro__nome">Produto</span>
+          </h2>
+          <p class="filtro__ajuda" id="ajuda-produto">Digite o nome do produto, ou clique no campo para percorrer a lista inteira.</p>
+
+          <label class="sr-only" for="busca-produto">Produto</label>
+          <div class="combo">
+            <input class="combo__campo" id="busca-produto" type="text" data-busca
+                   role="combobox" aria-expanded="false" aria-controls="lista-produtos"
+                   aria-autocomplete="list" aria-describedby="ajuda-produto"
+                   placeholder="buscar produto" autocomplete="off" spellcheck="false">
+            <ul class="combo__lista" id="lista-produtos" data-lista role="listbox"
+                aria-label="Produtos da série" hidden></ul>
+          </div>
+        </div>
+
+        <div class="filtro__etapa">
+          <h2 class="filtro__titulo">
+            <span class="filtro__num" aria-hidden="true">02</span>
+            <span class="filtro__nome">Canais</span>
+          </h2>
+          <p class="filtro__ajuda">Ligue e desligue as séries do gráfico. Canal tracejado é canal sem coleta para o produto escolhido.</p>
+          <div class="serie-toggle" data-canais role="group" aria-label="Canais exibidos no gráfico"></div>
+          <p class="filtro__aviso" data-aviso></p>
+        </div>
+
+      </div>
+      <p class="sr-only" data-status role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- Gráfico -->
+    <section aria-labelledby="titulo-serie">
+      <div class="serie-titulo">
+        <h2 class="section-title" style="margin:0;" id="titulo-serie" data-titulo-serie>Série de preço</h2>
+        <p class="serie-titulo__meta" data-subtitulo-serie></p>
+      </div>
+      <div class="chart-container">
+        <canvas data-grafico role="img"
+                aria-label="Série de preço do produto selecionado, nos canais selecionados.">
+          Série de preço do produto selecionado. Os valores de cada coleta estão nos cartões abaixo do gráfico.
+        </canvas>
+      </div>
+
+      <section class="index-grid" data-cartoes aria-label="Resumo por canal"></section>
+    </section>
+
+    <!-- Nota metodológica -->
+    <aside id="nota-metodologica" class="method-note">
+      <div class="method-note__label">notas metodológicas</div>
+      <p class="method-note__text">
+        <strong>Fonte:</strong> EMDAGRO / ASPLAN, boletins de preços médios praticados em Aracaju, transcritos dos PDFs originais. O atacado do CEASA-SE cobre janeiro a julho de 2026 em 48 coletas e os 54 produtos que o boletim lista. Os dois canais de varejo cobrem onze produtos em 23 coletas de janeiro a março: essa é a extensão da transcrição feita até agora, e não um limite conhecido do que a EMDAGRO publica. Estender o varejo depende de transcrever os boletins de abril em diante; o portal não estima nem interpola nada para emparelhar as janelas.
+      </p>
+      <p class="method-note__text" style="margin-top:10px;">
+        <strong>Os três canais:</strong> o atacado do CEASA-SE é a cotação por embalagem no entreposto. O Mercado Central, oficialmente Mercado Maria Virgínia Leite Franco, aparece rotulado como varejo na fonte, mas pratica preços próximos ou abaixo do atacado: é canal híbrido, de atacarejo popular, e não proxy de supermercado. O Mercado Setorial do Augusto Franco, oficialmente Vereador Nilton Santos, é varejo de bairro, sistematicamente acima do híbrido. Comparar os três mostra o spread; tomá-los como três medidas da mesma coisa é erro de leitura.
+      </p>
+      <p class="method-note__text" style="margin-top:10px;">
+        <strong>Unidade:</strong> <span data-nota-unidade>o boletim cota por embalagem, e a conversão para R$/kg usa o peso nominal declarado.</span> Produtos cotados por cento ou por caixa de dúzias ficam sem conversão, na unidade do boletim.
+      </p>
+      <p class="method-note__text" style="margin-top:10px;">
+        <strong>Junho de 2026:</strong> dois boletins do mês saíram com a coluna de nomes de produto reordenada sem que as colunas numéricas acompanhassem, e cada linha impressa exibia o preço de outro produto. Os valores das seis datas afetadas foram realinhados para a ordem padrão e conferidos contra o boletim íntegro de 2/9/11 de junho na data coberta pelos dois: coincidem em 54 de 54 produtos. É inferência verificada, não confirmação da fonte. A transcrição literal do que a EMDAGRO publicou está preservada na planilha de origem.
+      </p>
+      <p class="method-note__text" style="margin-top:10px;">
+        <strong>Buracos na série:</strong> 02/04, 21/04 e 04/06 aparecem no boletim marcados como feriado, sem preço publicado, e não entram. Entre 16/04 e 05/05 não houve boletim. O gráfico liga os pontos por cima dessas ausências; o eixo mostra as datas que existem.
+      </p>
+      <p class="method-note__text" style="margin-top:10px;">
+        <strong>Cautela:</strong> preço travado por semanas seguidas, às vezes pela série inteira, é inércia de coleta e arredondamento da fonte, não estabilidade de mercado: no gráfico vira uma reta que não significa calmaria. A série descreve Aracaju, e só — o interior do estado não está aqui. E a validação cruzada contra fonte independente, que é o que capturaria erro sistemático de leitura, ainda não foi feita.
+      </p>
+    </aside>
+
+  </main>
+
+  <!-- ============================================================
+       Footer
+       ============================================================ -->
+  <footer class="site-footer container container--wide">
+    <span>CobWeb · publicação editorial independente</span>
+    <span>cc by-sa 4.0</span>
+  </footer>
+
+  <!-- Chart.js + scripts da página -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="../assets/js/series-precos.js?v=20260830-0051"></script>
+  <script src="../assets/js/nota-metodologica.js?v=20260830-0051"></script>
+
+</body>
+</html>

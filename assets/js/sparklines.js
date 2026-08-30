@@ -22,9 +22,9 @@
   const token = function (nome, reserva) {
     return (tokens.getPropertyValue(nome) || '').trim() || reserva;
   };
-  const COR_ALTA   = token('--color-serie-alta', '#1d9e75');
-  const COR_BAIXA  = token('--color-serie-baixa', '#a0762a');
-  const COR_NEUTRA = token('--color-serie-estavel', '#b4b2a9');
+  const COR_ALTA   = token('--serie-alta', '#1d9e75');
+  const COR_BAIXA  = token('--serie-baixa', '#a0762a');
+  const COR_NEUTRA = token('--serie-estavel', '#b4b2a9');
 
   containers.forEach(function (container) {
     const fonte = container.dataset.sparklines;
