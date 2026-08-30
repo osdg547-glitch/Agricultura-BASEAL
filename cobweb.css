@@ -42,6 +42,13 @@
   --serie-varejo-mc: #a0762a;
   --serie-varejo-af: #3a6ea5;
 
+  /* Tendência de uma série sozinha · não é canal de coleta, é o sentido do
+     traço quando um único produto está na tela: verde sobe, âmbar cai, cinza
+     fica. Calibrado para linha fina; texto pequeno usa os tokens de variação. */
+  --serie-alta: #1d9e75;
+  --serie-baixa: #a0762a;
+  --serie-estavel: #b4b2a9;
+
   /* Bordas */
   --color-border: rgba(26, 26, 26, 0.12);
   --color-border-strong: rgba(26, 26, 26, 0.25);
@@ -89,6 +96,9 @@
     --serie-atacado: #5dcaa5;
     --serie-varejo-mc: #d4a96a;
     --serie-varejo-af: #7aa6d4;
+    --serie-alta: #5dcaa5;
+    --serie-baixa: #d4a96a;
+    --serie-estavel: #8c8b84;
   }
 }
 
