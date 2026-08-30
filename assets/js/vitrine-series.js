@@ -2,7 +2,7 @@
    cobweb · vitrine das séries de preço
    ============================================================
    A home mostra uma série por vez: o painel troca de produto a
-   cada cinco segundos e percorre as 54 séries do atacado, com o
+   cada dez segundos e percorre as 54 séries do atacado, com o
    link de cada uma para a página de produtos.
 
    Tudo — nome, unidade, preço, variação, janela, contagens do
@@ -19,7 +19,7 @@
 (function () {
   'use strict';
 
-  const INTERVALO = 5000;   /* tempo de cada série no painel */
+  const INTERVALO = 10000;  /* tempo de cada série no painel; casa com a régua do CSS */
   const FADE = 200;         /* precisa casar com a transição do CSS */
 
   const vitrine = document.querySelector('[data-vitrine]');

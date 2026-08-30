@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="cobweb.css?v=20260830-0051">
+  <link rel="stylesheet" href="cobweb.css?v=20260830-1402">
 
   <!-- Open Graph -->
   <meta property="og:title" content="CobWeb · mercados do hortifrúti em Sergipe">
@@ -137,8 +137,9 @@
     }
 
     /* Vitrine: à esquerda o que a série é, à direita uma série por vez.
-       O painel troca de produto a cada cinco segundos; a lista de fichas
-       embaixo continua sendo o caminho estável para as onze páginas. */
+       O painel troca de produto a cada dez segundos e leva os próprios
+       controles no rodapé; a página de produtos é o caminho estável para
+       buscar um produto pelo nome. */
     .vitrine {
       display: grid;
       grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -222,7 +223,7 @@
       width: 100%;
       background: var(--serie-cor);
       transform-origin: left center;
-      animation: painel-regua 5s linear infinite;
+      animation: painel-regua 10s linear infinite;
     }
 
     .painel--parado::after { animation-play-state: paused; }
@@ -573,7 +574,7 @@
          Vitrine — o que a série é, e uma série de cada vez
          ============================================================
          O painel da direita percorre as séries do atacado, uma a
-         cada cinco segundos, e cada uma abre na página de produtos
+         cada dez segundos, e cada uma abre na página de produtos
          pelo endereço ?p=chave. A troca para quando o leitor
          sobrevoa ou tabula a vitrine, os botões de anterior e
          próxima a desligam de vez, e com prefers-reduced-motion a
@@ -589,10 +590,10 @@
     <section class="bloco" aria-label="Séries de preço no atacado">
 
       <div class="bloco__header">
-        <h2 class="section-title" style="margin: 0;">As séries de preço</h2>
+        <h2 class="section-title" style="margin: 0;">Séries temporais de preços</h2>
       </div>
 
-      <div class="vitrine" data-vitrine data-json="dados/series-precos-se-2026.json?v=20260830-0051">
+      <div class="vitrine" data-vitrine data-json="dados/series-precos-se-2026.json?v=20260830-1402">
 
         <div class="vitrine__texto">
           <p>Os preços dos dois principais mercados de Aracaju são apresentados graficamente, facilitando a visualização de suas respectivas tendências temporais.</p>
@@ -660,7 +661,7 @@
             </div>
           </div>
 
-          <figcaption class="sr-only">Painel que alterna as séries de preço no atacado, uma a cada cinco segundos. Use os botões de série anterior e próxima para escolher uma, o botão de pausa para interromper a troca, ou a página de produtos para buscar um produto pelo nome.</figcaption>
+          <figcaption class="sr-only">Painel que alterna as séries de preço no atacado, uma a cada dez segundos. Use os botões de série anterior e próxima para escolher uma, o botão de pausa para interromper a troca, ou a página de produtos para buscar um produto pelo nome.</figcaption>
         </figure>
 
       </div>
@@ -712,6 +713,6 @@
   </footer>
 
   <!-- Vitrine giratória das séries de preço -->
-  <script src="assets/js/vitrine-series.js?v=20260830-0051"></script>
+  <script src="assets/js/vitrine-series.js?v=20260830-1402"></script>
 </body>
 </html>
