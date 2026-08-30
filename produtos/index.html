@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="../cobweb.css?v=20260828-2312">
+  <link rel="stylesheet" href="../cobweb.css?v=20260830-1545">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Produtos · CobWeb">
@@ -94,7 +94,7 @@
 
     <!-- Filtro em dois estágios -->
     <section aria-label="Escolha da série">
-      <div class="filtro" data-series-precos data-json="../dados/series-precos-se-2026.json?v=20260828-2312">
+      <div class="filtro" data-series-precos data-json="../dados/series-precos-se-2026.json?v=20260830-1545">
 
         <div class="filtro__etapa">
           <h2 class="filtro__titulo">
@@ -119,7 +119,7 @@
             <span class="filtro__num" aria-hidden="true">02</span>
             <span class="filtro__nome">Canais</span>
           </h2>
-          <p class="filtro__ajuda">Ligue e desligue as séries do gráfico. Canal tracejado é canal sem coleta para o produto escolhido.</p>
+          <p class="filtro__ajuda">Ligue e desligue as séries do gráfico. Borda tracejada é canal sem coleta para este produto; borda pontilhada é canal cotado em outra unidade, que clicar traz para o eixo.</p>
           <div class="serie-toggle" data-canais role="group" aria-label="Canais exibidos no gráfico"></div>
           <p class="filtro__aviso" data-aviso></p>
         </div>
@@ -148,19 +148,25 @@
     <aside id="nota-metodologica" class="method-note">
       <div class="method-note__label">notas metodológicas</div>
       <p class="method-note__text">
-        <strong>Fonte:</strong> EMDAGRO / ASPLAN, boletins de preços médios praticados em Aracaju, transcritos dos PDFs originais. O atacado do CEASA-SE cobre janeiro a julho de 2026 em 48 coletas e os 54 produtos que o boletim lista. Os dois canais de varejo cobrem onze produtos em 23 coletas de janeiro a março: essa é a extensão da transcrição feita até agora, e não um limite conhecido do que a EMDAGRO publica. Estender o varejo depende de transcrever os boletins de abril em diante; o portal não estima nem interpola nada para emparelhar as janelas.
+        <strong>Fonte:</strong> EMDAGRO / ASPLAN, boletins de preços médios praticados em Aracaju, transcritos dos PDFs originais. o atacado do CEASA-SE cobre 54 produtos em 48 coletas de janeiro a julho de 2026; o varejo do Mercado Central, 65 produtos em 58 coletas na mesma janela. O Mercado Setorial do Augusto Franco é o único canal ainda sem reconsolidação: cobre 11 produtos e para em março, que é até onde a transcrição desse canal chegou. As janelas e as listas de produto são as das fontes; o portal não estima nem interpola nada para emparelhá-las.
       </p>
       <p class="method-note__text" style="margin-top:10px;">
         <strong>Os três canais:</strong> o atacado do CEASA-SE é a cotação por embalagem no entreposto. O Mercado Central, oficialmente Mercado Maria Virgínia Leite Franco, aparece rotulado como varejo na fonte, mas pratica preços próximos ou abaixo do atacado: é canal híbrido, de atacarejo popular, e não proxy de supermercado. O Mercado Setorial do Augusto Franco, oficialmente Vereador Nilton Santos, é varejo de bairro, sistematicamente acima do híbrido. Comparar os três mostra o spread; tomá-los como três medidas da mesma coisa é erro de leitura.
       </p>
       <p class="method-note__text" style="margin-top:10px;">
-        <strong>Unidade:</strong> <span data-nota-unidade>o boletim cota por embalagem, e a conversão para R$/kg usa o peso nominal declarado.</span> Produtos cotados por cento ou por caixa de dúzias ficam sem conversão, na unidade do boletim.
+        <strong>Unidade:</strong> <span data-nota-unidade>o boletim cota por embalagem, e a conversão para R$/kg usa o peso nominal declarado.</span> Produtos cotados por peça — cento, dúzia, molho, pé, cabeça — ficam sem conversão, na unidade do boletim. Dois canais só entram no mesmo gráfico quando compartilham a unidade: comparar preço por cento com preço por molho exigiria supor quantas peças o cento traz, e a fonte não diz.
+      </p>
+      <p class="method-note__text" style="margin-top:10px;">
+        <strong>Unidade que muda:</strong> em sete produtos do varejo — alface, alho, amendoim, caju, chuchu, melão espanhol e pimentão verde — a unidade de venda alterna ao longo do período, entre quilo e peça. O gráfico interrompe a linha a cada troca e não converte entre os trechos: a fonte não publica equivalência, e ligar preço por cabeça a preço por quilo desenharia uma alta que não aconteceu.
       </p>
       <p class="method-note__text" style="margin-top:10px;">
         <strong>Junho de 2026:</strong> dois boletins do mês saíram com a coluna de nomes de produto reordenada sem que as colunas numéricas acompanhassem, e cada linha impressa exibia o preço de outro produto. Os valores das seis datas afetadas foram realinhados para a ordem padrão e conferidos contra o boletim íntegro de 2/9/11 de junho na data coberta pelos dois: coincidem em 54 de 54 produtos. É inferência verificada, não confirmação da fonte. A transcrição literal do que a EMDAGRO publicou está preservada na planilha de origem.
       </p>
       <p class="method-note__text" style="margin-top:10px;">
         <strong>Buracos na série:</strong> 02/04, 21/04 e 04/06 aparecem no boletim marcados como feriado, sem preço publicado, e não entram. Entre 16/04 e 05/05 não houve boletim. O gráfico liga os pontos por cima dessas ausências; o eixo mostra as datas que existem.
+      </p>
+      <p class="method-note__text" style="margin-top:10px;">
+        <strong>Saltos abruptos:</strong> a consolidação do varejo marca doze variações de 40% ou mais entre coletas consecutivas, e alguns casos em que o preço médio, o máximo e o mínimo publicados no mesmo boletim divergem entre si. Alho a R$ 2,00 e depois a R$ 25,00 o quilo em julho é o caso extremo. São valores publicados, transcritos como estão, e a própria fonte recomenda conferir antes de usá-los em série.
       </p>
       <p class="method-note__text" style="margin-top:10px;">
         <strong>Cautela:</strong> preço travado por semanas seguidas, às vezes pela série inteira, é inércia de coleta e arredondamento da fonte, não estabilidade de mercado: no gráfico vira uma reta que não significa calmaria. A série descreve Aracaju, e só — o interior do estado não está aqui. E a validação cruzada contra fonte independente, que é o que capturaria erro sistemático de leitura, ainda não foi feita.
@@ -179,8 +185,8 @@
 
   <!-- Chart.js + scripts da página -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="../assets/js/series-precos.js?v=20260828-2312"></script>
-  <script src="../assets/js/nota-metodologica.js?v=20260828-2312"></script>
+  <script src="../assets/js/series-precos.js?v=20260830-1545"></script>
+  <script src="../assets/js/nota-metodologica.js?v=20260830-1545"></script>
 
 </body>
 </html>

@@ -128,13 +128,12 @@
     const janela = document.querySelector('[data-resumo-janela]');
     const cobertura = document.querySelector('[data-resumo-cobertura]');
     const atacado = dados.meta.canais.atacado_ceasa;
-    const comVarejo = Object.keys(dados.produtos)
-      .filter((k) => canaisDoProduto(k).length > 1).length;
+    const mercado = dados.meta.canais.varejo_mercado_central;
 
-    if (janela) janela.textContent = janelaLegivel(atacado.janela);
+    if (janela) janela.textContent = janelaLegivel(dados.meta.janela);
     if (cobertura) {
-      cobertura.textContent = dados.meta.n_produtos + ' produtos · ' + atacado.n_datas
-        + ' coletas no atacado · ' + comVarejo + ' com varejo';
+      cobertura.textContent = dados.meta.n_produtos + ' produtos · '
+        + atacado.n_produtos + ' no atacado · ' + mercado.n_produtos + ' no varejo';
     }
   }
 
@@ -151,7 +150,9 @@
     const disponiveis = canaisDoProduto(produto);
     const escolhidos = pedidos.filter((c) => disponiveis.indexOf(c) !== -1);
 
-    return { produto: produto, canais: escolhidos.length ? escolhidos : disponiveis };
+    /* compativeis() precisa do produto já ativo para ler as bases. */
+    produtoAtivo = produto;
+    return { produto: produto, canais: compativeis(escolhidos.length ? escolhidos : disponiveis) };
   }
 
   function produtoPadrao() {
@@ -243,7 +244,7 @@
     } else {
       visiveis.forEach((chave, indice) => {
         const ficha = dados.produtos[chave];
-        const canais = canaisDoProduto(chave).length;
+        const canais = canaisDoProduto(chave);
         const opcao = document.createElement('li');
         opcao.className = 'combo__opcao';
         opcao.id = 'opcao-' + chave;
@@ -251,8 +252,13 @@
         opcao.setAttribute('aria-selected', String(chave === produtoAtivo));
         opcao.dataset.produto = chave;
         opcao.dataset.indice = String(indice);
+        /* Com um canal só, dizer qual é: há produtos que só o atacado cota e
+           produtos que só o varejo cota, e "1 canal" não distingue os dois. */
+        const resumo = canais.length > 1
+          ? canais.length + ' canais'
+          : dados.meta.canais[canais[0]].label_curto.toLowerCase();
         opcao.innerHTML = '<span>' + ficha.label + '</span>'
-          + '<span class="combo__opcao__meta">' + (canais > 1 ? canais + ' canais' : 'atacado') + '</span>';
+          + '<span class="combo__opcao__meta">' + resumo + '</span>';
         el.lista.appendChild(opcao);
       });
     }
@@ -319,11 +325,11 @@
     produtoAtivo = chave;
     el.busca.value = dados.produtos[chave].label;
 
-    /* Troca de produto preserva os canais que o novo produto também tem; os
-       que ele não tem saem da seleção em vez de virar linha vazia. */
+    /* Troca de produto preserva os canais que o novo produto também tem, e
+       descarta os que não compartilham a unidade de comparação do primeiro. */
     const disponiveis = canaisDoProduto(produtoAtivo);
     const mantidos = canaisAtivos.filter((c) => disponiveis.indexOf(c) !== -1);
-    canaisAtivos = mantidos.length ? mantidos : disponiveis;
+    canaisAtivos = compativeis(mantidos.length ? mantidos : disponiveis);
 
     desenhar();
   }
@@ -341,20 +347,49 @@
 
     /* Desligar o último canal deixaria um gráfico vazio sem dizer por quê:
        o clique que faria isso é ignorado. */
-    if (posicao !== -1 && canaisAtivos.length === 1) return;
-    if (posicao === -1) canaisAtivos.push(canal); else canaisAtivos.splice(posicao, 1);
+    if (posicao !== -1) {
+      if (canaisAtivos.length === 1) return;
+      canaisAtivos.splice(posicao, 1);
+    } else if (baseDoCanal(canal) === baseAtiva()) {
+      canaisAtivos.push(canal);
+    } else {
+      /* Unidade diferente da que está no eixo: em vez de somar uma linha que
+         não se compara com as outras, o clique troca o gráfico para a unidade
+         do canal pedido. */
+      canaisAtivos = [canal];
+    }
 
     desenhar();
+  }
+
+  function baseDoCanal(chave) {
+    const bloco = dados.produtos[produtoAtivo][chave];
+    return bloco ? bloco.base_comparacao : null;
+  }
+
+  /* A unidade do eixo é a do primeiro canal escolhido. */
+  function baseAtiva() {
+    return baseDoCanal(canaisAtivos[0]);
+  }
+
+  /* Reduz uma lista de canais aos que dividem a unidade do primeiro. */
+  function compativeis(chaves) {
+    if (!chaves.length) return chaves;
+    const base = baseDoCanal(chaves[0]);
+    return chaves.filter((c) => baseDoCanal(c) === base);
   }
 
   function montarBotoesDeCanal() {
     if (!el.canais) return;
     const disponiveis = canaisDoProduto(produtoAtivo);
+    const base = baseAtiva();
+    const divergentes = [];
     el.canais.innerHTML = '';
 
     CANAIS.forEach((canal) => {
       const meta = dados.meta.canais[canal.chave];
       const tem = disponiveis.indexOf(canal.chave) !== -1;
+      const mesmaUnidade = tem && baseDoCanal(canal.chave) === base;
       const botao = document.createElement('button');
       botao.type = 'button';
       botao.className = 'serie-btn';
@@ -363,18 +398,58 @@
       botao.setAttribute('aria-pressed', String(tem && canaisAtivos.indexOf(canal.chave) !== -1));
       botao.innerHTML = '<span class="serie-btn__cor" style="background:' + canal.cor + '"></span>';
       botao.appendChild(document.createTextNode(meta.label));
-      if (!tem) botao.title = 'Sem coleta deste produto no canal ' + meta.label;
+
+      if (!tem) {
+        botao.title = 'Sem coleta deste produto no canal ' + meta.label;
+      } else if (!mesmaUnidade) {
+        /* Fica clicável: o leitor pode querer ver esta série, e aí o eixo
+           inteiro passa a ser o dela. */
+        botao.classList.add('serie-btn--outra-unidade');
+        botao.title = 'Cotado em ' + unidadeLegivel(dados.produtos[produtoAtivo][canal.chave])
+          + ', unidade diferente da do gráfico. Clicar troca o gráfico para esta série.';
+        divergentes.push(meta.label_curto + ' (' + unidadeLegivel(dados.produtos[produtoAtivo][canal.chave]) + ')');
+      }
       el.canais.appendChild(botao);
     });
 
-    if (el.aviso) {
-      const semVarejo = disponiveis.length === 1;
-      el.aviso.textContent = semVarejo
-        ? 'Este produto só tem série de atacado. O varejo do portal cobre onze produtos no '
-          + 'primeiro trimestre: é até onde a transcrição chegou, não um limite conhecido do boletim.'
-        : 'O atacado vai de janeiro a julho; os dois canais de varejo param em março, que é até '
-          + 'onde a transcrição do varejo chegou. Nada foi estendido para emparelhar as janelas.';
+    if (el.aviso) el.aviso.textContent = textoDoAviso(disponiveis, divergentes);
+  }
+
+  function unidadeLegivel(bloco) {
+    if (bloco.unidade_variou) return 'unidade que muda ao longo da série';
+    return bloco.base_comparacao === 'kg' ? 'quilo' : bloco.unidade_origem.toLowerCase();
+  }
+
+  /* O aviso diz por que o gráfico tem menos linhas do que o leitor esperava:
+     ausência de coleta e divergência de unidade são coisas diferentes. */
+  function textoDoAviso(disponiveis, divergentes) {
+    const partes = [];
+    const faltando = CANAIS.filter((c) => disponiveis.indexOf(c.chave) === -1)
+      .map((c) => dados.meta.canais[c.chave].label_curto);
+
+    if (faltando.length) {
+      partes.push('Sem coleta deste produto em ' + juntar(faltando) + '.');
     }
+    if (divergentes.length) {
+      partes.push(juntar(divergentes) + ' tem unidade diferente da que está no eixo, então a série '
+        + 'não entra neste gráfico. Clicar no canal leva o eixo para a unidade dele.');
+    }
+    const bloco = dados.produtos[produtoAtivo][canaisAtivos[0]];
+    if (bloco.unidade_variou) {
+      partes.push('A unidade de venda muda ao longo da série (' + bloco.unidade_origem
+        + '): a linha se interrompe a cada troca, porque os trechos não se comparam entre si.');
+    }
+    if (!partes.length) {
+      partes.push('As janelas de coleta dos canais não coincidem dia a dia; o gráfico usa a união '
+        + 'das datas e não inventa leitura onde não houve boletim.');
+    }
+    return partes.join(' ');
+  }
+
+  function juntar(itens) {
+    return itens.length > 1
+      ? itens.slice(0, -1).join(', ') + ' e ' + itens[itens.length - 1]
+      : itens[0];
   }
 
   /* ----------------------------------------------------------
@@ -408,19 +483,29 @@
       + janelaLegivel(janelaDosCanais());
   }
 
-  /* Produto cotado por peso vira R$/kg; produto cotado por cento ou por caixa
-     de dúzias fica na unidade do boletim, porque a fonte não publica peso por
-     peça e estimá-lo seria inventar número. */
+  /* A unidade do gráfico é a base de comparação do primeiro canal escolhido.
+     Peso vira R$/kg; peça (cento, dúzia, molho, pé) fica na unidade do boletim,
+     porque a fonte não publica peso por peça e estimá-lo seria inventar número. */
   function unidadeDoProduto(ficha) {
-    const atacado = ficha.atacado_ceasa;
-    if (atacado.precos_rs_kg) {
-      return { campo: 'precos_rs_kg', sufixo: '/kg', legenda: 'R$ por quilo' };
+    const bloco = ficha[canaisAtivos[0]];
+
+    if (bloco.base_comparacao === 'kg') {
+      return { campo: 'precos_rs_kg', sufixo: '/kg', legenda: 'R$ por quilo', mista: false };
     }
-    const nome = atacado.unidade_origem.toLowerCase();
+    if (bloco.unidade_variou) {
+      return {
+        campo: 'precos_unidade_origem',
+        sufixo: '',
+        legenda: 'R$ na unidade do boletim, que muda ao longo da série',
+        mista: true
+      };
+    }
+    const nome = bloco.unidade_origem.toLowerCase();
     return {
       campo: 'precos_unidade_origem',
       sufixo: '/' + nome,
-      legenda: 'R$ por ' + nome
+      legenda: 'R$ por ' + nome,
+      mista: false
     };
   }
 
@@ -443,22 +528,37 @@
     });
     const eixo = Object.keys(todas).sort();
 
-    const conjuntos = CANAIS.filter((c) => canaisAtivos.indexOf(c.chave) !== -1).map((canal) => {
+    const conjuntos = [];
+    CANAIS.filter((c) => canaisAtivos.indexOf(c.chave) !== -1).forEach((canal) => {
+      const bloco = ficha[canal.chave];
       const serie = serieDoCanal(ficha, canal.chave, unidade);
-      const mapa = {};
-      serie.datas.forEach((d, i) => { mapa[d] = serie.valores[i]; });
-      return {
-        label: dados.meta.canais[canal.chave].label,
-        data: eixo.map((d) => (d in mapa ? mapa[d] : null)),
-        borderColor: canal.cor,
-        backgroundColor: 'transparent',
-        borderDash: canal.traco,
-        tension: 0.25,
-        borderWidth: 2,
-        pointRadius: eixo.length > 30 ? 1.5 : 2.5,
-        pointHoverRadius: 5,
-        spanGaps: true
-      };
+      const meta = dados.meta.canais[canal.chave];
+
+      /* Série com unidade constante é uma linha só. Onde a unidade de venda
+         muda, cada trecho vira um conjunto próprio: ligar preço por cabeça a
+         preço por quilo desenharia uma alta que não aconteceu. */
+      const trechos = bloco.trechos || [{ indice_inicio: 0, indice_fim: serie.valores.length - 1,
+                                          unidade: bloco.unidade_origem }];
+
+      trechos.forEach((trecho, ordem) => {
+        const mapa = {};
+        for (let i = trecho.indice_inicio; i <= trecho.indice_fim; i++) {
+          mapa[serie.datas[i]] = serie.valores[i];
+        }
+        conjuntos.push({
+          label: meta.label + (bloco.unidade_variou ? ' · ' + trecho.unidade : ''),
+          data: eixo.map((d) => (d in mapa ? mapa[d] : null)),
+          borderColor: canal.cor,
+          backgroundColor: 'transparent',
+          borderDash: canal.traco,
+          tension: 0.25,
+          borderWidth: 2,
+          pointRadius: eixo.length > 30 ? 1.5 : 2.5,
+          pointHoverRadius: 5,
+          spanGaps: true,
+          ordemDoTrecho: ordem
+        });
+      });
     });
 
     grafico = new Chart(canvas.getContext('2d'), {
@@ -516,8 +616,17 @@
       : 'repeat(' + Math.min(canaisAtivos.length, 3) + ', 1fr)';
 
     CANAIS.filter((c) => canaisAtivos.indexOf(c.chave) !== -1).forEach((canal) => {
+      const bloco = ficha[canal.chave];
       const serie = serieDoCanal(ficha, canal.chave, unidade);
-      const valores = serie.valores.filter((v) => v !== null);
+      const meta = dados.meta.canais[canal.chave];
+
+      /* Onde a unidade muda, o cartão resume o último trecho e diz qual é:
+         mínimo e variação sobre a série inteira misturariam preço por cabeça
+         com preço por quilo. */
+      const trecho = bloco.trechos ? bloco.trechos[bloco.trechos.length - 1] : null;
+      const de = trecho ? trecho.indice_inicio : 0;
+      const ate = trecho ? trecho.indice_fim : serie.valores.length - 1;
+      const valores = serie.valores.slice(de, ate + 1).filter((v) => v !== null);
       if (!valores.length) return;
 
       const primeiro = valores[0];
@@ -525,22 +634,24 @@
       const variacao = primeiro ? ((ultimo - primeiro) / primeiro) * 100 : 0;
       const classe = variacao > 0.5 ? 'delta-up' : (variacao < -0.5 ? 'delta-down' : 'delta-flat');
       const sinal = variacao > 0.5 ? '+' : (variacao < -0.5 ? '−' : '±');
-      const meta = dados.meta.canais[canal.chave];
+      const rotuloUnidade = trecho ? trecho.unidade.toLowerCase() : unidade.sufixo.slice(1);
+      const referencia = trecho ? 'vs. início do trecho' : 'vs. primeira coleta';
 
       const cartao = document.createElement('article');
       cartao.className = 'index-card';
       cartao.innerHTML =
         '<header class="index-card__header">'
         + '<span class="index-card__name">' + (meta.label_curto || meta.label) + '</span>'
-        + '<span class="index-card__source">' + valores.length + ' coletas</span>'
+        + '<span class="index-card__source">' + valores.length
+        + (trecho ? ' coletas no trecho' : ' coletas') + '</span>'
         + '</header>'
         + '<div class="index-card__value">'
         + '<span class="index-card__number">' + moeda(ultimo) + '</span>'
         + '<span class="index-card__delta ' + classe + '">' + sinal
         + Math.abs(variacao).toFixed(0) + '%</span>'
         + '</div>'
-        + '<div class="index-card__base">' + dataLonga(serie.datas[serie.datas.length - 1])
-        + ' · ' + unidade.sufixo.slice(1) + ' · vs. primeira coleta</div>'
+        + '<div class="index-card__base">' + dataLonga(serie.datas[ate])
+        + ' · ' + rotuloUnidade + ' · ' + referencia + '</div>'
         + '<div class="index-card__base" style="margin-top:6px;">mín ' + moeda(Math.min.apply(null, valores))
         + ' · máx ' + moeda(Math.max.apply(null, valores)) + '</div>';
       cartoes.appendChild(cartao);
@@ -549,15 +660,31 @@
 
   function escreverNotaDeUnidade(ficha, unidade) {
     if (!notaUnidade) return;
-    const atacado = ficha.atacado_ceasa;
-    const texto = atacado.precos_rs_kg
-      ? 'No atacado, ' + ficha.label.toLowerCase() + ' é cotado por ' + atacado.unidade_origem
-        + '. A conversão divide o preço do boletim por ' + atacado.fator_conversao_kg
-        + ', o peso nominal da embalagem.'
-      : 'No atacado, ' + ficha.label.toLowerCase() + ' é cotado por ' + atacado.unidade_origem
-        + ' (' + atacado.itens_por_unidade + ' unidades), e o gráfico mantém essa unidade: a EMDAGRO '
-        + 'não publica peso por peça, e estimá-lo seria inventar número.';
-    notaUnidade.textContent = texto;
+    const bloco = ficha[canaisAtivos[0]];
+    const canal = dados.meta.canais[canaisAtivos[0]].label;
+    const nome = ficha.label.toLowerCase();
+
+    if (bloco.unidade_variou) {
+      const trechos = bloco.trechos.map((t) => t.unidade + ' até ' + dataLonga(t.fim));
+      notaUnidade.textContent = 'Em ' + canal + ', ' + nome + ' muda de unidade de venda ao longo '
+        + 'do período (' + trechos.join('; ') + '). O gráfico interrompe a linha a cada troca, e '
+        + 'não converte entre elas: a fonte não publica equivalência.';
+      return;
+    }
+    if (bloco.base_comparacao === 'kg') {
+      notaUnidade.textContent = bloco.fator_conversao_kg === 1
+        ? 'Em ' + canal + ', ' + nome + ' já é cotado por quilo no boletim: o gráfico mostra o '
+          + 'preço publicado, sem conversão.'
+        : 'Em ' + canal + ', ' + nome + ' é cotado por ' + bloco.unidade_origem
+          + '. A conversão divide o preço do boletim por ' + bloco.fator_conversao_kg
+          + ', o peso nominal da embalagem.';
+      return;
+    }
+    notaUnidade.textContent = 'Em ' + canal + ', ' + nome + ' é cotado por '
+      + bloco.unidade_origem + (bloco.itens_por_unidade > 1
+        ? ' (' + bloco.itens_por_unidade + ' ' + (bloco.peca_contada || 'unidades') + 's)' : '')
+      + ', e o gráfico mantém essa unidade: a EMDAGRO não publica peso por peça, e estimá-lo '
+      + 'seria inventar número.';
   }
 
   /* A janela anunciada é a dos canais escolhidos, não a do arquivo: com só o
@@ -572,9 +699,7 @@
   function anunciar(ficha, unidade) {
     const nomes = CANAIS.filter((c) => canaisAtivos.indexOf(c.chave) !== -1)
       .map((c) => dados.meta.canais[c.chave].label);
-    const lista = nomes.length > 1
-      ? nomes.slice(0, -1).join(', ') + ' e ' + nomes[nomes.length - 1]
-      : nomes[0];
+    const lista = juntar(nomes);
     const descricao = 'Série de preço de ' + ficha.label.toLowerCase() + ' em ' + unidade.legenda
       + ', ' + lista + ', ' + janelaLegivel(janelaDosCanais()) + '.';
 

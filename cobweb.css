@@ -430,6 +430,13 @@ a:hover { border-bottom-color: currentColor; }
   border-color: var(--color-border);
 }
 
+/* Canal que existe para o produto, mas cotado em outra unidade: não soma ao
+   gráfico atual, e por isso não fica pressionado — mas continua clicável,
+   porque clicar leva o eixo inteiro para a unidade dele. */
+.serie-btn--outra-unidade {
+  border-style: dotted;
+}
+
 /* Ponto da cor da série dentro do botão do canal. */
 .serie-btn__cor {
   display: inline-block;

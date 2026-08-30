@@ -1,23 +1,28 @@
 # Séries de preço de Aracaju — 2026
 
 Documenta `dados/series-precos-se-2026.json`, o arquivo que a página `/produtos/`
-lê. É o conjunto de referência do portal para preço interno em Sergipe: 54
-produtos, três canais de coleta, tudo vindo dos boletins da EMDAGRO/ASPLAN.
+lê. É o conjunto de referência do portal para preço interno em Sergipe: 71
+produtos em três canais de coleta, tudo vindo dos boletins da EMDAGRO/ASPLAN.
 
 | canal | produtos | coletas | janela |
 | --- | --- | --- | --- |
 | Atacado CEASA-SE | 54 | 48 | 06/01/2026 a 21/07/2026 |
-| Varejo Mercado Central | 11 | 23 | 05/01/2026 a 30/03/2026 |
+| Varejo Mercado Central | 65 | 58 | 05/01/2026 a 29/07/2026 |
 | Varejo Augusto Franco | 11 | 23 | 07/01/2026 a 27/03/2026 |
 
-As janelas são diferentes porque a transcrição é assim, não porque a fonte pare:
-o atacado foi transcrito até julho, o varejo só até março, e os onze produtos de
-varejo são os que a consolidação do primeiro trimestre trouxe. Nada no material
-que temos diz que a EMDAGRO publique varejo só para esses onze — descobrir isso
-depende de olhar os boletins de varejo de abril em diante, que ainda não foram
-transcritos. O portal não estende, não interpola e não estima nada para
-emparelhar os três canais: cada um carrega a própria lista de datas, e o gráfico
-da página desenha a união delas.
+São 71 produtos no total: 48 aparecem no atacado e no Mercado Central, 6 só no
+atacado e 17 só no varejo — treze deles cortes de carne, que o boletim de atacado
+não cota.
+
+O Augusto Franco é o único canal ainda sem reconsolidação. Sua cobertura curta
+— onze produtos, primeiro trimestre — é da transcrição, não da fonte: foi o que
+a consolidação antiga trouxe. O caso do Mercado Central mostra o tamanho do
+efeito: enquanto o portal publicava onze produtos até março, o boletim daquele
+mesmo mercado cotava 65 desde janeiro.
+
+O portal não estende, não interpola e não estima nada para emparelhar os três
+canais: cada um carrega a própria lista de datas, e o gráfico da página desenha
+a união delas.
 
 ## Origem
 
@@ -32,9 +37,24 @@ onde ela saiu. A janela de janeiro a março vem de uma consolidação anterior,
 validada célula a célula; as 26 datas de abril a julho foram extraídas de 10
 boletins.
 
-O varejo vem de `dados/precos-emdagro-q1-2026.json`, a transcrição do primeiro
-trimestre nos dois pontos de varejo do mesmo boletim. Esse arquivo continua
-servindo o mural da capa e a grade dos panoramas, que seguem no trimestre.
+O Mercado Central vem de
+`dados/fontes/emdagro-mercado-central-precos-diarios-2026.csv`, formato longo,
+uma linha por produto e dia, com o PDF de origem em cada linha. São 23 boletins,
+3.900 observações, nenhum preço faltando, 65 produtos em todas as 58 datas. Duas
+datas (20/05 e 10/06) aparecem em dois boletins cada, porque as janelas
+publicadas se sobrepõem; os valores coincidem em 100% dos produtos, e a leitura
+repetida é descartada em vez de virar coleta a mais.
+
+O Augusto Franco vem de `dados/precos-emdagro-q1-2026.json`, a consolidação
+antiga do primeiro trimestre. Esse arquivo continua servindo também o mural da
+capa e a grade dos panoramas, que seguem no trimestre.
+
+**Uma divergência entre transcrições.** A reconsolidação do Mercado Central
+reproduz exatamente a série que o portal publicava em 251 das 253 células do
+primeiro trimestre. As duas exceções são o inhame da costa em 02/03 e 04/03: a
+transcrição antiga registrava R$ 12,00 e a nova registra R$ 15,00. O portal passa
+a publicar a nova, por ser a reconsolidação feita a partir dos PDFs, mas qual
+delas está certa só o boletim original responde.
 
 ## Como regenerar
 
@@ -43,8 +63,8 @@ pip install openpyxl
 python3 scripts/importar-series-precos.py
 ```
 
-O script transpõe a planilha, converte para R$/kg, junta o varejo e carrega a
-procedência de cada data. Não corrige, não interpola e não estima preço nenhum:
+O script transpõe a planilha do atacado, lê o CSV do varejo, converte para R$/kg
+onde a unidade tem peso, junta os canais e carrega a procedência de cada data. Não corrige, não interpola e não estima preço nenhum:
 o que ele não encontra na fonte, não escreve. Quando chegar um boletim novo, ele
 entra primeiro na planilha e só depois no JSON, pelo script.
 
@@ -69,13 +89,22 @@ meta
 produtos{slug}
   label, grupo                        "vegetal" ou "animal"
   {canal}                             presente só onde há coleta
-    unidade_origem, tipo_unidade      "peso" ou "unidade"
+    unidade_origem, tipo_unidade      "peso", "unidade" ou "mista"
+    peca_contada                      unidade, molho, pé, cabeça — quando é contagem
     fator_conversao_kg, itens_por_unidade
+    base_comparacao                   "kg", "unidade:<x>" ou "mista"
+    unidade_variou                    true onde a unidade muda no meio da série
+    unidades_por_data[]               só quando variou
+    trechos[]                         só quando variou: unidade, início, fim, estatísticas
     precos_unidade_origem[]           preço como o boletim publica
     precos_rs_kg[]                    preço convertido, ou null se não converte
     medias_mensais_*{}                média por mês das coletas daquele mês
     estatisticas_*{}                  n, mínimo, máximo, média, CV, nº de mudanças
 ```
+
+`base_comparacao` é o que decide quais canais entram no mesmo gráfico. Dois
+canais só se comparam quando têm a mesma base: preço por cento e preço por molho
+são ambos "por peça", mas quantas peças o cento traz a fonte não diz.
 
 Cada array de preço tem o mesmo comprimento da lista de datas do seu canal. Não
 há buraco: toda data publicada tem preço em todos os produtos daquele canal.
@@ -97,6 +126,27 @@ branco e ovo vermelho, por caixa de 30 dúzias. Converter exigiria um peso médi
 por peça que a EMDAGRO não publica, e estimá-lo seria inventar número. A página
 detecta esse caso sozinha: mantém o eixo na unidade do boletim e diz isso na nota
 metodológica.
+
+## Unidade que muda no meio da série
+
+Em sete produtos do varejo — alface, alho, amendoim com casca cozido, caju,
+chuchu, melão espanhol e pimentão verde — a unidade de venda alterna ao longo do
+período, entre quilo e peça. O alho, por exemplo, vai de cabeça para quilo e volta
+seis vezes entre janeiro e julho.
+
+Nesses produtos o bloco do canal não publica média mensal nem conversão global:
+média de preço por cabeça com preço por quilo não significa nada. O que ele traz
+é `trechos`, um por intervalo de unidade constante, com as estatísticas de cada
+um. A página desenha um segmento por trecho, e a linha se interrompe a cada
+troca — ligar os pontos desenharia uma alta que não aconteceu.
+
+## Saltos abruptos no varejo
+
+A consolidação do varejo marca doze variações de 40% ou mais entre coletas
+consecutivas, e sete casos em que o preço médio, o máximo e o mínimo publicados
+no mesmo boletim divergem entre si. O extremo é o alho, que sai de R$ 2,00 para
+R$ 25,00 o quilo na última coleta de julho. São valores publicados e transcritos
+como estão; a própria fonte recomenda conferir antes de usá-los em série.
 
 ## Erro de publicação em junho
 
@@ -130,9 +180,16 @@ depende do arquivo original da EMDAGRO ou de consulta à ASPLAN.
   que captura erro sistemático de leitura é validação cruzada contra fonte
   independente (CODERSE, PROHORT/CONAB), ainda por fazer.
 - **Uma praça só.** Aracaju. Não descreve o preço no interior do estado.
-- **A cobertura do varejo é da transcrição, não da fonte.** Onze produtos e um
-  trimestre é o que existe transcrito, e as ressalvas da página dizem isso. Se os
-  boletins de varejo cobrem mais produtos ou meses, o portal ainda não sabe.
+- **O Augusto Franco ainda é da transcrição antiga.** Onze produtos e um
+  trimestre é o que existe transcrito desse canal. O Mercado Central mostrou que
+  a limitação era nossa; presumir o mesmo do Augusto Franco é razoável, mas só a
+  transcrição dos boletins dele confirma.
+- **Os produtos não foram fundidos por semelhança de nome.** O varejo cota
+  "abacaxi grande", "abóbora", "alface" e "cebola branca" onde o atacado cota
+  "abacaxi", "abóbora de leite", "alface lisa" e "cebola pera". São entradas
+  separadas de propósito: uni-las afirmaria uma identidade de produto que a fonte
+  não declara. Só diferenças de grafia foram pareadas — "arroz agulha T 1" com
+  "arroz agulha T1", "mamão haway" com "mamão hawai".
 - **O Mercado Central não é varejo final.** A fonte o rotula como varejo, mas os
   preços ficam próximos ou abaixo do atacado. É canal híbrido, de atacarejo
   popular. Usá-lo como proxy de preço de supermercado subestima o varejo.
@@ -142,6 +199,8 @@ depende do arquivo original da EMDAGRO ou de consulta à ASPLAN.
 Conferidos contra as fontes, produto a produto e data a data: as abas "Série
 larga" e "Série longa" da planilha batem entre si nos 54 × 48 pontos; as
 conversões para R$/kg batem com a unidade declarada; as estatísticas batem com a
-aba "Estatísticas" da fonte; as séries de varejo reproduzem exatamente o arquivo
-do primeiro trimestre; e as 22 datas de janeiro a março do atacado reproduzem
-exatamente os valores que o portal já publicava. Zero divergências.
+aba "Estatísticas" da fonte; os 65 produtos do varejo reproduzem
+exatamente as 58 datas do CSV de origem; e as 22 datas de janeiro a março do
+atacado reproduzem exatamente os valores que o portal já publicava. A única
+divergência encontrada está registrada acima: duas células do inhame da costa em
+março, onde as duas transcrições do varejo discordam.
