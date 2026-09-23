@@ -36,7 +36,6 @@
     grafico:   painel.querySelector('[data-painel-grafico]'),
     eixoIni:   painel.querySelector('[data-painel-eixo-inicio]'),
     eixoFim:   painel.querySelector('[data-painel-eixo-fim]'),
-    nota:      painel.querySelector('[data-painel-nota]'),
     resumo:    painel.querySelector('[data-painel-resumo]'),
     link:      painel.querySelector('[data-painel-link]'),
     linkNome:  painel.querySelector('[data-painel-link-nome]'),
@@ -297,11 +296,6 @@
 
     el.eixoIni.textContent = mesAno(serie.datas[0]);
     el.eixoFim.textContent = mesAno(serie.datas[serie.datas.length - 1]);
-
-    el.nota.textContent = serie.unidade.sufixo === '/kg'
-      ? 'Linha tracejada: a primeira coleta, base da variação.'
-      : 'Linha tracejada: a primeira coleta. Cotado por ' + serie.unidade.sufixo.slice(1)
-        + ', sem conversão para quilo: a fonte não publica peso por peça.';
 
     el.resumo.textContent = 'Mínimo de ' + moeda(Math.min.apply(null, valores))
       + ' e máximo de ' + moeda(Math.max.apply(null, valores))
