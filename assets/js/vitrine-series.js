@@ -61,6 +61,12 @@
     return parseInt(p[2], 10) + '/' + MESES_CURTOS[parseInt(p[1], 10) - 1] + '/' + p[0];
   };
 
+  /* '2026-07-21' → 'jul/2026': rótulo das pontas da variação. */
+  const mesCurto = function (iso) {
+    const p = iso.split('-');
+    return MESES_CURTOS[parseInt(p[1], 10) - 1] + '/' + p[0];
+  };
+
   const mesAno = function (iso) {
     const p = iso.split('-');
     return MESES_CURTOS[parseInt(p[1], 10) - 1] + ' de ' + p[0];
@@ -169,6 +175,7 @@
 
     const campos = {
       produtos: dados.meta.n_produtos || Object.keys(dados.produtos).length,
+      atacado: canal.n_produtos,
       coletas: canal.n_datas || canal.datas.length,
       varejo: comVarejo,
       janela: janelaLegivel(canal.janela)
@@ -291,8 +298,12 @@
     el.preco.innerHTML = moeda(ultima)
       + '<span class="painel__unid">' + serie.unidade.sufixo + '</span>';
 
-    el.base.textContent = dataLonga(serie.datas[serie.datas.length - 1])
-      + ' · ' + serie.unidade.legenda + ' · vs. primeira coleta';
+    /* O rótulo nomeia as duas pontas comparadas, para que a variação não
+       seja lida como tendência da janela inteira. */
+    const dataFinal = serie.datas[serie.datas.length - 1];
+    el.base.textContent = dataLonga(dataFinal)
+      + ' · ' + serie.unidade.legenda + ' · ' + mesCurto(dataFinal)
+      + ' vs. ' + mesCurto(serie.datas[0]);
 
     el.eixoIni.textContent = mesAno(serie.datas[0]);
     el.eixoFim.textContent = mesAno(serie.datas[serie.datas.length - 1]);
@@ -351,7 +362,8 @@
                   : 'estabilidade';
     return 'Série de preço de ' + serie.rotulo + ' no atacado do CEASA-SE, '
       + janelaLegivel(dados.meta.canais.atacado_ceasa.janela) + ': ' + sentido
-      + ' contra a primeira coleta, de ' + moeda(valores[0]) + ' para '
+      + ' entre ' + mesCurto(serie.datas[0]) + ' e '
+      + mesCurto(serie.datas[serie.datas.length - 1]) + ', de ' + moeda(valores[0]) + ' para '
       + moeda(valores[valores.length - 1]) + ' em ' + serie.unidade.legenda + '.';
   }
 

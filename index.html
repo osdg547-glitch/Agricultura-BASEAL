@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="cobweb.css?v=20260923-2002">
+  <link rel="stylesheet" href="cobweb.css?v=20260924-0323">
 
   <!-- Open Graph -->
   <meta property="og:title" content="CobWeb · mercados do hortifrúti em Sergipe">
@@ -485,7 +485,7 @@
         </svg>
         <div>
           <div class="site-logo__name">CobWeb</div>
-          <div class="site-logo__tag">mercados integrados · sergipe</div>
+          <div class="site-logo__tag">mercados do hortifrúti · sergipe</div>
         </div>
       </a>
       <nav class="site-nav" aria-label="Navegação principal">
@@ -510,7 +510,7 @@
 
       <div>
         <div class="eyebrow">cobweb · hortifrúti · sergipe</div>
-        <h1 class="capa__manchete">Todas as informações sobre o setor de hortifrúti de Sergipe</h1>
+        <h1 class="capa__manchete">Preços, produção e exportações do hortifrúti sergipano</h1>
         <p class="capa__deck">Aqui está centralizado um conjunto de informações sobre a situação atual da produção de hortifrúti de Sergipe, índices de preços produzidos por agências estatais e de elaboração própria, além de fotografias do cenário internacional do setor e da forma como Sergipe nele se insere.</p>
       </div>
 
@@ -520,7 +520,7 @@
           <span class="sumario__num" aria-hidden="true">01</span>
           <span>
             <span class="sumario__nome">Mercado interno</span>
-            <span class="sumario__meta"><span data-resumo="produtos">71</span> produtos em Aracaju, <span data-resumo="varejo">48</span> deles nos dois canais · <span data-resumo="janela">janeiro a julho de 2026</span></span>
+            <span class="sumario__meta"><span data-resumo="produtos">71</span> produtos em Aracaju, <span data-resumo="varejo">48</span> deles com preço no atacado e no varejo · <span data-resumo="janela">janeiro a julho de 2026</span></span>
           </span>
         </a>
 
@@ -575,7 +575,8 @@
 
          Nenhum número aqui é escrito à mão: contagens, janela,
          unidade e variação saem do JSON, com as convenções da
-         página de produtos (variação contra a primeira coleta,
+         página de produtos (variação entre a primeira e a última
+         coleta, rotulada pelos meses das duas pontas,
          produto cotado por cento mantido na unidade do boletim).
          O HTML carrega a primeira série já desenhada, para que a
          home diga alguma coisa antes do JavaScript rodar.
@@ -586,11 +587,11 @@
         <h2 class="section-title" style="margin: 0;">Séries temporais de preços</h2>
       </div>
 
-      <div class="vitrine" data-vitrine data-json="dados/series-precos-se-2026.json?v=20260923-2002">
+      <div class="vitrine" data-vitrine data-json="dados/series-precos-se-2026.json?v=20260924-0323">
 
         <div class="vitrine__texto">
-          <p>Os preços dos dois principais mercados de Aracaju são apresentados graficamente, facilitando a visualização de suas respectivas tendências temporais.</p>
-          <p>As séries usam como fonte os boletins semanais de preços da EMDAGRO, coletados de duas a três vezes por semana.</p>
+          <p>Os preços do atacado da CEASA-SE e do varejo em dois mercados de Aracaju (Mercado Central e Augusto Franco) aparecem em gráfico, para que se veja a tendência de cada um ao longo do semestre.</p>
+          <p>As séries vêm do boletim semanal de preços da EMDAGRO, que traz de duas a três coletas por semana.</p>
 
           <dl class="vitrine__fatos">
             <div class="vitrine__fato">
@@ -598,11 +599,15 @@
               <dd data-resumo="produtos">71</dd>
             </div>
             <div class="vitrine__fato">
-              <dt>coletas no atacado</dt>
+              <dt>produtos no atacado</dt>
+              <dd data-resumo="atacado">54</dd>
+            </div>
+            <div class="vitrine__fato">
+              <dt>datas de coleta no atacado</dt>
               <dd data-resumo="coletas">48</dd>
             </div>
             <div class="vitrine__fato">
-              <dt>atacado e varejo</dt>
+              <dt>produtos com preço no atacado e no varejo</dt>
               <dd data-resumo="varejo">48</dd>
             </div>
             <div class="vitrine__fato">
@@ -623,10 +628,10 @@
             </div>
 
             <div class="painel__preco" data-painel-preco>R$&nbsp;5,00<span class="painel__unid">/kg</span></div>
-            <div class="painel__base" data-painel-base>21/jul/2026 · R$ por quilo · vs. primeira coleta</div>
+            <div class="painel__base" data-painel-base>21/jul/2026 · R$ por quilo · jul/2026 vs. jan/2026</div>
 
             <svg class="painel__grafico" data-painel-grafico viewBox="0 0 480 220" role="img"
-                 aria-label="Série de preço de acerola no atacado do CEASA-SE, janeiro a julho de 2026: alta de 100% contra a primeira coleta, de R$ 2,50 para R$ 5,00 em R$ por quilo.">
+                 aria-label="Série de preço de acerola no atacado do CEASA-SE, janeiro a julho de 2026: alta de 100% entre jan/2026 e jul/2026, de R$ 2,50 para R$ 5,00 em R$ por quilo.">
               <path class="spark__area" d="M 10.0,202 L 10.0,202.0 L 19.8,202.0 L 29.6,202.0 L 39.4,202.0 L 49.1,202.0 L 58.9,202.0 L 68.7,202.0 L 78.5,202.0 L 88.3,202.0 L 98.1,202.0 L 107.9,202.0 L 117.7,202.0 L 127.4,202.0 L 137.2,202.0 L 147.0,128.4 L 156.8,128.4 L 166.6,128.4 L 176.4,128.4 L 186.2,128.4 L 196.0,128.4 L 205.7,128.4 L 215.5,128.4 L 225.3,110.0 L 235.1,110.0 L 244.9,110.0 L 254.7,110.0 L 264.5,18.0 L 274.3,18.0 L 284.0,18.0 L 293.8,18.0 L 303.6,18.0 L 313.4,18.0 L 323.2,18.0 L 333.0,18.0 L 342.8,18.0 L 352.6,18.0 L 362.3,18.0 L 372.1,18.0 L 381.9,18.0 L 391.7,18.0 L 401.5,18.0 L 411.3,18.0 L 421.1,18.0 L 430.9,18.0 L 440.6,18.0 L 450.4,18.0 L 460.2,18.0 L 470.0,18.0 L 470.0,202 Z"/>
               <line class="spark__ref" x1="10" y1="202.0" x2="470" y2="202.0"/>
               <polyline class="spark__linha" points="10.0,202.0 19.8,202.0 29.6,202.0 39.4,202.0 49.1,202.0 58.9,202.0 68.7,202.0 78.5,202.0 88.3,202.0 98.1,202.0 107.9,202.0 117.7,202.0 127.4,202.0 137.2,202.0 147.0,128.4 156.8,128.4 166.6,128.4 176.4,128.4 186.2,128.4 196.0,128.4 205.7,128.4 215.5,128.4 225.3,110.0 235.1,110.0 244.9,110.0 254.7,110.0 264.5,18.0 274.3,18.0 284.0,18.0 293.8,18.0 303.6,18.0 313.4,18.0 323.2,18.0 333.0,18.0 342.8,18.0 352.6,18.0 362.3,18.0 372.1,18.0 381.9,18.0 391.7,18.0 401.5,18.0 411.3,18.0 421.1,18.0 430.9,18.0 440.6,18.0 450.4,18.0 460.2,18.0 470.0,18.0"/>
@@ -705,6 +710,6 @@
   </footer>
 
   <!-- Vitrine giratória das séries de preço -->
-  <script src="assets/js/vitrine-series.js?v=20260923-2002"></script>
+  <script src="assets/js/vitrine-series.js?v=20260924-0323"></script>
 </body>
 </html>

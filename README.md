@@ -1,24 +1,34 @@
 # cobweb
 
-Portal editorial de preços agricolas com foco em hortifrúti em Sergipe.
+Portal editorial sobre os mercados do hortifrúti em Sergipe: preços, produção e exportações.
 
 ## Sobre
 
-Site estático que publica mensalmente um índice de preços do hortifrúti em Aracaju (CEASA-SE), comparado com Recife (CEASA-PE) e São Paulo (CEAGESP), acompanhado de comentário de conjuntura e fichas individuais por produto. Além disso, dá uma panorama do mercado internacional, os preços negociados em diversos países e os principais portos de exportação nascional. Analisa o desepenho de outro países que atuam no setor, contribuindo para a estrategia dos produtores nacionais. 
+Site estático que reúne três leituras do hortifrúti sergipano:
 
-Fonte primária: PROHORT/CONAB para os preços do ceasas. Comex e sites internacionais para analíse internacional. 
+- **Mercado interno**: séries de preço de 71 produtos em Aracaju, no atacado da
+  CEASA-SE e no varejo do Mercado Central e do Augusto Franco, a partir do
+  boletim semanal da EMDAGRO/ASPLAN (de duas a três coletas por semana).
+- **Estrutura produtiva**: o que o estado planta e colhe, município a município,
+  pela Produção Agrícola Municipal (PAM/IBGE).
+- **Mercado externo**: o que Sergipe exporta, em valor e volume, pelo Comex Stat.
+
+As leituras são publicadas como panoramas em formato de ensaio, uma cadeia por
+vez, com série, mapa e comentário, sempre com as fontes citadas e a nota de método.
 
 ## Estrutura
 
 ```
 cobweb/
-├── index.html                 # home com índice geral
+├── index.html                 # home: sumário, vitrine de séries e panoramas
+├── cobweb.css                 # sistema de design completo
 ├── assets/
-│   ├── css/cobweb.css         # sistema de design completo
-│   ├── js/indice-geral.js     # gráfico do índice
+│   ├── js/                    # gráficos, vitrine e página de produtos
 │   └── img/                   # logo e favicon (SVG)
 ├── produtos/                  # série de preço de todos os produtos, em uma página
-├── panoramas/                 # arquivo de comentários mensais
+├── panoramas/                 # ensaios por cadeia (laranja, exportações)
+├── servicos/                  # análise econômica sob demanda
+├── sobre/                     # quem publica e com qual método
 ├── dados/                     # exports em JSON e CSV
 │   └── fontes/                # planilhas de origem, para conferência
 ├── scripts/                   # importação de dados e versionamento de assets
@@ -95,10 +105,8 @@ GitHub Pages: configurar em Settings → Pages → Source: main / root. URL fica
 Veja `docs/BRIEFING.md` para o contexto completo do projeto. Em ordem de prioridade:
 
 1. Decidir e migrar para um gerador estático (Eleventy ou Astro)
-2. Estabelecer o pipeline de dados a partir do PROHORT
-3. Criar templates de página de produto e de panorama mensal
-4. Versão mobile refinada (auditoria atual)
-5. Explicação do índice na nota metodológica, que abre em janela a partir da meta strip
+2. Criar templates de panorama, para que novas cadeias entrem sem copiar HTML
+3. Versão mobile refinada (auditoria atual)
 
 ## Identidade visual
 
