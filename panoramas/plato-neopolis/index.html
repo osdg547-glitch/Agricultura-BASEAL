@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platô de Neópolis: polo de produção de limão-taiti · CobWeb</title>
+  <meta name="description" content="Produção, área, rendimento e exportações do limão no Platô de Neópolis, Sergipe, de 2001 a 2025. Fontes: IBGE, PAM, tabela 1613, e Comex Stat/MDIC.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg">
+
+  <!-- Tipografia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../../cobweb.css?v=20260926-0139">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Platô de Neópolis: polo de produção de limão-taiti · CobWeb">
+  <meta property="og:description" content="Onde se produz o limão exportado por Sergipe, quanto dele sai do país, e se a produção cresceu por área ou por rendimento. Série de 2001 a 2025.">
+  <meta property="og:type" content="article">
+
+  <style>
+    /* ============================================================
+       Mapa temático do limão
+       As cores vêm dos tokens do cobweb.css; nenhum hexadecimal solto.
+       ============================================================ */
+
+    .cw-mapa {
+      --mapa-c1: var(--color-map-1);
+      --mapa-c2: var(--color-map-2);
+      --mapa-c3: var(--color-map-3);
+      --mapa-c4: var(--color-map-4);
+      --mapa-c5: var(--color-map-5);
+      --mapa-zero: var(--color-map-zero);
+      --mapa-sem-info: var(--color-map-nodata);
+      --mapa-borda: var(--color-bg);
+      --mapa-texto: var(--color-text);
+      --mapa-texto-fraco: var(--color-text-secondary);
+      --mapa-acento: var(--color-brand);
+
+      max-width: 640px;
+      margin: 0 auto 36px;
+      color: var(--mapa-texto);
+    }
+
+    /* Os botões de variável do mapa vestem .serie-btn, do cobweb.css, o mesmo
+       componente do seletor do gráfico acima. Aqui fica só o arranjo. */
+    .cw-mapa-controles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .cw-mapa-ano input:focus-visible {
+      outline: 2px solid var(--color-brand);
+      outline-offset: 2px;
+    }
+
+    /* Controle de ano */
+    .cw-mapa-ano {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+    }
+
+    .cw-mapa-ano input[type="range"] {
+      flex: 1;
+      max-width: 320px;
+      accent-color: var(--color-brand);
+    }
+
+    .cw-mapa-ano-valor {
+      font-variant-numeric: tabular-nums;
+      color: var(--color-text);
+      min-width: 3.5ch;
+    }
+
+    /* Legenda */
+    .cw-mapa-legenda {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      margin: 0 0 12px;
+      padding: 0;
+      list-style: none;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    .cw-mapa-legenda li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cw-mapa-chave {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+      border: 1px solid var(--color-border);
+      flex: 0 0 auto;
+    }
+
+    /* Mapa */
+    .cw-mapa-palco { position: relative; }
+
+    .cw-mapa-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .cw-mapa-mun {
+      stroke: var(--mapa-borda);
+      stroke-width: 0.6;
+      transition: fill 160ms ease;
+    }
+
+    .cw-mapa-mun.em-destaque {
+      stroke: var(--mapa-acento);
+      stroke-width: 1.4;
+    }
+
+    /* As mesmas classes vestem o polígono do SVG e o quadradinho da legenda,
+       que é um span. Daí as duas propriedades: fill pinta um, background o outro. */
+    .cw-mapa-sem-info { fill: var(--mapa-sem-info); background: var(--mapa-sem-info); }
+    .cw-mapa-zero     { fill: var(--mapa-zero);     background: var(--mapa-zero); }
+    .cw-mapa-c1       { fill: var(--mapa-c1);       background: var(--mapa-c1); }
+    .cw-mapa-c2       { fill: var(--mapa-c2);       background: var(--mapa-c2); }
+    .cw-mapa-c3       { fill: var(--mapa-c3);       background: var(--mapa-c3); }
+    .cw-mapa-c4       { fill: var(--mapa-c4);       background: var(--mapa-c4); }
+    .cw-mapa-c5       { fill: var(--mapa-c5);       background: var(--mapa-c5); }
+
+    /* Dica de contexto no hover */
+    .cw-mapa-dica {
+      position: absolute;
+      transform: translate(12px, -50%);
+      pointer-events: none;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      font-size: 12px;
+      line-height: 1.45;
+      max-width: 15rem;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .cw-mapa-dica strong {
+      display: block;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .cw-mapa-dica span {
+      color: var(--color-text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Nota de rodapé do mapa */
+    .cw-mapa-nota,
+    .cw-mapa-erro {
+      margin: 12px 0 0;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      font-style: italic;
+    }
+
+    /* Em tela estreita a dica precisa caber na viewport, então quebra linha */
+    @media (max-width: 640px) {
+      .cw-mapa-dica {
+        white-space: normal;
+        max-width: 11rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cw-mapa-mun { transition: none; }
+    }
+
+    /* ============================================================
+       Gráficos do Platô
+       ============================================================ */
+
+    /* Subtítulo de gráfico dentro de uma seção: um degrau abaixo do
+       section-title, na mesma família serifada. */
+    .grafico-titulo {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.3;
+      color: var(--color-text);
+      margin: 28px 0 6px;
+    }
+
+    .grafico-desc {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin: 0 0 18px;
+    }
+
+    .grafico-fonte {
+      font-size: 13px;
+      margin: 10px 0 32px;
+    }
+
+    @media (max-width: 640px) {
+      .grafico-titulo { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       Cabeçalho
+       ============================================================ -->
+  <header class="site-header">
+    <div class="container container--wide site-header__inner">
+      <a href="../../" class="site-logo" aria-label="CobWeb, página inicial">
+        <svg class="site-logo__mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M 16 4 L 28 16 L 16 28 L 4 16 Z" stroke-width="1"/>
+            <path d="M 16 9 L 23 16 L 16 23 L 9 16 Z" stroke-width="1"/>
+            <path d="M 16 13 L 19 16 L 16 19 L 13 16 Z" stroke-width="1"/>
+            <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+          </g>
+        </svg>
+        <div>
+          <div class="site-logo__name">CobWeb</div>
+          <div class="site-logo__tag">mercados do hortifrúti · sergipe</div>
+        </div>
+      </a>
+      <nav class="site-nav" aria-label="Navegação principal">
+        <a href="../../">home</a>
+        <a href="../../produtos/">produtos</a>
+        <a href="../../servicos/">serviços</a>
+        <a href="../" class="is-active">panoramas</a>
+        <a href="../../sobre/">sobre</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       Conteúdo principal
+       ============================================================ -->
+  <main class="container">
+
+    <!-- Manchete -->
+    <section>
+      <div class="eyebrow">panoramas · produção · limão · 2001 a 2025</div>
+      <h1 class="headline">Platô de Neópolis: polo de produção de limão-taiti</h1>
+      <!-- TEXTO: deck. Uma ou duas frases com o fato central do ensaio. A frase abaixo é provisória e só descreve o conteúdo. -->
+      <p class="deck">Onde se produz o limão de Sergipe, quanto dele o estado exporta, e se a produção do Platô cresceu por área plantada ou por rendimento.</p>
+    </section>
+
+    <!-- Meta strip -->
+    <div class="meta-strip">
+      <span class="meta-strip__item">
+        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+        2001 a 2025
+      </span>
+      <span class="meta-strip__item">
+        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v6c0 1.7 4 3 9 3s9-1.3 9-3V6M3 12v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg>
+        fontes: IBGE, PAM, tabela 1613 · Comex Stat
+      </span>
+      <span class="meta-strip__item">
+        <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-4.35-7-10a7 7 0 1 1 14 0c0 5.65-7 10-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg>
+        5 municípios no Platô
+      </span>
+      <span class="meta-strip__item">
+        <a href="#nota-metodologica">
+          <svg class="meta-strip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align: -3px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          metodologia
+        </a>
+      </span>
+    </div>
+
+    <!-- Cards de destaque. Valores lidos de dados/limao-plato.json;
+         conferir de novo se o arquivo for atualizado. -->
+    <section class="index-grid" aria-label="Destaques da série do limão no Platô de Neópolis">
+
+      <article class="index-card">
+        <header class="index-card__header">
+          <span class="index-card__name">2025</span>
+          <span class="index-card__source">produção do Platô</span>
+        </header>
+        <div class="index-card__value">
+          <span class="index-card__number">5.137</span>
+          <span class="index-card__delta delta-down">−61,9%</span>
+        </div>
+        <div class="index-card__base">toneladas · frente ao pico de 2021</div>
+      </article>
+
+      <article class="index-card">
+        <header class="index-card__header">
+          <span class="index-card__name">2025</span>
+          <span class="index-card__source">rendimento do Platô</span>
+        </header>
+        <div class="index-card__value">
+          <span class="index-card__number">30.396</span>
+        </div>
+        <div class="index-card__base">kg/ha · Brasil: 25.556</div>
+      </article>
+
+      <article class="index-card">
+        <header class="index-card__header">
+          <span class="index-card__name">2024</span>
+          <span class="index-card__source">parcela exportada</span>
+        </header>
+        <div class="index-card__value">
+          <span class="index-card__number">29,2%</span>
+        </div>
+        <div class="index-card__base">da produção do Platô · máximo da série</div>
+      </article>
+
+    </section>
+
+    <!-- Abertura do ensaio -->
+    <section aria-label="Abertura">
+      <div class="prose" style="margin-bottom: 36px;">
+        <!-- TEXTO: abertura, parágrafo 1. O que é o Platô de Neópolis (perímetro irrigado da CODEVASF no Baixo São Francisco), o limão-taiti e o seu peso na pauta de exportação de Sergipe. -->
+        <!-- TEXTO: abertura, parágrafo 2. As perguntas do ensaio, na ordem dos cinco objetivos: onde, quanto, que parcela sai, área ou rendimento, e como o Platô se compara ao Brasil. Fontes: PAM/IBGE e Comex Stat. -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Objetivo 1 · Localizar a produção
+         ============================================================ -->
+    <section aria-labelledby="titulo-mapa">
+      <h2 class="section-title" id="titulo-mapa">Onde se produz limão em Sergipe</h2>
+      <p class="grafico-desc">
+        Escolha a variável e arraste o controle de ano. Os cortes de classe são fixos por variável e calculados sobre a distribuição de 2001 a 2025 inteira, de modo que a mesma cor significa a mesma coisa em qualquer ano da série. O Platô reúne Japoatã, Neópolis, Santana do São Francisco, Pacatuba e Ilha das Flores, no nordeste do estado.
+      </p>
+
+      <div id="mapa-limao">
+        <p class="cw-mapa-erro">Carregando o mapa. Se nada aparecer, os arquivos de dados não foram encontrados.</p>
+      </div>
+
+      <div class="prose" style="margin-bottom: 36px;">
+        <!-- TEXTO: leitura do mapa. Concentração da produção nos municípios do Platô, com Japoatã à frente; o polo secundário no sul (Itabaianinha, Arauá). -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Objetivo 2 · Dimensionar produção e exportações
+         ============================================================ -->
+    <section aria-labelledby="titulo-producao">
+      <h2 class="section-title" id="titulo-producao">Produção e exportações do Platô</h2>
+
+      <div class="prose">
+        <!-- TEXTO: introdução da seção. Ordem de grandeza da produção do Platô frente ao resto do estado. -->
+      </div>
+
+      <!-- Gráfico A -->
+      <div id="limao-producao-wrapper">
+        <h3 class="grafico-titulo">Platô contra o resto de Sergipe, 2001 a 2025</h3>
+        <p class="grafico-desc">Soma dos cinco municípios do Platô e soma dos demais municípios do estado.</p>
+
+        <div class="serie-toggle" role="group" aria-label="Selecionar variável">
+          <button class="serie-btn" data-serie="qtd" aria-pressed="true">Quantidade produzida</button>
+          <button class="serie-btn" data-serie="area" aria-pressed="false">Área colhida</button>
+        </div>
+
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="limao-producao" data-fonte="../../dados/limao-plato.json?v=20260926-0139"
+                  role="img"
+                  aria-label="Série anual do limão, 2001 a 2025, no Platô de Neópolis e no resto de Sergipe, em duas variáveis alternáveis: quantidade produzida em toneladas e área colhida em hectares.">
+            Quantidade produzida de limão, 2001 a 2025. O Platô de Neópolis sai de 3.900 toneladas em 2001, chega ao máximo de 13.475 em 2021 e cai para 5.137 em 2025. O resto de Sergipe vai de 4.974 toneladas em 2001 para 3.584 em 2025. A participação do Platô na produção estadual passa de 43,9% em 2001 para 79,3% em 2021 e 58,9% em 2025. Na área colhida, o Platô vai de 260 hectares em 2001 ao máximo de 629 em 2015 e fecha 2025 com 169; o resto do estado vai de 840 para 435 hectares.
+          </canvas>
+        </div>
+
+        <p class="method-note__text grafico-fonte">
+          <em>Fonte: IBGE, Produção Agrícola Municipal, tabela 1613, extração em 25/09/2026. Elaboração própria.</em>
+        </p>
+      </div>
+
+      <div class="prose">
+        <!-- TEXTO: leitura do gráfico A. -->
+      </div>
+
+      <!-- Gráfico B -->
+      <h3 class="grafico-titulo">Área destinada à colheita e área colhida no Platô</h3>
+      <p class="grafico-desc">Quando a área destinada supera a colhida, parte do pomar já está plantada mas ainda não produz.</p>
+
+      <div class="chart-container" style="height: 280px;">
+        <canvas id="limao-areas" data-fonte="../../dados/limao-plato.json?v=20260926-0139"
+                role="img"
+                aria-label="Área destinada à colheita e área colhida de limão no Platô de Neópolis, em hectares, 2001 a 2025.">
+          Área destinada à colheita e área colhida de limão no Platô de Neópolis, 2001 a 2025. As duas coincidem na maior parte da série. A destinada supera a colhida em 2006 (517 contra 454 hectares), de 2012 a 2014 (405 contra 365 em 2012 e 2013; 505 contra 402 em 2014) e em 2016 (521 contra 421). Em 2025 as duas estão em 169 hectares.
+        </canvas>
+      </div>
+
+      <p class="method-note__text grafico-fonte">
+        <em>Fonte: IBGE, Produção Agrícola Municipal, tabela 1613, extração em 25/09/2026. Elaboração própria.</em>
+      </p>
+
+      <div class="prose">
+        <!-- TEXTO: leitura do gráfico B. -->
+      </div>
+
+      <!-- Exportações: o mesmo gráfico do panorama de exportações, lendo o
+           mesmo arquivo. Os dados não são duplicados. -->
+      <div id="limao-chart-wrapper">
+        <h3 class="grafico-titulo">Exportações de limão-taiti de Sergipe, 2016 a 2026</h3>
+        <p class="grafico-desc">SH6 080550, UF do produto Sergipe. O preço implícito é o valor dividido pelo peso, não uma cotação de mercado. 2026 é parcial.</p>
+
+        <div class="serie-toggle" role="group" aria-label="Selecionar vista do gráfico">
+          <button class="serie-btn" data-vista="volume-preco" aria-pressed="true">Volume e preço do limão-taiti</button>
+          <button class="serie-btn" data-vista="preco-sh4" aria-pressed="false">Preço implícito por categoria</button>
+        </div>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="limao-volume-preco" data-fonte="../../dados/exportacoes-se.json?v=20260926-0139" role="img" aria-label="Gráfico em dois modos: (1) volume anual em toneladas e preço implícito US$/kg do limão-taiti (SH6 080550), Sergipe 2016–2026; (2) preço médio implícito anual por categoria SH4: citrinos (0805), frutas secas (0813) e manga/abacaxi (0804).">
+            Série anual de volume exportado (toneladas) e preço médio implícito (US$ FOB/kg) do limão-taiti (SH6 080550) por Sergipe, 2016 a 2026. Na segunda vista, compara preços implícitos entre categorias SH4: citrinos in natura (~US$ 1/kg), frutas secas processadas (~US$ 22/kg em 2016–2017) e manga/abacaxi (~US$ 1,1/kg).
+          </canvas>
+        </div>
+        <p class="method-note__text grafico-fonte">
+          <em>Fonte: Comex Stat / MDIC, geração 17/mai/2026. Elaboração própria.</em>
+        </p>
+      </div>
+
+      <div class="prose" style="margin-bottom: 36px;">
+        <!-- TEXTO: leitura das exportações. Remeter ao <a href="../exportacoes/">panorama de exportações</a>. -->
+        <!-- DESTINOS: aguardando dados do Comex Stat -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Objetivo 3 · Parcela exportada
+         ============================================================ -->
+    <section aria-labelledby="titulo-parcela">
+      <h2 class="section-title" id="titulo-parcela">Quanto da produção sai do país</h2>
+      <p class="grafico-desc">Produção do Platô e exportação sergipana de limão-taiti, em toneladas (barras, eixo esquerdo), e a razão entre as duas (linha, eixo direito), 2016 a 2025.</p>
+
+      <div class="chart-container" style="height: 300px;">
+        <canvas id="limao-parcela" data-fonte="../../dados/limao-plato.json?v=20260926-0139"
+                role="img"
+                aria-label="Produção de limão do Platô de Neópolis e exportação de Sergipe em toneladas, com a parcela exportada em porcentagem, 2016 a 2025.">
+          Produção do Platô, exportação e parcela exportada, 2016 a 2025. A parcela é de 16,9% em 2016 e 12,9% em 2017, cai para 5,0% em 2018, 4,6% em 2019, 1,8% em 2020 e zero em 2021, e volta a subir: 1,3% em 2022, 18,7% em 2023, 29,2% em 2024, o máximo da série, com 2.376 toneladas exportadas, e 24,5% em 2025.
+        </canvas>
+      </div>
+
+      <p class="method-note__text grafico-fonte" style="margin-bottom: 10px;">
+        <em>Fonte: IBGE, Produção Agrícola Municipal, tabela 1613; Comex Stat / MDIC, SH6 080550. Elaboração própria.</em>
+      </p>
+      <p class="method-note__text grafico-fonte">
+        A parcela supõe que toda a exportação sergipana de 080550 sai do Platô. O Comex Stat identifica apenas a UF de origem do produto, não o município.
+      </p>
+
+      <div class="prose" style="margin-bottom: 36px;">
+        <!-- TEXTO: leitura da parcela exportada. -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Objetivo 4 · Decompor a variação da produção
+         ============================================================ -->
+    <section id="limao-decomposicao-wrapper" aria-labelledby="titulo-decomposicao">
+      <h2 class="section-title" id="titulo-decomposicao">Área ou rendimento</h2>
+      <p class="grafico-desc">Variação da produção entre médias trienais, repartida entre a contribuição da área colhida e a do rendimento, em pontos percentuais. O losango marca a variação total.</p>
+
+      <div class="serie-toggle" role="group" aria-label="Selecionar recorte">
+        <button class="serie-btn" data-recorte="plato" aria-pressed="true">Platô</button>
+        <button class="serie-btn" data-recorte="sergipe" aria-pressed="false">Sergipe</button>
+        <button class="serie-btn" data-recorte="brasil" aria-pressed="false">Brasil</button>
+        <button class="serie-btn" data-recorte="sao_paulo" aria-pressed="false">São Paulo</button>
+      </div>
+
+      <div class="chart-container" style="height: 280px;">
+        <canvas id="limao-decomposicao" data-fonte="../../dados/limao-plato.json?v=20260926-0139"
+                role="img"
+                aria-label="Decomposição da variação da produção de limão entre área colhida e rendimento, em três intervalos entre médias trienais, para Platô de Neópolis, Sergipe, Brasil e São Paulo.">
+          Decomposição da variação da produção de limão no Platô de Neópolis. De 2001–2003 a 2011–2013, a produção sobe 49,8%: 18,0 pontos vêm da área e 31,8 do rendimento. De 2011–2013 a 2019–2021, sobe 59,6%: 27,0 pontos da área e 32,6 do rendimento. De 2019–2021 a 2023–2025, cai 28,3%: a área contribui com menos 38,3 pontos e o rendimento com mais 10,0. Os botões trocam o recorte para Sergipe, Brasil e São Paulo.
+        </canvas>
+      </div>
+
+      <p class="method-note__text grafico-fonte">
+        <em>Fonte: IBGE, Produção Agrícola Municipal, tabela 1613. Elaboração própria.</em>
+      </p>
+
+      <div class="prose" style="margin-bottom: 36px;">
+        <!-- TEXTO: leitura da decomposição, comparando o Platô aos outros recortes. -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Objetivo 5 · Comparar com o Brasil e verificar o calendário
+         ============================================================ -->
+    <section aria-labelledby="titulo-comparacao">
+      <h2 class="section-title" id="titulo-comparacao">O Platô frente ao Brasil</h2>
+
+      <!-- Gráfico E -->
+      <h3 class="grafico-titulo">Rendimento médio, 2001 a 2025</h3>
+      <p class="grafico-desc">Quilogramas por hectare colhido. Nos agregados, o rendimento é a razão entre quantidade e área somadas, não a média dos rendimentos municipais.</p>
+
+      <div class="chart-container" style="height: 300px;">
+        <canvas id="limao-rendimento" data-fonte="../../dados/limao-plato.json?v=20260926-0139"
+                role="img"
+                aria-label="Rendimento médio do limão em quilogramas por hectare, 2001 a 2025, no Platô de Neópolis, em Sergipe, em São Paulo e no Brasil.">
+          Rendimento médio do limão, 2001 a 2025. Em 2001: Platô 15.000 quilogramas por hectare, Sergipe 8.067, São Paulo 22.812, Brasil 19.541. Em 2025: Platô 30.396, Sergipe 14.439, São Paulo 32.987, Brasil 25.556. O máximo do Platô é 33.311 em 2024; o mínimo, 11.311 em 2016.
+        </canvas>
+      </div>
+
+      <p class="method-note__text grafico-fonte">
+        <em>Fonte: IBGE, Produção Agrícola Municipal, tabela 1613. Elaboração própria.</em>
+      </p>
+
+      <div class="prose">
+        <!-- TEXTO: leitura do rendimento. -->
+      </div>
+
+      <!-- Gráfico F -->
+      <h3 class="grafico-titulo">Calendário de embarques</h3>
+      <p class="grafico-desc">Participação de cada mês no volume exportado de limão-taiti no período, em %.</p>
+
+      <div class="chart-container" style="height: 280px;">
+        <canvas id="limao-calendario" data-fonte="../../dados/limao-plato.json?v=20260926-0139"
+                role="img"
+                aria-label="Participação mensal no volume exportado de limão-taiti por Sergipe, janeiro a dezembro, comparando 2016–2019 e 2023–2025.">
+          Calendário de embarques do limão-taiti. Em 2016–2019, janeiro concentra 18,2% do volume, seguido de março (15,1%) e abril (12,5%); junho tem o menor peso, 1,6%. Em 2023–2025, fevereiro lidera com 14,6% e março tem 14,1%; outubro e novembro caem para 0,8% e 1,3%.
+        </canvas>
+      </div>
+
+      <p class="method-note__text grafico-fonte">
+        <em>Fonte: Comex Stat / MDIC, SH6 080550, geração 17/mai/2026. Elaboração própria.</em>
+      </p>
+
+      <div class="prose" style="margin-bottom: 36px;">
+        <!-- TEXTO: leitura do calendário e fechamento do ensaio. -->
+      </div>
+    </section>
+
+    <!-- Nota metodológica -->
+    <aside id="nota-metodologica" class="method-note">
+      <div class="method-note__label">nota metodológica</div>
+      <p class="method-note__text">
+        Dados de produção do IBGE, Produção Agrícola Municipal, tabela 1613, produto "Limão", municípios de Sergipe, extraídos do SIDRA em 25 de setembro de 2026. Exportações do Comex Stat / MDIC, fluxo de exportação, UF do produto Sergipe, SH6 080550, geração de 17 de maio de 2026. Cinco ressalvas importam na leitura.
+        <br><br>
+        <strong>1. A PAM não distingue variedades.</strong> O produto é registrado como "Limão". No Platô de Neópolis a produção é de limão-taiti, e é essa a leitura adotada aqui, mas o número do IBGE cobre qualquer limão colhido no município.
+        <br><br>
+        <strong>2. A série começa em 2001 por quebra de unidade.</strong> Até 2000 o IBGE media quantidade em mil frutos e rendimento em frutos por hectare; de 2001 em diante, em toneladas e quilogramas por hectare. Séries que cruzam 2001 não são comparáveis sem conversão.
+        <br><br>
+        <strong>3. A composição do Platô é provisória.</strong> O agregado soma Japoatã, Neópolis, Santana do São Francisco, Pacatuba e Ilha das Flores, a confirmar com a CODEVASF. Rendimento e preço implícito dos agregados são recalculados sobre os totais (quantidade sobre área, valor sobre quantidade), e não médias dos valores municipais.
+        <br><br>
+        <strong>4. A parcela exportada depende de uma ponte entre UF e Platô.</strong> É a exportação sergipana de 080550 dividida pela produção do Platô na PAM. O Comex Stat identifica só a UF de origem do produto, e a conta supõe que toda a exportação de 080550 do estado sai do Platô e que 080550 é limão-taiti. A exportação está disponível de 2016 em diante; 2026, incompleto, fica de fora.
+        <br><br>
+        <strong>5. A decomposição usa médias trienais</strong> (2001–2003, 2011–2013, 2019–2021 e 2023–2025), para reduzir o peso de um ano atípico. A variação da produção entre duas médias é repartida entre área colhida e rendimento na proporção das variações logarítmicas de cada um, de modo que as duas contribuições somam exatamente a variação total.
+        <br><br>
+        O calendário de embarques é a participação de cada mês no volume exportado, em quilogramas, somado sobre o período. A malha municipal do mapa e os cortes de classe seguem o mesmo método do <a href="../laranja/">panorama da laranja</a>: junção por código do IBGE de sete dígitos e cortes fixos por variável sobre toda a série.
+      </p>
+    </aside>
+
+  </main>
+
+  <!-- ============================================================
+       Footer
+       ============================================================ -->
+  <footer class="site-footer container container--wide">
+    <span>CobWeb · publicação editorial independente</span>
+    <span>cc by-sa 4.0</span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="../../assets/js/limao-plato-comum.js?v=20260926-0139"></script>
+  <script src="../../assets/js/limao-plato-producao.js?v=20260926-0139"></script>
+  <script src="../../assets/js/limao-volume-preco.js?v=20260926-0139"></script>
+  <script src="../../assets/js/limao-parcela.js?v=20260926-0139"></script>
+  <script src="../../assets/js/limao-decomposicao.js?v=20260926-0139"></script>
+  <script src="../../assets/js/limao-rendimento-calendario.js?v=20260926-0139"></script>
+  <script src="../../assets/js/mapa-laranja.js?v=20260926-0139"></script>
+  <script src="../../assets/js/nota-metodologica.js?v=20260926-0139"></script>
+  <script>
+    CobWebMapaLaranja.montar('#mapa-limao', {
+      geojson: '../../dados/se-municipios.geojson',
+      dados: '../../dados/limao-municipios.json',
+      variavel: 'qtd',
+      ano: 2025
+    });
+  </script>
+
+</body>
+</html>

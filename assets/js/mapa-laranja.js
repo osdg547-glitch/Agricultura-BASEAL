@@ -1,5 +1,6 @@
 /*
- * Mapa temático da laranja nos municípios de Sergipe.
+ * Mapa temático de uma lavoura nos municípios de Sergipe (laranja, limão).
+ * O produto e a janela de anos vêm do arquivo de dados.
  *
  * JS puro, sem dependências. Projeção equirretangular com correção de cosseno
  * da latitude, suficiente para a extensão de Sergipe (cerca de 2 graus).
@@ -127,12 +128,15 @@
       renderizar(alvo, res[0], res[1], cfg);
     }).catch(function (erro) {
       alvo.innerHTML = '<p class="cw-mapa-erro">Não foi possível carregar o mapa.</p>';
-      console.error('mapa da laranja:', erro);
+      console.error('mapa:', erro);
     });
   }
 
   function renderizar(alvo, geo, dados, cfg) {
-    var estado = { variavel: cfg.variavel, ano: cfg.ano };
+    // O ano pedido precisa existir na série do arquivo; se não existir,
+    // o mapa abre no último ano disponível.
+    var ano = dados.anos.indexOf(cfg.ano) >= 0 ? cfg.ano : dados.anos[dados.anos.length - 1];
+    var estado = { variavel: cfg.variavel, ano: ano };
     var projetar = criarProjecao(
       calcularBbox(geo.features), cfg.largura, cfg.altura, cfg.margem
     );
@@ -270,8 +274,10 @@
         }
       });
 
+      // O produto vem do arquivo de dados: o mesmo mapa serve à laranja e ao limão.
+      var produto = dados.produto ? ' de ' + dados.produto.toLowerCase() : '';
       svg.querySelector('title').textContent =
-        meta.rotulo + ' de laranja por município em Sergipe, ' + estado.ano + '.';
+        meta.rotulo + produto + ' por município em Sergipe, ' + estado.ano + '.';
 
       var nota = estado.variavel === 'rend'
         ? 'Rendimento é razão entre quantidade e área, por isso não se soma entre municípios.'
