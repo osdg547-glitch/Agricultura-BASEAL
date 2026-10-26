@@ -26,7 +26,6 @@ cobweb/
 │   ├── js/                    # gráficos e vitrine
 │   └── img/                   # logo e favicon (SVG)
 ├── panoramas/                 # ensaios por cadeia (laranja, exportações)
-├── servicos/                  # análise econômica sob demanda
 ├── sobre/                     # quem publica e com qual método
 ├── dados/                     # exports em JSON e CSV
 │   └── fontes/                # planilhas de origem, para conferência
