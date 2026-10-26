@@ -2,12 +2,10 @@
    cobweb · vitrine das séries de preço
    ============================================================
    A home mostra uma série por vez: o painel troca de produto a
-   cada dez segundos e percorre as 54 séries do atacado, com o
-   link de cada uma para a página de produtos.
+   cada dez segundos e percorre as 54 séries do atacado.
 
    Tudo — nome, unidade, preço, variação, janela, contagens do
-   cabeçalho — sai do JSON, com as mesmas convenções do explorador
-   em produtos/: variação contra a primeira coleta, produto cotado
+   cabeçalho — sai do JSON, com estas convenções: variação contra a primeira coleta, produto cotado
    por cento ou por caixa de dúzias mantido na unidade do boletim.
    Atualizar a série não pede reescrever a home.
 
@@ -37,8 +35,6 @@
     eixoIni:   painel.querySelector('[data-painel-eixo-inicio]'),
     eixoFim:   painel.querySelector('[data-painel-eixo-fim]'),
     resumo:    painel.querySelector('[data-painel-resumo]'),
-    link:      painel.querySelector('[data-painel-link]'),
-    linkNome:  painel.querySelector('[data-painel-link-nome]'),
     anterior:  painel.querySelector('[data-painel-anterior]'),
     proxima:   painel.querySelector('[data-painel-proxima]'),
     pausa:     painel.querySelector('[data-painel-pausa]'),
@@ -72,8 +68,7 @@
     return MESES_CURTOS[parseInt(p[1], 10) - 1] + ' de ' + p[0];
   };
 
-  /* '2026-01 a 2026-07' → 'janeiro a julho de 2026' — mesma leitura da
-     página de produtos. */
+  /* '2026-01 a 2026-07' → 'janeiro a julho de 2026'. */
   const janelaLegivel = function (janela) {
     const extremos = String(janela).split(' a ');
     if (extremos.length !== 2) return janela;
@@ -139,8 +134,8 @@
     sincronizarBotao();
   }
 
-  /* Abre na primeira série com os três canais, como a página de produtos
-     faz na ausência de ?p= — e não num produto qualquer da ordem do arquivo. */
+  /* Abre na primeira série com os três canais, e não num produto qualquer
+     da ordem do arquivo. */
   function indicePadrao() {
     for (let i = 0; i < series.length; i++) {
       if (series[i].temVarejo) return i;
@@ -280,8 +275,7 @@
     const primeira = valores[0];
     const ultima = valores[valores.length - 1];
 
-    /* Mesma convenção dos cartões da página de produtos: variação contra a
-       primeira coleta da janela, com faixa morta de meio ponto. */
+    /* Variação contra a primeira coleta da janela, com faixa morta de meio ponto. */
     const variacao = primeira ? ((ultima - primeira) / primeira) * 100 : 0;
     const tendencia = variacao > 0.5 ? 'alta' : variacao < -0.5 ? 'baixa' : 'estavel';
 
@@ -312,8 +306,6 @@
       + ' e máximo de ' + moeda(Math.max.apply(null, valores))
       + ' em ' + valores.length + ' coletas.';
 
-    el.link.setAttribute('href', 'produtos/?p=' + serie.chave);
-    el.linkNome.textContent = serie.rotulo;
 
     if (el.posicao) {
       el.posicao.textContent = (series.indexOf(serie) + 1) + ' de ' + series.length;

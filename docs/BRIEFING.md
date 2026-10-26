@@ -36,8 +36,6 @@ Estrutura de URLs:
 
 ```
 /                          → home com índice geral + comentário + produtos em destaque
-/produtos/                 → série de preço de todos os produtos, em uma página só:
-                             filtro de produto, filtro de canal, um gráfico
 /panoramas/                → arquivo dos comentários mensais
 /panoramas/2026-05/        → panorama específico
 /dados/                    → downloads em CSV e API/JSON

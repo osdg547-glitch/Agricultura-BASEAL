@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gera dados/series-precos-se-2026.json, a série que a página /produtos/ lê.
+"""Gera dados/series-precos-se-2026.json, a série que a vitrine da home lê.
 
 Junta três fontes num arquivo só:
 

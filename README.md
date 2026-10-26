@@ -23,9 +23,8 @@ cobweb/
 ├── index.html                 # home: sumário, vitrine de séries e panoramas
 ├── cobweb.css                 # sistema de design completo
 ├── assets/
-│   ├── js/                    # gráficos, vitrine e página de produtos
+│   ├── js/                    # gráficos e vitrine
 │   └── img/                   # logo e favicon (SVG)
-├── produtos/                  # série de preço de todos os produtos, em uma página
 ├── panoramas/                 # ensaios por cadeia (laranja, exportações)
 ├── servicos/                  # análise econômica sob demanda
 ├── sobre/                     # quem publica e com qual método
@@ -44,7 +43,7 @@ cobweb/
 produtos em três canais dos boletins EMDAGRO/ASPLAN de Aracaju — atacado CEASA-SE
 com 54 produtos em 48 coletas de janeiro a julho de 2026, varejo do Mercado
 Central com 65 produtos em 58 coletas na mesma janela, e o Augusto Franco com 11
-produtos no primeiro trimestre. É o arquivo que a página `/produtos/` lê.
+produtos no primeiro trimestre. É o arquivo que a vitrine da home lê.
 Regeneração a partir das fontes:
 
 ```bash
@@ -54,17 +53,6 @@ python3 scripts/importar-series-precos.py
 
 Cobertura, unidades, ressalvas metodológicas e o erro de publicação de junho estão
 em `docs/dados-precos-se.md`. Leia antes de publicar qualquer número da série.
-
-## A página de produtos
-
-`/produtos/` é uma página só para todas as séries. O leitor escolhe em dois
-estágios: primeiro o produto, depois quais canais entram no gráfico. Dois canais
-só entram no mesmo eixo quando compartilham a unidade de comparação. Tudo que aparece na tela
-— cartões, estatísticas, rótulo do gráfico, nota de unidade, cobertura na meta
-strip — é calculado a partir do JSON pelo `assets/js/series-precos.js`. Atualizar a
-série não pede reescrever a página, e a escolha vive na barra de endereço
-(`/produtos/?p=tomate&c=atacado,mercado-central`), de modo que um link para uma
-série específica continua sendo compartilhável.
 
 ## Uso local
 

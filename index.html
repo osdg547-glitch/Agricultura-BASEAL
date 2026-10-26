@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Estilos -->
-  <link rel="stylesheet" href="cobweb.css?v=20260926-0139">
+  <link rel="stylesheet" href="cobweb.css?v=20261026-1841">
 
   <!-- Open Graph -->
   <meta property="og:title" content="CobWeb · mercados do hortifrúti em Sergipe">
@@ -138,8 +138,7 @@
 
     /* Vitrine: à esquerda o que a série é, à direita uma série por vez.
        O painel troca de produto a cada dez segundos e leva os próprios
-       controles no rodapé; a página de produtos é o caminho estável para
-       buscar um produto pelo nome. */
+       controles no rodapé. */
     .vitrine {
       display: grid;
       grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -188,12 +187,6 @@
       text-align: right;
     }
 
-    .vitrine__cta {
-      display: inline-block;
-      margin-top: 16px;
-      font-size: 12px;
-      color: var(--color-brand-text);
-    }
 
     /* ---------- painel giratório ---------- */
 
@@ -300,10 +293,6 @@
       margin-top: 2px;
     }
 
-    .painel__link {
-      font-size: 12px;
-      color: var(--color-brand-text);
-    }
 
     /* ---------- controles da vitrine ---------- */
 
@@ -490,7 +479,6 @@
       </a>
       <nav class="site-nav" aria-label="Navegação principal">
         <a href="." class="is-active">home</a>
-        <a href="produtos/">produtos</a>
         <a href="servicos/">serviços</a>
         <a href="panoramas/">panoramas</a>
         <a href="sobre/">sobre</a>
@@ -516,7 +504,7 @@
 
       <nav class="sumario" aria-label="Sumário do portal">
 
-        <a href="produtos/" class="sumario__item">
+        <a href="#series" class="sumario__item">
           <span class="sumario__num" aria-hidden="true">01</span>
           <span>
             <span class="sumario__nome">Mercado interno</span>
@@ -567,27 +555,26 @@
          Vitrine — o que a série é, e uma série de cada vez
          ============================================================
          O painel da direita percorre as séries do atacado, uma a
-         cada dez segundos, e cada uma abre na página de produtos
-         pelo endereço ?p=chave. A troca para quando o leitor
+         cada dez segundos. A troca para quando o leitor
          sobrevoa ou tabula a vitrine, os botões de anterior e
          próxima a desligam de vez, e com prefers-reduced-motion a
          vitrine nasce parada.
 
          Nenhum número aqui é escrito à mão: contagens, janela,
-         unidade e variação saem do JSON, com as convenções da
-         página de produtos (variação entre a primeira e a última
+         unidade e variação saem do JSON, com estas convenções
+         (variação entre a primeira e a última
          coleta, rotulada pelos meses das duas pontas,
          produto cotado por cento mantido na unidade do boletim).
          O HTML carrega a primeira série já desenhada, para que a
          home diga alguma coisa antes do JavaScript rodar.
          ============================================================ -->
-    <section class="bloco" aria-label="Séries de preço no atacado">
+    <section id="series" class="bloco" aria-label="Séries de preço no atacado">
 
       <div class="bloco__header">
         <h2 class="section-title" style="margin: 0;">Séries temporais de preços</h2>
       </div>
 
-      <div class="vitrine" data-vitrine data-json="dados/series-precos-se-2026.json?v=20260926-0139">
+      <div class="vitrine" data-vitrine data-json="dados/series-precos-se-2026.json?v=20261026-1841">
 
         <div class="vitrine__texto">
           <p>Os preços do atacado da CEASA-SE e do varejo em dois mercados de Aracaju (Mercado Central e Augusto Franco) aparecem em gráfico, para que se veja a tendência de cada um ao longo do semestre.</p>
@@ -615,8 +602,6 @@
               <dd data-resumo="janela">janeiro a julho de 2026</dd>
             </div>
           </dl>
-
-          <a href="produtos/" class="vitrine__cta">escolher produto e canais &rarr;</a>
         </div>
 
         <figure class="painel painel--alta" data-painel>
@@ -646,8 +631,6 @@
             <p class="sr-only" data-painel-resumo>Mínimo de R$ 2,50 e máximo de R$ 5,00 em 48 coletas.</p>
 
             <div class="painel__rodape">
-              <a class="painel__link" data-painel-link href="produtos/?p=acerola">abrir a série de <span data-painel-link-nome>acerola</span> &rarr;</a>
-
               <div class="painel__controles">
                 <span class="painel__posicao" data-painel-posicao>4 de 54</span>
                 <button type="button" class="painel__botao" data-painel-anterior aria-label="Série anterior">&larr;</button>
@@ -658,7 +641,7 @@
             </div>
           </div>
 
-          <figcaption class="sr-only">Painel que alterna as séries de preço no atacado, uma a cada dez segundos. Use os botões de série anterior e próxima para escolher uma, o botão de pausa para interromper a troca, ou a página de produtos para buscar um produto pelo nome.</figcaption>
+          <figcaption class="sr-only">Painel que alterna as séries de preço no atacado, uma a cada dez segundos. Use os botões de série anterior e próxima para escolher uma ou o botão de pausa para interromper a troca.</figcaption>
         </figure>
 
       </div>
@@ -710,6 +693,6 @@
   </footer>
 
   <!-- Vitrine giratória das séries de preço -->
-  <script src="assets/js/vitrine-series.js?v=20260926-0139"></script>
+  <script src="assets/js/vitrine-series.js?v=20261026-1841"></script>
 </body>
 </html>

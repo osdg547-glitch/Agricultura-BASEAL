@@ -1,7 +1,7 @@
 # Séries de preço de Aracaju — 2026
 
-Documenta `dados/series-precos-se-2026.json`, o arquivo que a página `/produtos/`
-lê. É o conjunto de referência do portal para preço interno em Sergipe: 71
+Documenta `dados/series-precos-se-2026.json`, o arquivo que a vitrine da
+home lê. É o conjunto de referência do portal para preço interno em Sergipe: 71
 produtos em três canais de coleta, tudo vindo dos boletins da EMDAGRO/ASPLAN.
 
 | canal | produtos | coletas | janela |
@@ -109,8 +109,8 @@ há buraco: toda data publicada tem preço em todos os produtos daquele canal.
 
 Os slugs seguem o nome do produto sem acento (`limao_taiti`, `mamao_hawai`), e
 os onze que já circulavam no portal não mudam: o mural da capa e a grade dos
-panoramas continuam achando o produto pelo mesmo identificador, e o endereço
-`/produtos/?p=tomate` sobrevive a qualquer reimportação.
+panoramas continuam achando o produto pelo mesmo identificador em qualquer
+reimportação.
 
 ## Unidades
 
@@ -181,8 +181,8 @@ também aparece no boletim íntegro de 2/9/11. Antes do realinhamento, 12 dos 54
 produtos coincidiam; depois, 54 de 54.
 
 O JSON publica os valores realinhados e marca as seis datas em
-`meta.canais.atacado_ceasa.datas_realinhadas`. A nota metodológica de `/produtos/`
-declara o ajuste, como deve: o realinhamento é inferência verificada, não
+`meta.canais.atacado_ceasa.datas_realinhadas`. Qualquer página que publique a série
+deve declarar o ajuste: o realinhamento é inferência verificada, não
 confirmação da fonte. A transcrição literal do que a EMDAGRO publicou está
 preservada na aba "Junho como publicado" da planilha. A confirmação definitiva
 depende do arquivo original da EMDAGRO ou de consulta à ASPLAN.
